@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../app_state.dart';
+import '../app_bloc.dart';
 import '../models/sea_location.dart';
+import '../services/open_meteo.dart';
 
 Future<void> showLocationSheet(BuildContext context) {
   return showModalBottomSheet<void>(
@@ -44,12 +46,12 @@ class _LocationSheetState extends State<_LocationSheet> {
     super.dispose();
   }
 
-  void _onChanged(String value, AppState app) {
+  void _onChanged(String value, OpenMeteoApi api) {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 400), () => _runSearch(value, app));
+    _debounce = Timer(const Duration(milliseconds: 400), () => _runSearch(value, api));
   }
 
-  Future<void> _runSearch(String value, AppState app) async {
+  Future<void> _runSearch(String value, OpenMeteoApi api) async {
     final query = value.trim();
     if (query.length < 2) {
       setState(() {
@@ -60,7 +62,7 @@ class _LocationSheetState extends State<_LocationSheet> {
     }
     setState(() => _searching = true);
     try {
-      final results = await app.searchLocations(query);
+      final results = await api.searchLocations(query);
       if (!mounted) return;
       setState(() {
         _results = results;
@@ -79,7 +81,7 @@ class _LocationSheetState extends State<_LocationSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final app = AppStateScope.of(context);
+    final locating = context.watch<AppBloc>().state.locating;
     final scheme = Theme.of(context).colorScheme;
     final viewInsets = MediaQuery.of(context).viewInsets;
 
@@ -120,24 +122,28 @@ class _LocationSheetState extends State<_LocationSheet> {
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
                 ),
-                onChanged: (value) => _onChanged(value, app),
+                onChanged: (value) => _onChanged(value, context.read<OpenMeteoApi>()),
               ),
               const SizedBox(height: 12),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.icon(
-                  onPressed: app.locating ? null : () => app.useDeviceLocation(),
-                  icon: app.locating
+                  onPressed: locating
+                      ? null
+                      : () => context
+                          .read<AppBloc>()
+                          .add(const DeviceLocationRequested()),
+                  icon: locating
                       ? const SizedBox(
                           width: 16,
                           height: 16,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.my_location, size: 18),
-                  label: Text(app.locating ? 'Locating…' : 'Use my current location'),
+                  label: Text(locating ? 'Locating…' : 'Use my current location'),
                 ),
               ),
-              if (app.locating) const SizedBox(height: 8),
+              if (locating) const SizedBox(height: 8),
               if (_searching)
                 const Padding(
                   padding: EdgeInsets.all(16),
@@ -169,7 +175,9 @@ class _LocationSheetState extends State<_LocationSheet> {
                         ),
                         onTap: () {
                           Navigator.of(context).pop();
-                          app.setLocation(result);
+                          context
+                              .read<AppBloc>()
+                              .add(LocationSelected(result));
                         },
                       );
                     },

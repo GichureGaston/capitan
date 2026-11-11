@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../app_state.dart';
+import '../app_bloc.dart';
 import '../models/activity_rating.dart';
 import '../models/marine_data.dart';
 import '../models/uv_advice.dart';
@@ -18,21 +19,24 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final app = AppStateScope.of(context);
+    final state = context.watch<AppBloc>().state;
 
-    if (app.location == null) {
+    if (state.location == null) {
       return const _NoLocationState();
     }
-    if (app.error != null && app.weather == null) {
-      return _ErrorState(message: app.error!, onRetry: app.refresh);
+    if (state.error != null && state.weather == null) {
+      return _ErrorState(
+        message: state.error!,
+        onRetry: () => context.read<AppBloc>().add(const RefreshRequested()),
+      );
     }
-    if (app.weather == null) {
+    if (state.weather == null) {
       return const Center(child: CircularProgressIndicator(strokeWidth: 2));
     }
 
-    final weather = app.weather!;
-    final marine = app.marine;
-    final snapshot = app.snapshot;
+    final weather = state.weather!;
+    final marine = state.marine;
+    final snapshot = state.snapshot;
     final current = weather.current;
     final uvNow = weather.uvNow ?? 0;
     final uvMax = weather.uvMaxToday ?? uvNow;
@@ -42,14 +46,14 @@ class DashboardScreen extends StatelessWidget {
     final tideTrend = marine == null ? 0 : TideService.tideTrend(marine.hourly, current.time);
 
     return RefreshIndicator(
-      onRefresh: app.refresh,
+      onRefresh: () => _refresh(context),
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.only(bottom: 24),
         children: [
-          _HeroHeader(app: app, weather: weather, best: best),
-          if (app.error != null) _RefreshFailedBanner(message: app.error!),
-          if (app.marineNotice != null) _MarineNoticeCard(text: app.marineNotice!),
+          _HeroHeader(state: state, weather: weather, best: best),
+          if (state.error != null) _RefreshFailedBanner(message: state.error!),
+          if (state.marineNotice != null) _MarineNoticeCard(text: state.marineNotice!),
           const SectionHeader('Conditions right now'),
           _WindCard(weather: weather),
           _ConditionGrid(weather: weather, marine: marine, tideTrend: tideTrend),
@@ -94,14 +98,20 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _refresh(BuildContext context) async {
+    final bloc = context.read<AppBloc>();
+    bloc.add(const RefreshRequested());
+    await bloc.stream.firstWhere((state) => !state.loading);
+  }
+
   static String _formatUv(double uv) =>
       uv >= 10 ? uv.round().toString() : uv.toStringAsFixed(1);
 }
 
 class _HeroHeader extends StatelessWidget {
-  const _HeroHeader({required this.app, required this.weather, this.best});
+  const _HeroHeader({required this.state, required this.weather, this.best});
 
-  final AppState app;
+  final AppState state;
   final WeatherData weather;
   final ActivityRating? best;
 
@@ -109,7 +119,7 @@ class _HeroHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final current = weather.current;
-    final location = app.location!;
+    final location = state.location!;
 
     return Container(
       width: double.infinity,
@@ -147,9 +157,9 @@ class _HeroHeader extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                if (app.lastUpdated != null)
+                if (state.lastUpdated != null)
                   Text(
-                    'Updated ${DateFormat('HH:mm').format(app.lastUpdated!)}',
+                    'Updated ${DateFormat('HH:mm').format(state.lastUpdated!)}',
                     style: TextStyle(
                         color: scheme.onPrimary.withValues(alpha: 0.85), fontSize: 12),
                   ),
@@ -470,8 +480,7 @@ class _SunTimesCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final app = AppStateScope.of(context);
-    final weather = app.weather;
+    final weather = context.watch<AppBloc>().state.weather;
     final scheme = Theme.of(context).colorScheme;
     final sunrise = weather?.sunriseToday;
     final sunset = weather?.sunsetToday;
@@ -638,7 +647,7 @@ class _ErrorState extends StatelessWidget {
   const _ErrorState({required this.message, required this.onRetry});
 
   final String message;
-  final Future<void> Function() onRetry;
+  final VoidCallback onRetry;
 
   @override
   Widget build(BuildContext context) {

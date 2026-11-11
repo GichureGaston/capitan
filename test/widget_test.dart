@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:capitan/app_state.dart';
 import 'package:capitan/data/species_repository.dart';
 import 'package:capitan/main.dart';
 import 'package:capitan/models/species.dart';
@@ -15,7 +15,8 @@ void main() {
   group('app smoke test', () {
     testWidgets('shows the no-location welcome state and builds all tabs',
         (tester) async {
-      await tester.pumpWidget(CapitanApp(appState: AppState()));
+      SharedPreferences.setMockInitialValues({});
+      await tester.pumpWidget(const CapitanApp());
 
       expect(find.text('Where are you headed?'), findsOneWidget);
       expect(find.text('Choose location'), findsOneWidget);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../app_state.dart';
+import '../app_bloc.dart';
 import '../models/activity_rating.dart';
 import '../models/marine_data.dart';
 import '../models/sea_location.dart';
@@ -33,8 +34,7 @@ class _SpotsScreenState extends State<SpotsScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final app = AppStateScope.of(context);
-    final locationLabel = app.location?.label;
+    final locationLabel = context.watch<AppBloc>().state.location?.label;
     if (locationLabel == _loadedForLocation) return;
     if (locationLabel == null) {
       if (_loadedForLocation != null) {
@@ -45,12 +45,13 @@ class _SpotsScreenState extends State<SpotsScreen> {
       }
       return;
     }
-    _loadSpots(app);
+    _loadSpots();
   }
 
-  Future<void> _loadSpots(AppState app) async {
-    final location = app.location;
+  Future<void> _loadSpots() async {
+    final location = context.read<AppBloc>().state.location;
     if (location == null || _loading) return;
+    final api = context.read<OpenMeteoApi>();
     final seq = ++_loadSeq;
 
     setState(() {
@@ -81,7 +82,6 @@ class _SpotsScreenState extends State<SpotsScreen> {
           SeaLocation(name: spot.name, latitude: spot.latitude, longitude: spot.longitude),
       ];
 
-      final api = app.api;
       List<WeatherData> weatherBatch = const [];
       List<MarineData> marineBatch = const [];
       try {
@@ -138,10 +138,10 @@ class _SpotsScreenState extends State<SpotsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final app = AppStateScope.of(context);
+    final state = context.watch<AppBloc>().state;
     final scheme = Theme.of(context).colorScheme;
 
-    if (app.location == null) {
+    if (state.location == null) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(32),
@@ -172,7 +172,7 @@ class _SpotsScreenState extends State<SpotsScreen> {
             children: [
               Expanded(
                 child: Text(
-                  'Around ${app.location!.name}',
+                  'Around ${state.location!.name}',
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium
@@ -181,7 +181,7 @@ class _SpotsScreenState extends State<SpotsScreen> {
               ),
               IconButton(
                 tooltip: 'Refresh spots',
-                onPressed: _loading ? null : () => _loadSpots(app),
+                onPressed: _loading ? null : _loadSpots,
                 icon: const Icon(Icons.refresh),
               ),
             ],
@@ -198,7 +198,7 @@ class _SpotsScreenState extends State<SpotsScreen> {
             selected: {_radiusKm},
             onSelectionChanged: (selection) {
               setState(() => _radiusKm = selection.first);
-              _loadSpots(app);
+              _loadSpots();
             },
           ),
         ),
@@ -218,7 +218,6 @@ class _SpotsScreenState extends State<SpotsScreen> {
   }
 
   Widget _buildBody(BuildContext context) {
-    final app = AppStateScope.of(context);
     if (_loading) {
       return const Center(child: CircularProgressIndicator(strokeWidth: 2));
     }
@@ -235,7 +234,7 @@ class _SpotsScreenState extends State<SpotsScreen> {
             ),
             const SizedBox(height: 12),
             FilledButton.icon(
-              onPressed: () => _loadSpots(app),
+              onPressed: _loadSpots,
               icon: const Icon(Icons.refresh),
               label: const Text('Retry'),
             ),
@@ -262,15 +261,18 @@ class _SpotsScreenState extends State<SpotsScreen> {
       itemBuilder: (context, index) => SpotTile(
         spot: _spots[index],
         onUse: (spot) {
-          app.setLocation(
-            SeaLocation(
-              name: spot.name,
-              latitude: spot.latitude,
-              longitude: spot.longitude,
-              admin: app.location?.admin,
-              country: app.location?.country,
-            ),
-          );
+          final location = context.read<AppBloc>().state.location;
+          context.read<AppBloc>().add(
+                LocationSelected(
+                  SeaLocation(
+                    name: spot.name,
+                    latitude: spot.latitude,
+                    longitude: spot.longitude,
+                    admin: location?.admin,
+                    country: location?.country,
+                  ),
+                ),
+              );
           widget.onUseSpot?.call();
         },
       ),

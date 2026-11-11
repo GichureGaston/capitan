@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../app_state.dart';
+import '../app_bloc.dart';
 import 'coral_screen.dart';
 import 'dashboard_screen.dart';
 import 'fish_screen.dart';
@@ -30,9 +31,8 @@ class _HomeShellState extends State<HomeShell> {
 
   @override
   Widget build(BuildContext context) {
-    final app = AppStateScope.of(context);
     final scheme = Theme.of(context).colorScheme;
-    final locationName = app.location?.name;
+    final locationName = context.watch<AppBloc>().state.location?.name;
 
     return Scaffold(
       appBar: AppBar(

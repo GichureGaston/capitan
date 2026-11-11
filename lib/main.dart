@@ -1,30 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'app_state.dart';
+import 'app_bloc.dart';
 import 'screens/home_shell.dart';
+import 'services/open_meteo.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  final appState = AppState();
-  appState.init();
-  runApp(CapitanApp(appState: appState));
+  runApp(const CapitanApp());
 }
 
 class CapitanApp extends StatelessWidget {
-  const CapitanApp({super.key, required this.appState});
+  const CapitanApp({super.key, this.bloc});
 
-  final AppState appState;
+  final AppBloc? bloc;
 
   @override
   Widget build(BuildContext context) {
-    return AppStateScope(
-      notifier: appState,
-      child: MaterialApp(
-        title: 'Capitán',
-        debugShowCheckedModeBanner: false,
-        theme: _seaTheme(Brightness.light),
-        darkTheme: _seaTheme(Brightness.dark),
-        home: const HomeShell(),
+    return RepositoryProvider<OpenMeteoApi>(
+      create: (_) => OpenMeteoApi(),
+      child: BlocProvider<AppBloc>(
+        create: (context) =>
+            (bloc ?? AppBloc(api: context.read<OpenMeteoApi>()))
+              ..add(const AppStarted()),
+        child: MaterialApp(
+          title: 'Capitán',
+          debugShowCheckedModeBanner: false,
+          theme: _seaTheme(Brightness.light),
+          darkTheme: _seaTheme(Brightness.dark),
+          home: const HomeShell(),
+        ),
       ),
     );
   }

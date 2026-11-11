@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../app_state.dart';
+import '../app_bloc.dart';
 import '../data/species_repository.dart';
 import '../models/species.dart';
 import '../widgets/species_tile.dart';
@@ -45,9 +46,8 @@ class _SpeciesScreenState extends State<SpeciesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final app = AppStateScope.of(context);
     final scheme = Theme.of(context).colorScheme;
-    final location = app.location;
+    final location = context.watch<AppBloc>().state.location;
 
     final regionTags = location == null
         ? const <String>[]

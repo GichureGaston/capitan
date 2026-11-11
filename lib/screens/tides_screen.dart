@@ -1,8 +1,9 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../app_state.dart';
+import '../app_bloc.dart';
 import '../models/marine_data.dart';
 import '../models/weather_data.dart';
 import '../services/tide_service.dart';
@@ -17,15 +18,15 @@ class TidesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final app = AppStateScope.of(context);
+    final state = context.watch<AppBloc>().state;
 
-    if (app.location == null) {
+    if (state.location == null) {
       return _promptLocation(context);
     }
-    if (app.weather == null) {
+    if (state.weather == null) {
       return const Center(child: CircularProgressIndicator(strokeWidth: 2));
     }
-    if (app.marine == null) {
+    if (state.marine == null) {
       return _noMarineData(context);
     }
 
@@ -86,9 +87,9 @@ class _TidesBodyState extends State<_TidesBody> {
 
   @override
   Widget build(BuildContext context) {
-    final app = AppStateScope.of(context);
-    final marine = app.marine!;
-    final weather = app.weather!;
+    final state = context.watch<AppBloc>().state;
+    final marine = state.marine!;
+    final weather = state.weather!;
     final now = weather.current.time;
     final hourly = marine.hourly;
 
@@ -107,7 +108,7 @@ class _TidesBodyState extends State<_TidesBody> {
           next: next,
           levelNow: levelNow,
           trend: trend,
-          locationLabel: app.location!.name,
+          locationLabel: state.location!.name,
         ),
         const SectionHeader('Sea level (tides)', icon: Icons.waves),
         Card(
