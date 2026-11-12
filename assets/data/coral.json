@@ -4,20 +4,28 @@
     "name": "Staghorn Coral",
     "scientificName": "Acropora cervicornis",
     "emoji": "🪸",
-    "regions": ["caribbean"],
+    "regions": [
+      "caribbean"
+    ],
     "danger": "sharp",
     "size": "Branches up to 2 m",
     "habitat": "Fore-reef slopes and lagoon edges",
     "conservation": "Critically endangered",
     "description": "Fast-growing antler-like branches that once forested Caribbean reefs. Staghorn thickets shelter juvenile fish and break wave energy. Look — never touch — the branches snap easily and cuts heal slowly.",
-    "funFact": "Staghorn rarely reproduces by eggs alone — broken fragments re-attach and regrow, which restoration divers exploit to rebuild reefs."
+    "funFact": "Staghorn rarely reproduces by eggs alone — broken fragments re-attach and regrow, which restoration divers exploit to rebuild reefs.",
+    "image": "assets/images/staghorn-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Hertshoon.jpg",
+    "imageCredit": "Albert Kok at Dutch Wikipedia\n\n(Original text: albert kok)",
+    "imageLicense": "Public domain"
   },
   {
     "id": "elkhorn-coral",
     "name": "Elkhorn Coral",
     "scientificName": "Acropora palmata",
     "emoji": "🪸",
-    "regions": ["caribbean"],
+    "regions": [
+      "caribbean"
+    ],
     "danger": "sharp",
     "size": "Colonies over 3 m across",
     "habitat": "Shallow reef crests pounded by waves",
@@ -30,20 +38,30 @@
     "name": "Table Coral",
     "scientificName": "Acropora hyacinthus",
     "emoji": "🪸",
-    "regions": ["indo-pacific", "red-sea"],
+    "regions": [
+      "indo-pacific",
+      "red-sea"
+    ],
     "danger": "sharp",
     "size": "Tables up to 2 m across",
     "habitat": "Reef flats and upper slopes",
     "conservation": "Near threatened",
     "description": "Broad horizontal plates that shade the reef below and shade-hunt beneath them. Snorkellers drifting over a reef flat see them like dinner tables set for dinner — each one a city of fish.",
-    "funFact": "A single table coral can host several species of territorial damselfish gardening their own algal lawns on it."
+    "funFact": "A single table coral can host several species of territorial damselfish gardening their own algal lawns on it.",
+    "image": "assets/images/table-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Lodestone_Reef,_Valentines_Day_2016_CoralScape.jpg",
+    "imageCredit": "Holobionics",
+    "imageLicense": "CC BY-SA 4.0"
   },
   {
     "id": "brain-coral",
     "name": "Grooved Brain Coral",
     "scientificName": "Diploria labyrinthiformis",
     "emoji": "🪸",
-    "regions": ["caribbean", "tropical"],
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
     "danger": "harmless",
     "size": "Domes up to 2 m",
     "habitat": "Protected reef flats and lagoons",
@@ -56,33 +74,48 @@
     "name": "Pillar Coral",
     "scientificName": "Dendrogyra cylindrus",
     "emoji": "🪸",
-    "regions": ["caribbean"],
+    "regions": [
+      "caribbean"
+    ],
     "danger": "sharp",
     "size": "Pillars up to 3 m tall",
     "habitat": "Flat reef areas and sandy patches",
     "conservation": "Vulnerable",
     "description": "Distinctive finger-like pillars standing from the seabed. During the day its polyps stay hidden; snorkellers who visit at dusk see the pillars 'fuzzy' with extended tentacles.",
-    "funFact": "It's one of the few corals whose polyps are extended during daylight — earning the nickname 'fingers of the reef'."
+    "funFact": "It's one of the few corals whose polyps are extended during daylight — earning the nickname 'fingers of the reef'.",
+    "image": "assets/images/pillar-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:PillarCoral.jpg",
+    "imageCredit": "Unknown",
+    "imageLicense": "Public domain"
   },
   {
     "id": "boulder-star-coral",
     "name": "Boulder Star Coral",
     "scientificName": "Orbicella annularis",
     "emoji": "🪸",
-    "regions": ["caribbean"],
+    "regions": [
+      "caribbean"
+    ],
     "danger": "harmless",
     "size": "Boulders to 1.5 m tall",
     "habitat": "Reef slopes, 5-30 m",
     "conservation": "Endangered",
     "description": "The Caribbean's reef-building workhorse: massive boulder colonies of knobbly, star-shaped corallites. It grows so slowly that large boulders are centuries old.",
-    "funFact": "Boulder star coral rings, like tree rings, let scientists read centuries of ocean climate history."
+    "funFact": "Boulder star coral rings, like tree rings, let scientists read centuries of ocean climate history.",
+    "image": "assets/images/boulder-star-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:MontastraeaAnnularis.jpg",
+    "imageCredit": "Louiswray",
+    "imageLicense": "CC BY-SA 3.0"
   },
   {
     "id": "finger-coral",
     "name": "Finger Coral",
     "scientificName": "Porites porites",
     "emoji": "🪸",
-    "regions": ["caribbean", "tropical"],
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
     "danger": "harmless",
     "size": "Clumps to 1 m",
     "habitat": "Shallow back-reefs and seagrass edges",
@@ -95,20 +128,30 @@
     "name": "Fire Coral",
     "scientificName": "Millepora alcicornis",
     "emoji": "🪸",
-    "regions": ["global", "tropical"],
+    "regions": [
+      "global",
+      "tropical"
+    ],
     "danger": "sting",
     "size": "Encrusting plates and branches",
     "habitat": "Reef crests and shallow rocks",
     "conservation": "Least concern",
     "description": "Despite the name, fire coral is a hydrocoral, not a true coral. Its yellow-brown branches deliver a fierce burning sting on contact. Watch for it in surge zones — wear a rash guard if you're prone to contact.",
-    "funFact": "The sting comes from millions of microscopic stinging nematocysts that fire a tiny harpoon into your skin on touch."
+    "funFact": "The sting comes from millions of microscopic stinging nematocysts that fire a tiny harpoon into your skin on touch.",
+    "image": "assets/images/fire-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Millepora_alcicornis_(Branching_Fire_Coral).jpg",
+    "imageCredit": "Nhobgood Nick Hobgood",
+    "imageLicense": "CC BY-SA 3.0"
   },
   {
     "id": "sea-fan",
     "name": "Sea Fan",
     "scientificName": "Gorgonia flabellum",
     "emoji": "🪸",
-    "regions": ["caribbean", "tropical"],
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
     "danger": "harmless",
     "size": "Fans to 1.5 m",
     "habitat": "Reef walls and current-swept channels",
@@ -121,111 +164,168 @@
     "name": "Leather Coral",
     "scientificName": "Sarcophyton spp.",
     "emoji": "🪸",
-    "regions": ["indo-pacific", "red-sea"],
+    "regions": [
+      "indo-pacific",
+      "red-sea"
+    ],
     "danger": "harmless",
     "size": "Mushroom caps to 1 m",
     "habitat": "Reef flats and lagoons",
     "conservation": "Not evaluated",
     "description": "Soft corals shaped like leather toadstools; the surface flushes with polyps at night to feed. They lack the hard skeleton of reef-building corals, so they sway in the current.",
-    "funFact": "Leather corals wage chemical warfare — they release compounds that stunt neighbouring corals competing for space."
+    "funFact": "Leather corals wage chemical warfare — they release compounds that stunt neighbouring corals competing for space.",
+    "image": "assets/images/leather-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Flexible_Leather_Coral_(Sinularia_flexibilis)_-_GRB.jpg",
+    "imageCredit": "George Berninger Jr.",
+    "imageLicense": "CC BY-SA 3.0"
   },
   {
     "id": "carnation-coral",
     "name": "Carnation Coral",
     "scientificName": "Dendronephthya spp.",
     "emoji": "🪸",
-    "regions": ["indo-pacific", "red-sea"],
+    "regions": [
+      "indo-pacific",
+      "red-sea"
+    ],
     "danger": "harmless",
     "size": "Bushes to 50 cm",
     "habitat": "Walls and overhangs with strong current",
     "conservation": "Not evaluated",
     "description": "Impossibly vivid pink, orange and violet soft corals that glow on deep reef walls. They feed on passing plankton, so they thrive where currents bring food.",
-    "funFact": "Their neon colours come from proteins in the skin — related to the GFP that makes jellyfish glow in labs."
+    "funFact": "Their neon colours come from proteins in the skin — related to the GFP that makes jellyfish glow in labs.",
+    "image": "assets/images/carnation-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Dendronephthya_soft_coral_at_Gilli_Lawa_Laut.JPG",
+    "imageCredit": "Alexander Vasenin",
+    "imageLicense": "CC BY-SA 3.0"
   },
   {
     "id": "bubble-coral",
     "name": "Bubble Coral",
     "scientificName": "Plerogyra sinuosa",
     "emoji": "🪸",
-    "regions": ["indo-pacific"],
+    "regions": [
+      "indo-pacific"
+    ],
     "danger": "harmless",
     "size": "Domes to 30 cm",
     "habitat": "Sheltered reef slopes",
     "conservation": "Near threatened",
     "description": "By day it looks like a cluster of translucent grapes; by night the bubbles deflate and tentacles sweep the water for food. It's one of the reef's odder-looking residents.",
-    "funFact": "The bubbles are inflated water-filled vesicles that act as built-in sunglasses for the coral below."
+    "funFact": "The bubbles are inflated water-filled vesicles that act as built-in sunglasses for the coral below.",
+    "image": "assets/images/bubble-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Plerogyra_sinuosa-1.jpg",
+    "imageCredit": "Oceanamazon",
+    "imageLicense": "CC0"
   },
   {
     "id": "organ-pipe-coral",
     "name": "Organ Pipe Coral",
     "scientificName": "Tubipora musica",
     "emoji": "🪸",
-    "regions": ["red-sea", "indo-pacific"],
+    "regions": [
+      "red-sea",
+      "indo-pacific"
+    ],
     "danger": "harmless",
     "size": "Mats to 1 m",
     "habitat": "Sheltered reef flats",
     "conservation": "Near threatened",
     "description": "A skeleton of deep-red vertical tubes, each occupied by a single polyp — unmistakable and beautiful. It forms carpets of pipes connected by horizontal runways.",
-    "funFact": "The vivid red skeleton is exposed where the polyps retract, making this one of the most collected corals — legally protected in many countries."
+    "funFact": "The vivid red skeleton is exposed where the polyps retract, making this one of the most collected corals — legally protected in many countries.",
+    "image": "assets/images/organ-pipe-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Tubipora_musica_Mayotte.jpg",
+    "imageCredit": "Frédéric Ducarme",
+    "imageLicense": "CC BY-SA 4.0"
   },
   {
     "id": "mushroom-coral",
     "name": "Mushroom Coral",
     "scientificName": "Fungia fungites",
     "emoji": "🪸",
-    "regions": ["indo-pacific"],
+    "regions": [
+      "indo-pacific"
+    ],
     "danger": "sharp",
     "size": "Discs to 30 cm",
     "habitat": "Sandy reef flats and rubble",
     "conservation": "Near threatened",
     "description": "A single free-living polyp shaped like a dinner plate, lying loose on the sand. Unlike most corals, it doesn't need to stay attached — it can even right itself when flipped.",
-    "funFact": "One mushroom coral is a single animal — not a colony — and it can slowly crawl using its tentacles."
+    "funFact": "One mushroom coral is a single animal — not a colony — and it can slowly crawl using its tentacles.",
+    "image": "assets/images/mushroom-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Fungiafungites.jpg",
+    "imageCredit": "Stickpen",
+    "imageLicense": "Public domain"
   },
   {
     "id": "cauliflower-coral",
     "name": "Cauliflower Coral",
     "scientificName": "Pocillopora verrucosa",
     "emoji": "🪸",
-    "regions": ["indo-pacific", "east-pacific", "red-sea"],
+    "regions": [
+      "indo-pacific",
+      "east-pacific",
+      "red-sea"
+    ],
     "danger": "sharp",
     "size": "Heads to 50 cm",
     "habitat": "Exposed reef crests",
     "conservation": "Near threatened",
     "description": "Stubby, domed branches with a bumpy surface, usually tinted pink, brown or lavender. Its dense thickets are nurseries for small fish and shrimp that shelter between the knobs.",
-    "funFact": "Some damselfish 'farm' cauliflower coral by biting the tips — pruning it into lollipop shapes to suit their gardens."
+    "funFact": "Some damselfish 'farm' cauliflower coral by biting the tips — pruning it into lollipop shapes to suit their gardens.",
+    "image": "assets/images/cauliflower-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Coral_(Pocillopora_verrucosa),_mar_Rojo,_Egipto,_2023-04-15,_DD_103.jpg",
+    "imageCredit": "Diego Delso",
+    "imageLicense": "CC BY-SA 4.0"
   },
   {
     "id": "magnificent-anemone",
     "name": "Magnificent Sea Anemone",
     "scientificName": "Heteractis magnifica",
     "emoji": "🌺",
-    "regions": ["indo-pacific", "red-sea"],
+    "regions": [
+      "indo-pacific",
+      "red-sea"
+    ],
     "danger": "sting",
     "size": "Tentacle crown to 1 m",
     "habitat": "Reef tops and slopes in clear light",
     "conservation": "Not evaluated",
     "description": "Enormous purple-tipped tents, often carpeted with clownfish. The anemone hosts the fish in exchange for scraps and defence — one of nature's most iconic partnerships.",
-    "funFact": "Some anemones slowly walk the reef on their basal disc when their spot gets too shady — a journey of centimetres per month."
+    "funFact": "Some anemones slowly walk the reef on their basal disc when their spot gets too shady — a journey of centimetres per month.",
+    "image": "assets/images/magnificent-anemone.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Amphiprion_perideraion_(Pink_anemonefish)_in_Heteractis_magnifica_(Magnificent_sea_anemone).jpg",
+    "imageCredit": "Nhobgood Nick Hobgood",
+    "imageLicense": "CC BY-SA 3.0"
   },
   {
     "id": "blue-coral",
     "name": "Blue Coral",
     "scientificName": "Heliopora coerulea",
     "emoji": "🪸",
-    "regions": ["indo-pacific"],
+    "regions": [
+      "indo-pacific"
+    ],
     "danger": "harmless",
     "size": "Plates and columns to 2 m",
     "habitat": "Clear reef flats",
     "conservation": "Vulnerable",
     "description": "Its skeleton is genuinely blue — iron salts in the tissue tint the colony a smoky steel-blue — with pale brown polyps. It is a 'living fossil', unchanged for 100+ million years.",
-    "funFact": "Blue coral is the sole surviving species of its entire order — the last member of a lineage older than the dinosaurs."
+    "funFact": "Blue coral is the sole surviving species of its entire order — the last member of a lineage older than the dinosaurs.",
+    "image": "assets/images/blue-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Heliopora_coerulea_Maldives.jpg",
+    "imageCredit": "Frédéric Ducarme",
+    "imageLicense": "CC BY-SA 4.0"
   },
   {
     "id": "black-coral",
     "name": "Black Coral",
     "scientificName": "Antipatharia spp.",
     "emoji": "🪸",
-    "regions": ["global", "tropical"],
+    "regions": [
+      "global",
+      "tropical"
+    ],
     "danger": "harmless",
     "size": "Bushes and whips to 3 m",
     "habitat": "Deeper reef walls and overhangs",
@@ -238,20 +338,29 @@
     "name": "Red Gorgonian",
     "scientificName": "Paramuricea clavata",
     "emoji": "🪸",
-    "regions": ["mediterranean"],
+    "regions": [
+      "mediterranean"
+    ],
     "danger": "harmless",
     "size": "Fans to 1 m",
     "habitat": "Rocky walls below 15 m",
     "conservation": "Near threatened",
     "description": "The Mediterranean's signature sea fan — crimson branches forming forests on dim rocky walls where little else grows. They filter plankton from the cool currents.",
-    "funFact": "Red gorgonian forests shelter seahorses and neon-red shrimp that live nowhere else in the Mediterranean."
+    "funFact": "Red gorgonian forests shelter seahorses and neon-red shrimp that live nowhere else in the Mediterranean.",
+    "image": "assets/images/red-gorgonian.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Paramuricea_clavata_(Risso,_1826)_3.jpg",
+    "imageCredit": "Parent Géry",
+    "imageLicense": "CC0"
   },
   {
     "id": "porites-boulder",
     "name": "Massive Porites",
     "scientificName": "Porites lobata",
     "emoji": "🪸",
-    "regions": ["indo-pacific", "tropical"],
+    "regions": [
+      "indo-pacific",
+      "tropical"
+    ],
     "danger": "harmless",
     "size": "Domes over 5 m",
     "habitat": "Reef flats and lagoons",
@@ -264,12 +373,18 @@
     "name": "Rose Coral",
     "scientificName": "Manicina areolata",
     "emoji": "🪸",
-    "regions": ["caribbean"],
+    "regions": [
+      "caribbean"
+    ],
     "danger": "harmless",
     "size": "Domes to 20 cm",
     "habitat": "Seagrass beds and rubble flats",
     "conservation": "Least concern",
     "description": "A small, elliptical coral like a rose fossil, often found loose in the grass beds. Like mushroom coral, young colonies live loose on the sand and can even move with the waves.",
-    "funFact": "Rose corals can right themselves after storms flip them over — by inflating one side and shifting weight."
+    "funFact": "Rose corals can right themselves after storms flip them over — by inflating one side and shifting weight.",
+    "image": "assets/images/rose-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Manicina_areolata_(rose_coral)_(San_Salvador_Island,_Bahamas)_2_(15472166633).jpg",
+    "imageCredit": "James St. John",
+    "imageLicense": "CC BY 2.0"
   }
 ]
