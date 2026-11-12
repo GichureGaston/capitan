@@ -138,14 +138,6 @@ To run on a device or emulator, pick a target with `flutter devices` and then `f
 - **Android:** fine location permission is already declared in `android/app/src/main/AndroidManifest.xml`.
 - **iOS:** device location requires adding `NSLocationWhenInUseUsageDescription` to `ios/Runner/Info.plist`. Without it, location search and manual spot selection still work.
 
-### Tests
-
-```bash
-flutter test
-```
-
-The test suite covers the activity-rating rules (including night behaviour), conditions parsing, dashboard night/day states, species metadata, photo attribution, and widget fallbacks.
-
 ---
 
 ## Under the hood
