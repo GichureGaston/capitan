@@ -115,7 +115,7 @@ class OpenMeteoApi {
     final uri = Uri.parse('$baseUrl/v1/forecast').replace(queryParameters: {
       'latitude': locations.map((l) => l.latitude).join(','),
       'longitude': locations.map((l) => l.longitude).join(','),
-      'current': 'weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,uv_index',
+      'current': 'weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,uv_index,is_day',
       'timezone': 'auto',
     });
     final json = await _getJson(uri);

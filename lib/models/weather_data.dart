@@ -85,7 +85,7 @@ class WeatherCurrent {
         windSpeed: _num(json['wind_speed_10m']),
         windDirection: _num(json['wind_direction_10m']),
         windGusts: _num(json['wind_gusts_10m']),
-        isDay: (json['is_day'] as num?)?.toInt() == 1,
+        isDay: (json['is_day'] as num?)?.toInt() != 0,
       );
 }
 
