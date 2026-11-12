@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/species.dart';
 import 'condition_tile.dart';
+import 'species_image.dart';
 
 class SpeciesTile extends StatelessWidget {
   const SpeciesTile({super.key, required this.entry, required this.onTap});
@@ -28,18 +29,11 @@ class SpeciesTile extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Row(
             children: [
-              Container(
-                width: 46,
-                height: 46,
-                decoration: BoxDecoration(
-                  color: scheme.primaryContainer.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  entry.emoji,
-                  style: const TextStyle(fontSize: 24),
-                ),
+              SpeciesImage(
+                entry: entry,
+                width: 52,
+                height: 52,
+                emojiSize: 26,
               ),
               const SizedBox(width: 12),
               Expanded(

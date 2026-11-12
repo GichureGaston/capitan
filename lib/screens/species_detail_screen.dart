@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/species_repository.dart';
 import '../models/species.dart';
 import '../widgets/condition_tile.dart';
+import '../widgets/species_image.dart';
 
 class SpeciesDetailScreen extends StatelessWidget {
   const SpeciesDetailScreen({super.key, required this.entry, required this.type});
@@ -27,6 +28,8 @@ class SpeciesDetailScreen extends StatelessWidget {
       if (entry.habitat != null) _DetailRow(Icons.waves, 'Habitat', entry.habitat!),
       if (entry.conservation != null)
         _DetailRow(Icons.eco, 'Conservation status', entry.conservation!),
+      if (entry.imageSource != null)
+        _DetailRow(Icons.photo_camera_outlined, 'Photo source', entry.imageSource!),
       _DetailRow(
         Icons.public,
         'Regions',
@@ -41,19 +44,41 @@ class SpeciesDetailScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          if (entry.hasImage) ...[
+            SpeciesImage(
+              entry: entry,
+              height: 220,
+              borderRadius: 18,
+              emojiSize: 64,
+            ),
+            if (entry.imageAttribution != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 6, right: 4),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Photo: ${entry.imageAttribution}',
+                    style: textTheme.labelSmall
+                        ?.copyWith(color: scheme.onSurfaceVariant),
+                  ),
+                ),
+              ),
+            const SizedBox(height: 14),
+          ],
           Row(
             children: [
-              Container(
-                width: 84,
-                height: 84,
-                decoration: BoxDecoration(
-                  color: scheme.primaryContainer.withValues(alpha: 0.5),
-                  borderRadius: BorderRadius.circular(20),
+              if (!entry.hasImage)
+                Container(
+                  width: 84,
+                  height: 84,
+                  decoration: BoxDecoration(
+                    color: scheme.primaryContainer.withValues(alpha: 0.5),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(entry.emoji, style: const TextStyle(fontSize: 44)),
                 ),
-                alignment: Alignment.center,
-                child: Text(entry.emoji, style: const TextStyle(fontSize: 44)),
-              ),
-              const SizedBox(width: 16),
+              if (!entry.hasImage) const SizedBox(width: 16),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
