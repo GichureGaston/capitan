@@ -23,7 +23,7 @@ extension SeaActivityX on SeaActivity {
       };
 }
 
-enum RatingLevel { excellent, good, fair, poor, dangerous, unknown }
+enum RatingLevel { excellent, good, fair, poor, dangerous, unknown, night }
 
 extension RatingLevelX on RatingLevel {
   String get label => switch (this) {
@@ -33,6 +33,7 @@ extension RatingLevelX on RatingLevel {
         RatingLevel.poor => 'Poor',
         RatingLevel.dangerous => 'Dangerous',
         RatingLevel.unknown => 'No sea data',
+        RatingLevel.night => 'Night — rest',
       };
 
   Color get color => switch (this) {
@@ -42,6 +43,7 @@ extension RatingLevelX on RatingLevel {
         RatingLevel.poor => const Color(0xFFEF6C00),
         RatingLevel.dangerous => const Color(0xFFC62828),
         RatingLevel.unknown => Colors.blueGrey,
+        RatingLevel.night => const Color(0xFF3949AB),
       };
 
   int get rank => switch (this) {
@@ -51,6 +53,7 @@ extension RatingLevelX on RatingLevel {
         RatingLevel.poor => 2,
         RatingLevel.dangerous => 1,
         RatingLevel.unknown => 0,
+        RatingLevel.night => 0,
       };
 }
 
@@ -67,6 +70,7 @@ class ConditionsSnapshot {
     this.seaSurfaceTemp,
     this.currentVelocity,
     this.hasMarineData = true,
+    this.isDay = true,
   });
 
   final DateTime time;
@@ -80,6 +84,10 @@ class ConditionsSnapshot {
   final double? seaSurfaceTemp;
   final double? currentVelocity;
   final bool hasMarineData;
+
+  /// Whether the sun is up at [time]. After dark no water activity is
+  /// suggested — the app tells the user to rest instead.
+  final bool isDay;
 
   factory ConditionsSnapshot.fromForecast(WeatherData weather, MarineData? marine) {
     final current = weather.current;
@@ -95,6 +103,7 @@ class ConditionsSnapshot {
       seaSurfaceTemp: marine?.current.seaSurfaceTemperature,
       currentVelocity: marine?.current.oceanCurrentVelocity,
       hasMarineData: marine != null && marine.hasData,
+      isDay: current.isDay,
     );
   }
 }
@@ -112,12 +121,18 @@ class ActivityRating {
   final List<String> reasons;
 
   bool get isUnknown => level == RatingLevel.unknown;
+
+  /// Night-time placeholder — the app suggests resting instead of the activity.
+  bool get isNight => level == RatingLevel.night;
 }
 
 class ActivityRater {
   const ActivityRater._();
 
   static ActivityRating rate(SeaActivity activity, ConditionsSnapshot c) {
+    if (!c.isDay) {
+      return _nightRating(activity);
+    }
     if (!c.hasMarineData) {
       if (activity == SeaActivity.swimming) {
         return _rateSwimming(c);
@@ -142,11 +157,17 @@ class ActivityRater {
   static ActivityRating? bestOf(List<ActivityRating> ratings) {
     ActivityRating? best;
     for (final r in ratings) {
-      if (r.isUnknown) continue;
+      if (r.isUnknown || r.isNight) continue;
       if (best == null || r.level.rank > best.level.rank) best = r;
     }
     return best;
   }
+
+  static ActivityRating _nightRating(SeaActivity activity) => ActivityRating(
+        activity: activity,
+        level: RatingLevel.night,
+        reasons: const ['It\'s night — rest up and swim in daylight'],
+      );
 
   static bool _stormy(int? code) => code != null && code >= 95;
 

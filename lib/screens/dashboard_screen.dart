@@ -200,36 +200,58 @@ class _HeroHeader extends StatelessWidget {
             ),
             if (best != null) ...[
               const SizedBox(height: 14),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.black.withValues(alpha: 0.25),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(best!.activity.icon, size: 18, color: scheme.onPrimary),
-                    const SizedBox(width: 8),
-                    Flexible(
-                      child: Text(
-                        'Best right now: ${best!.activity.label} — '
-                        '${best!.level.label.toLowerCase()}',
-                        style: TextStyle(
-                          color: scheme.onPrimary,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
+              _HeroChip(
+                icon: best!.activity.icon,
+                message: 'Best right now: ${best!.activity.label} — '
+                    '${best!.level.label.toLowerCase()}',
+              ),
+            ] else if (!current.isDay) ...[
+              const SizedBox(height: 14),
+              const _HeroChip(
+                icon: Icons.bedtime,
+                message: 'It\'s night — rest up for tomorrow\'s swim',
               ),
             ],
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _HeroChip extends StatelessWidget {
+  const _HeroChip({required this.icon, required this.message});
+
+  final IconData icon;
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.black.withValues(alpha: 0.25),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 18, color: scheme.onPrimary),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text(
+              message,
+              style: TextStyle(
+                color: scheme.onPrimary,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
       ),
     );
   }
