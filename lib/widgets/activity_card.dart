@@ -16,16 +16,8 @@ class ActivityCard extends StatelessWidget {
 
     return Card(
       elevation: 0,
-      clipBehavior: Clip.antiAlias,
       margin: const EdgeInsets.all(5),
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [color.withValues(alpha: 0.14), scheme.surfaceContainerLowest],
-          ),
-        ),
+      child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
