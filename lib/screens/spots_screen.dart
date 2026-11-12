@@ -13,34 +13,41 @@ import '../widgets/spot_tile.dart';
 import 'location_sheet.dart';
 
 class SpotsScreen extends StatefulWidget {
-  const SpotsScreen({super.key, this.onUseSpot});
+  const SpotsScreen({super.key, this.onUseSpot, this.overpass});
 
   final VoidCallback? onUseSpot;
+
+  /// Injectable for tests; defaults to the live Overpass API.
+  final OverpassService? overpass;
 
   @override
   State<SpotsScreen> createState() => _SpotsScreenState();
 }
 
 class _SpotsScreenState extends State<SpotsScreen> {
-  final _overpass = OverpassService();
+  late final OverpassService _overpass = widget.overpass ?? OverpassService();
 
   List<SwimSpot> _spots = const [];
   bool _loading = false;
   String? _error;
   int _radiusKm = 25;
-  String? _loadedForLocation;
+  String? _loadedKey;
   int _loadSeq = 0;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final locationLabel = context.watch<AppBloc>().state.location?.label;
-    if (locationLabel == _loadedForLocation) return;
-    if (locationLabel == null) {
-      if (_loadedForLocation != null) {
+    final location = context.watch<AppBloc>().state.location;
+    final key = location == null
+        ? null
+        : '${location.label}|${location.latitude}|${location.longitude}';
+    if (key == _loadedKey) return;
+    if (location == null) {
+      if (_loadedKey != null) {
         setState(() {
           _spots = const [];
-          _loadedForLocation = null;
+          _loadedKey = null;
+          _error = null;
         });
       }
       return;
@@ -50,14 +57,15 @@ class _SpotsScreenState extends State<SpotsScreen> {
 
   Future<void> _loadSpots() async {
     final location = context.read<AppBloc>().state.location;
-    if (location == null || _loading) return;
+    if (location == null) return;
     final api = context.read<OpenMeteoApi>();
     final seq = ++_loadSeq;
 
     setState(() {
       _loading = true;
       _error = null;
-      _loadedForLocation = location.label;
+      _loadedKey =
+          '${location.label}|${location.latitude}|${location.longitude}';
     });
 
     try {

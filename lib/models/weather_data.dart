@@ -18,7 +18,12 @@ class WeatherData {
 
   factory WeatherData.fromJson(Map<String, dynamic> json) {
     final current = WeatherCurrent.fromJson(json['current'] as Map<String, dynamic>);
-    final hourly = WeatherHourly.fromJson(json['hourly'] as Map<String, dynamic>);
+    // Batch forecast responses may omit hourly/daily data. Treat them as
+    // empty rather than failing — current conditions are still usable.
+    final hourlyRaw = json['hourly'] as Map<String, dynamic>?;
+    final hourly = hourlyRaw == null
+        ? WeatherHourly.fromJson(const {'time': <String>[]})
+        : WeatherHourly.fromJson(hourlyRaw);
     final dailyRaw = json['daily'] as Map<String, dynamic>?;
     final daily = <WeatherDay>[];
     if (dailyRaw != null) {

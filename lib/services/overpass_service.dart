@@ -35,7 +35,7 @@ class OverpassService {
       response = await _client.get(uri, headers: {
         'User-Agent': 'Capitan sea companion (Flutter app)',
         'Accept': 'application/json',
-      }).timeout(const Duration(seconds: 40));
+      }).timeout(const Duration(seconds: 60));
     } on TimeoutException {
       throw ApiException('The beach search timed out — try again.');
     } catch (e) {

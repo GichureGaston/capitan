@@ -102,7 +102,9 @@ class OpenMeteoApi {
       'latitude': locations.map((l) => l.latitude).join(','),
       'longitude': locations.map((l) => l.longitude).join(','),
       'current': 'wave_height,wave_period,sea_surface_temperature,ocean_current_velocity',
+      'hourly': 'wave_height,wave_period,sea_surface_temperature,ocean_current_velocity',
       'timezone': 'auto',
+      'forecast_days': '1',
       'cell_selection': 'sea',
     });
     final json = await _getJson(uri);
@@ -115,8 +117,10 @@ class OpenMeteoApi {
     final uri = Uri.parse('$baseUrl/v1/forecast').replace(queryParameters: {
       'latitude': locations.map((l) => l.latitude).join(','),
       'longitude': locations.map((l) => l.longitude).join(','),
-      'current': 'weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,uv_index,is_day',
+      'current': 'weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,is_day',
+      'hourly': 'uv_index',
       'timezone': 'auto',
+      'forecast_days': '1',
     });
     final json = await _getJson(uri);
     final list = _asList(json);

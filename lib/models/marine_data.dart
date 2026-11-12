@@ -11,7 +11,11 @@ class MarineData {
 
   factory MarineData.fromJson(Map<String, dynamic> json) {
     final current = MarineCurrent.fromJson(json['current'] as Map<String, dynamic>);
-    final hourly = MarineHourly.fromJson(json['hourly'] as Map<String, dynamic>);
+    // Batch marine responses may omit hourly/daily data.
+    final hourlyRaw = json['hourly'] as Map<String, dynamic>?;
+    final hourly = hourlyRaw == null
+        ? MarineHourly.fromJson(const {'time': <String>[]})
+        : MarineHourly.fromJson(hourlyRaw);
     final dailyRaw = json['daily'] as Map<String, dynamic>?;
     final daily = <MarineDay>[];
     if (dailyRaw != null) {
