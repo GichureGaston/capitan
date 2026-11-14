@@ -55,13 +55,13 @@ A single dashboard for the moment you are about to get in:
 - One tap sets the spot as your current location, and Capitán remembers it next time.
 
 ### 🐟 Fish guide
-- 33 fish species, each with a photo, scientific name, size, diet, habitat, and conservation status.
+- 79 fish species, each with a photo, scientific name, size, diet, habitat, and conservation status.
 - **Danger labels in plain language:** Harmless, Sharp / spiny, Stings, Venomous, Bites when provoked, Poisonous to eat.
 - A short "what to know" description and a fun fact per species.
-- Automatically filters to species typical for the waters around your current location (Caribbean, Indo-Pacific, Red Sea, Mediterranean, and more), with a toggle for the full guide and search by common or scientific name.
+- Automatically filters to species typical for the waters around your current location (Caribbean, Indo-Pacific, Red Sea, Mediterranean, eastern Pacific, southern Australia, temperate waters, and more), with a toggle for the full guide and search by common or scientific name.
 
 ### 🪸 Coral guide
-- 21 corals and reef-life entries (including anemones, jellies, octopuses, turtles, and sharks), with photos and the same safety framing.
+- 58 corals and reef-life entries (including anemones, jellies, octopuses, turtles, sharks, clams, starfish, sponges and sea urchins), with photos and the same safety framing.
 - Calls out fragile, sharp, and stinging reef life — the things to look at from a respectful distance rather than touch.
 - Conservation status surfaced next to the danger label, because "don't touch" is both a safety rule and a reef rule.
 
@@ -115,10 +115,17 @@ If you are ever unsure: don't get in. The sea will still be there tomorrow.
 | Waves, sea level, sea temperature, currents | [Open-Meteo Marine API](https://open-meteo.com/en/docs/marine-weather-api) (Copernicus Marine data) |
 | Beaches and swimming areas | [OpenStreetMap](https://www.openstreetmap.org/) via the [Overpass API](https://overpass-api.de/) |
 | Species photos | [Wikimedia Commons](https://commons.wikimedia.org/) |
+| Species reference summaries | [Wikipedia](https://en.wikipedia.org/) (development reference only) |
 
 Photo licences are limited to public domain, CC0, CC BY, and CC BY-SA. Attribution is stored alongside each species and shown in the detail screen. Per-image credits are also kept in [`fish-credits.csv`](fish-credits.csv) and [`coral-credits.csv`](coral-credits.csv); please keep those files and the in-app attribution if you reuse the images.
 
-The photo-fetching scripts in [`tools/`](tools/) were used to source and record the images. They are development utilities and are not part of the shipped app.
+The scripts in [`tools/`](tools/) were used to source and record the images and reference material. [`fetch_marine_life.py`](tools/fetch_marine_life.py) is the general-purpose fetcher: it looks up each species on Wikipedia and Wikimedia Commons, rejects licences outside the set above, downloads the photo, records attribution, and can fill a missing IUCN status. The earlier `fetch_species_images.py` and `fetch_coral_images.py` are kept as simpler single-dataset variants. [`wikipedia-summaries.json`](tools/wikipedia-summaries.json) stores the summaries used while checking the entries. These are development utilities and are not part of the shipped app.
+
+```bash
+# Add only the photos that are still missing, in place
+python3 tools/fetch_marine_life.py assets/data/fish.json --in-place --missing-images --download
+python3 tools/fetch_marine_life.py assets/data/coral.json --in-place --missing-images --download
+```
 
 ---
 
