@@ -31,7 +31,11 @@
     "habitat": "Shallow reef crests pounded by waves",
     "conservation": "Critically endangered",
     "description": "Broad, flattened branches like moose antlers, forming shallow reef barriers where snorkellers most often see them. Their decline from disease and bleaching transformed Caribbean coastlines.",
-    "funFact": "Elkhorn's flat shape evolved to catch light in shallow surf — entire reefs grow sideways into the sun."
+    "funFact": "Elkhorn's flat shape evolved to catch light in shallow surf — entire reefs grow sideways into the sun.",
+    "image": "assets/images/elkhorn-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Elkhorn_coral.jpg",
+    "imageCredit": "Unknown",
+    "imageLicense": "Public domain"
   },
   {
     "id": "table-coral",
@@ -67,7 +71,11 @@
     "habitat": "Protected reef flats and lagoons",
     "conservation": "Least concern",
     "description": "Smooth domes folded like a brain's surface. Their slow growth — millimetres a year — builds reef foundations that outlive centuries.",
-    "funFact": "The maze-like ridges channel mucus and trapped food toward the polyp mouths running down each valley."
+    "funFact": "The maze-like ridges channel mucus and trapped food toward the polyp mouths running down each valley.",
+    "image": "assets/images/brain-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Brain_coral.jpg",
+    "imageCredit": "Unknown",
+    "imageLicense": "Public domain"
   },
   {
     "id": "pillar-coral",
@@ -121,7 +129,11 @@
     "habitat": "Shallow back-reefs and seagrass edges",
     "conservation": "Least concern",
     "description": "Pale lilac or tan fingers clustered in cushions. It tolerates murky, warm water that other corals reject, so snorkellers see it even in degraded lagoons.",
-    "funFact": "Some Porites colonies in the Pacific have been growing for over 1,000 years — among the oldest animals alive."
+    "funFact": "Some Porites colonies in the Pacific have been growing for over 1,000 years — among the oldest animals alive.",
+    "image": "assets/images/finger-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Porites_porites_French_Bay.jpg",
+    "imageCredit": "Jstuby at en.wikipedia",
+    "imageLicense": "Public domain"
   },
   {
     "id": "fire-coral",
@@ -157,7 +169,11 @@
     "habitat": "Reef walls and current-swept channels",
     "conservation": "Data deficient",
     "description": "Flat, lattice-like fans that strain plankton from passing currents. Purple sea fans are flexible — unlike hard corals, they bend with the surge instead of breaking.",
-    "funFact": "Sea fans orient across the current like solar panels — each new branch grows into the food-bearing flow."
+    "funFact": "Sea fans orient across the current like solar panels — each new branch grows into the food-bearing flow.",
+    "image": "assets/images/sea-fan.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Gorgonia_flabellum,_Bahamas.jpg",
+    "imageCredit": "James St. John",
+    "imageLicense": "CC BY 2.0"
   },
   {
     "id": "leather-coral",
@@ -331,7 +347,11 @@
     "habitat": "Deeper reef walls and overhangs",
     "conservation": "Protected under CITES Appendix II",
     "description": "Living tissue comes in greens, yellows and whites — the jet-black skeleton only shows when polished. Slow-growing and long-lived, black corals are protected nearly everywhere they occur.",
-    "funFact": "Radiocarbon dating has found Hawaiian black corals over 4,000 years old — the oldest marine animals known."
+    "funFact": "Radiocarbon dating has found Hawaiian black corals over 4,000 years old — the oldest marine animals known.",
+    "image": "assets/images/black-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Blackcoral_colony_600.jpg",
+    "imageCredit": "Image courtesy of Dr. Scott France.",
+    "imageLicense": "Public domain"
   },
   {
     "id": "red-gorgonian",
@@ -366,7 +386,11 @@
     "habitat": "Reef flats and lagoons",
     "conservation": "Least concern",
     "description": "Lemon-yellow or green boulders, some of the largest coral colonies on Earth. Snorkellers in Hawaii and the Great Barrier Reef swim past 'Porites cities' that took a millennium to grow.",
-    "funFact": "The largest known Porites colony in American Samoa is over 5 m tall and estimated to be more than 800 years old."
+    "funFact": "The largest known Porites colony in American Samoa is over 5 m tall and estimated to be more than 800 years old.",
+    "image": "assets/images/porites-boulder.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Lisianski_coral_lrg.jpg",
+    "imageCredit": "not specified",
+    "imageLicense": "Public domain"
   },
   {
     "id": "rose-coral",
@@ -386,5 +410,773 @@
     "imageSource": "https://commons.wikimedia.org/wiki/File:Manicina_areolata_(rose_coral)_(San_Salvador_Island,_Bahamas)_2_(15472166633).jpg",
     "imageCredit": "James St. John",
     "imageLicense": "CC BY 2.0"
+  },
+  {
+    "id": "open-brain-coral",
+    "name": "Open Brain Coral",
+    "scientificName": "Trachyphyllia geoffroyi",
+    "emoji": "🪸",
+    "regions": [
+      "indo-pacific",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Colonies to 20 cm",
+    "habitat": "Sandy and rubble bottoms beside reefs",
+    "conservation": "Near threatened",
+    "description": "A single, fleshy polyp that inflates into wavy folds of green, red and brown, looking like a brain left on the sand. Its valleys and ridges feed mucus toward the mouth at the centre. Unlike reef-building corals, it often lives loose on soft bottoms.",
+    "funFact": "Open brain corals can inflate their tissue with water to cover sharp rubble beneath them — their own built-in cushion.",
+    "image": "assets/images/open-brain-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Open_Brain_Coral_Green.jpg",
+    "imageCredit": "bondolo",
+    "imageLicense": "CC BY 3.0"
+  },
+  {
+    "id": "elegance-coral",
+    "name": "Elegance Coral",
+    "scientificName": "Catalaphyllia jardinei",
+    "emoji": "🪸",
+    "regions": [
+      "indo-pacific",
+      "tropical"
+    ],
+    "danger": "sting",
+    "size": "Colonies to 1 m across",
+    "habitat": "Muddy reef flats, lagoons and seagrass edges",
+    "conservation": "Vulnerable",
+    "description": "Long, flowing tentacles with glowing green tips spread from a fleshy, sand-dwelling colony. The elegance coral is one of the few large corals that tolerates silty inshore water, but its stinging cells still demand space from neighbours and from snorkellers.",
+    "funFact": "Its common name comes from the way the tentacles sway like a ballgown in the current — but that skirt carries a powerful sting.",
+    "image": "assets/images/elegance-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Catalaphyllia_short.JPG",
+    "imageCredit": "Tappinen",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "torch-coral",
+    "name": "Torch Coral",
+    "scientificName": "Euphyllia glabrescens",
+    "emoji": "🪸",
+    "regions": [
+      "indo-pacific",
+      "tropical"
+    ],
+    "danger": "sting",
+    "size": "Colonies to 1 m",
+    "habitat": "Sheltered reef flats and lagoons",
+    "conservation": "Near threatened",
+    "description": "Clusters of long, tubular tentacles tipped with pale, glowing bulbs — like a bank of torches swaying in the surge. Torch corals are popular in aquariums, which has increased pressure on wild colonies. Their tentacles deliver a sharp sting to bare skin.",
+    "funFact": "At night they extend longer sweeper tentacles to sting and clear space from neighbouring corals.",
+    "image": "assets/images/torch-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Euphyllia_glabrescens_en_acuario.JPG",
+    "imageCredit": "Josuevg",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "hammer-coral",
+    "name": "Hammer Coral",
+    "scientificName": "Fimbriaphyllia ancora",
+    "emoji": "🪸",
+    "regions": [
+      "indo-pacific",
+      "tropical"
+    ],
+    "danger": "sting",
+    "size": "Colonies to 1 m",
+    "habitat": "Reef slopes and sheltered lagoons",
+    "conservation": "Vulnerable",
+    "description": "Tentacles shaped like tiny hammers or anchors, coloured green, pink or gold. Hammer corals grow in dense clusters on sheltered reef slopes and expand their tentacles to feed at night. Every one of those hammers is loaded with stinging cells.",
+    "funFact": "Each hammer-shaped tentacle can act like a slow, muscular hand, passing food along to the mouth at the colony's centre.",
+    "image": "assets/images/hammer-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Coral_(Euphyllia_ancora),_Anilao,_Filipinas,_2023-08-22,_DD_292.jpg",
+    "imageCredit": "Diego Delso",
+    "imageLicense": "CC BY-SA 4.0"
+  },
+  {
+    "id": "xenia-coral",
+    "name": "Pulsing Xenia Coral",
+    "scientificName": "Xenia spp.",
+    "emoji": "🪸",
+    "regions": [
+      "indo-pacific",
+      "red-sea",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Mats to 50 cm",
+    "habitat": "Reef flats, lagoons and shallow rubble",
+    "conservation": "Not evaluated",
+    "description": "Soft corals that spread in soft, feathered mats, their eight-tentacled polyps opening and closing in a slow, hypnotic pulse. Xenia thrives on shallow, nutrient-rich reef flats and can colonise rubble quickly after a storm.",
+    "funFact": "The pulsing rhythm varies with current and light, and may help the colony exchange water for feeding and oxygen.",
+    "image": "assets/images/xenia-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Coral_pulsante_(Xenia_umbellata),_Ras_Katy,_Sharm_el-Sheij,_Egipto,_2022-03-26,_DD_96.jpg",
+    "imageCredit": "Diego Delso",
+    "imageLicense": "CC BY-SA 4.0"
+  },
+  {
+    "id": "green-star-polyps",
+    "name": "Green Star Polyps",
+    "scientificName": "Briareum violaceum",
+    "emoji": "🪸",
+    "regions": [
+      "indo-pacific",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Mats to 1 m",
+    "habitat": "Reef rubble, walls and shallow rocky patches",
+    "conservation": "Not evaluated",
+    "description": "A purple or maroon encrusting mat from which bright green, star-shaped polyps emerge like a field of tiny flowers. Green star polyps spread quickly over bare rock and rubble, making them both a reef pioneer and a nuisance to neighbouring corals.",
+    "funFact": "They are soft corals that produce a tough, rubbery mat instead of a stony skeleton — flexible enough to survive surge.",
+    "image": "assets/images/green-star-polyps.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Briareum.JPG",
+    "imageCredit": "User:Haplochromis",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "giant-clam",
+    "name": "Giant Clam",
+    "scientificName": "Tridacna gigas",
+    "emoji": "🦪",
+    "regions": [
+      "indo-pacific",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Shells to 1.2 m",
+    "habitat": "Shallow reef flats and sandy lagoon patches",
+    "conservation": "Vulnerable",
+    "description": "The largest living bivalve, with a thick, fluted shell and a mantle striped in blue, green and gold. Giant clams farm algae inside their tissues, giving them energy from sunlight. They grow slowly and live for decades, so they are vulnerable to harvesting.",
+    "funFact": "A giant clam cannot snap shut fast enough to trap a diver — the old myth of being held underwater by a clam is just a story.",
+    "image": "assets/images/giant-clam.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Giant_clam_(Tridacna_gigas)_Michaelmas_Cay.jpg",
+    "imageCredit": "Charles J. Sharp",
+    "imageLicense": "CC BY-SA 4.0"
+  },
+  {
+    "id": "crown-of-thorns-starfish",
+    "name": "Crown-of-thorns Starfish",
+    "scientificName": "Acanthaster planci",
+    "emoji": "⭐",
+    "regions": [
+      "indo-pacific",
+      "red-sea",
+      "tropical"
+    ],
+    "danger": "venomous",
+    "size": "Up to 35 cm across",
+    "habitat": "Coral reefs, especially once dense coral cover builds up",
+    "conservation": "Not evaluated",
+    "description": "A many-armed starfish covered in venomous spines, feeding by pushing its stomach out through its mouth and digesting coral alive. In outbreaks it can strip a reef bare. The spines break off in skin and cause a painful, burning wound — look, never touch.",
+    "funFact": "A single female can release tens of millions of eggs in a spawning season, which helps trigger the outbreaks that plague some reefs.",
+    "image": "assets/images/crown-of-thorns-starfish.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Acanthaster_planci_460468243_(closeup).jpg",
+    "imageCredit": "John Hepburn",
+    "imageLicense": "CC BY 4.0"
+  },
+  {
+    "id": "christmas-tree-worm",
+    "name": "Christmas Tree Worm",
+    "scientificName": "Spirobranchus giganteus",
+    "emoji": "🎄",
+    "regions": [
+      "global",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Crowns to 10 cm",
+    "habitat": "Embedded in coral heads, especially Porites",
+    "conservation": "Not evaluated",
+    "description": "Two spiral crowns of feathery tentacles spiralling out of a coral head, often in red, blue or yellow. The worm lives in a tube it has bored into the coral and retreats in a blink if a shadow passes overhead. It filters plankton from the current.",
+    "funFact": "Each crown is a specialised feeding and breathing structure — the rest of the worm stays hidden in its coral burrow its whole life.",
+    "image": "assets/images/christmas-tree-worm.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Spirobranchus_giganteus_(Red_and_white_christmas_tree_worm).jpg",
+    "imageCredit": "Nhobgood Nick Hobgood",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "great-star-coral",
+    "name": "Great Star Coral",
+    "scientificName": "Montastraea cavernosa",
+    "emoji": "🪸",
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Colonies to 2 m",
+    "habitat": "Reef slopes, walls and shaded overhangs",
+    "conservation": "Least concern",
+    "description": "A massive Caribbean coral whose large, star-shaped polyps stay open in daylight — an unusual sight on a reef. Colonies can be domes, plates or columns, and the polyps come in shades of green, brown and orange. It is a resilient reef builder.",
+    "funFact": "Unlike many corals, great star coral is often seen feeding during the day, its polyps stretched out like tiny sea anemones.",
+    "image": "assets/images/great-star-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Montastraea_cavernosa.jpg",
+    "imageCredit": "Unknown",
+    "imageLicense": "Public domain"
+  },
+  {
+    "id": "zoanthid",
+    "name": "Zoanthid",
+    "scientificName": "Zoanthus spp.",
+    "emoji": "🌼",
+    "regions": [
+      "global",
+      "tropical"
+    ],
+    "danger": "poison",
+    "size": "Polyps 1-2 cm, mats to 1 m",
+    "habitat": "Shallow reef flats, rocks and rubble",
+    "conservation": "Not evaluated",
+    "description": "Colourful colonial polyps that carpet rocks like tiny daisies, often green, orange or electric blue. They look soft and harmless, but some zoanthids carry palytoxin, one of the most potent natural toxins known. Never handle, taste or scrub them.",
+    "funFact": "Palytoxin from zoanthids is so potent that aquarium hobbyists have been hospitalised simply from fumes released while cleaning a tank.",
+    "image": "assets/images/zoanthid.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Zoanthus-dragon-eye.jpg",
+    "imageCredit": "Kazvorpal",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "mustard-hill-coral",
+    "name": "Mustard Hill Coral",
+    "scientificName": "Porites astreoides",
+    "emoji": "🪸",
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Colonies up to 1 m",
+    "diet": "Plankton and nutrients from symbiotic algae",
+    "habitat": "Shallow reefs, lagoons and rubble",
+    "conservation": "Least concern",
+    "description": "A lumpy, mustard-yellow coral made of tightly packed bumps. It is one of the toughest Caribbean corals and can survive in murky or wave-washed shallows where other corals struggle.",
+    "funFact": "Mustard hill coral broods its larvae, releasing ready-to-settle young instead of broadcast eggs.",
+    "image": "assets/images/mustard-hill-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Porites_astreoides_(mustard_hill_coral)_(San_Salvador_Island,_Bahamas)_1_(16097660545).jpg",
+    "imageCredit": "James St. John",
+    "imageLicense": "CC BY 2.0"
+  },
+  {
+    "id": "lettuce-coral",
+    "name": "Lettuce Coral",
+    "scientificName": "Agaricia agaricites",
+    "emoji": "🪸",
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Colonies up to 1 m",
+    "diet": "Plankton and nutrients from symbiotic algae",
+    "habitat": "Reef slopes, lagoons and rubble",
+    "conservation": "Vulnerable",
+    "description": "Overlapping leaf-like plates with radiating ridges, often in shades of brown, purple or green. The plates grow at different angles to catch light on slopes and in shaded overhangs.",
+    "funFact": "Its upright plates work like solar panels, spreading to catch sunlight at different depths.",
+    "image": "assets/images/lettuce-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Agarica_agaricites_(Scaled_Lettuce_Coral)_closeup.jpg",
+    "imageCredit": "Nhobgood Nick Hobgood",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "giant-barrel-sponge",
+    "name": "Giant Barrel Sponge",
+    "scientificName": "Xestospongia muta",
+    "emoji": "🧽",
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Up to 2 m tall",
+    "diet": "Bacteria and plankton filtered from seawater",
+    "habitat": "Reef slopes and walls",
+    "conservation": "Not evaluated",
+    "description": "A huge brown barrel-shaped sponge with a wide opening at the top. It pumps seawater through its body, filtering out bacteria and plankton, and can dominate deeper Caribbean reef slopes.",
+    "funFact": "Some giant barrel sponges are estimated to be centuries old.",
+    "image": "assets/images/giant-barrel-sponge.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Reef3860_-_Flickr_-_NOAA_Photo_Library.jpg",
+    "imageCredit": "Twilight Zone Expedition Team 2007, NOAA-OE .",
+    "imageLicense": "Public domain"
+  },
+  {
+    "id": "long-spined-sea-urchin",
+    "name": "Long-spined Sea Urchin",
+    "scientificName": "Diadema antillarum",
+    "emoji": "🦔",
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
+    "danger": "sharp",
+    "size": "Spines up to 30 cm",
+    "diet": "Algae",
+    "habitat": "Reef flats, seagrass beds and rubble",
+    "conservation": "Not evaluated",
+    "description": "A black urchin with extremely long, brittle spines that can deliver painful wounds. It grazes algae and shelters in crevices during the day, playing a big role in keeping Caribbean reefs from being overgrown.",
+    "funFact": "A mass die-off in the 1980s removed most of these urchins and helped algae smother many reefs.",
+    "image": "assets/images/long-spined-sea-urchin.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Diadema_antillarum_Flower_Garden_Banks.jpg",
+    "imageCredit": "NOAA",
+    "imageLicense": "Public domain"
+  },
+  {
+    "id": "flower-coral",
+    "name": "Flower Coral",
+    "scientificName": "Eusmilia fastigiata",
+    "emoji": "🪸",
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Colonies up to 50 cm",
+    "diet": "Plankton",
+    "habitat": "Reef slopes and shaded overhangs",
+    "conservation": "Critically endangered",
+    "description": "Clusters of tubular corallites with pale centres and brown walls, looking like small flowers. It extends its tentacles at night to catch plankton and often grows in shaded overhangs.",
+    "funFact": "It is a slow-growing coral that can persist in low light where many other corals cannot.",
+    "image": "assets/images/flower-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Eusmilia_fastigiata_large.jpg",
+    "imageCredit": "Photographer: Florida Keys National Marine Sanctuary Staff",
+    "imageLicense": "Public domain"
+  },
+  {
+    "id": "blade-fire-coral",
+    "name": "Blade Fire Coral",
+    "scientificName": "Millepora complanata",
+    "emoji": "🪸",
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
+    "danger": "sting",
+    "size": "Colonies up to 1 m",
+    "diet": "Plankton and dissolved nutrients",
+    "habitat": "Reef crests and shallow slopes",
+    "conservation": "Critically endangered",
+    "description": "Upright blade-like plates with a smooth, pale surface, often forming dense thickets on shallow reef crests. Despite the name and appearance, it is a hydrozoan, not a true stony coral.",
+    "funFact": "Its stinging cells are tiny but can leave a painful, itchy rash on bare skin.",
+    "image": "assets/images/blade-fire-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Millepora_complanata_y_Chromis_multilineata.jpg",
+    "imageCredit": "Paul Asman y Jill Lenoble",
+    "imageLicense": "CC BY 2.0"
+  },
+  {
+    "id": "encrusting-gorgonian",
+    "name": "Encrusting Gorgonian",
+    "scientificName": "Erythropodium caribaeorum",
+    "emoji": "🪸",
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Mats up to several metres",
+    "diet": "Plankton",
+    "habitat": "Reef walls, rubble and shaded ledges",
+    "conservation": "Not evaluated",
+    "description": "A purple-brown soft coral that spreads as a rubbery mat over rock and rubble. Its pale polyps emerge to feed at night, and the mat can overgrow nearby corals and sponges.",
+    "funFact": "It grows outward as a sheet rather than building upright branches.",
+    "image": "assets/images/encrusting-gorgonian.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Erythropodium_caribaeorum_01_by_Line1.JPG",
+    "imageCredit": "Liné1",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "black-sea-rod",
+    "name": "Black Sea Fan",
+    "scientificName": "Iciligorgia schrammi",
+    "emoji": "🪸",
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Up to 1 m",
+    "diet": "Plankton",
+    "habitat": "Deep reef walls and drop-offs",
+    "conservation": "Not evaluated",
+    "description": "A dark, bushy gorgonian with thin flexible branches, usually found on deeper walls and drop-offs. Its polyps open at night to strain plankton from the current.",
+    "funFact": "Its skeleton is flexible and dark, unlike the hard white skeleton of stony corals.",
+    "image": "assets/images/black-sea-rod.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Iciligorgia_schrammi.jpg",
+    "imageCredit": "Unknown",
+    "imageLicense": "Public domain"
+  },
+  {
+    "id": "montipora-coral",
+    "name": "Montipora Coral",
+    "scientificName": "Montipora digitata",
+    "emoji": "🪸",
+    "regions": [
+      "indo-pacific",
+      "tropical"
+    ],
+    "danger": "sharp",
+    "size": "Colonies up to 1 m",
+    "diet": "Plankton and nutrients from symbiotic algae",
+    "habitat": "Shallow reef flats and lagoons",
+    "conservation": "Endangered",
+    "description": "A fast-growing coral with finger-like branches in brown, purple or green. It is one of the most widespread reef-builders in the Indo-Pacific and provides shelter for small fish and crustaceans.",
+    "funFact": "Montipora corals can grow quickly but are sensitive to bleaching and disease.",
+    "image": "assets/images/montipora-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Montipora_digitata.jpg",
+    "imageCredit": "No machine-readable author provided. Haplochromis assumed (based on copyright claims).",
+    "imageLicense": "Public domain"
+  },
+  {
+    "id": "duncan-coral",
+    "name": "Duncan Coral",
+    "scientificName": "Duncanopsammia axifuga",
+    "emoji": "🪸",
+    "regions": [
+      "indo-pacific"
+    ],
+    "danger": "harmless",
+    "size": "Colonies up to 30 cm",
+    "diet": "Plankton",
+    "habitat": "Sandy and rubbly reef edges",
+    "conservation": "Least concern",
+    "description": "A colonial coral with tubular corallites and greenish tentacles, often forming small clumps on sandy reef edges. Each polyp has its own mouth but shares a skeleton with its neighbours.",
+    "funFact": "Its common name comes from the Duncan family, early collectors of the species.",
+    "image": "assets/images/duncan-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Duncanopsammia_axifuga_(whisker_coral).jpg",
+    "imageCredit": "Unknown",
+    "imageLicense": "Public domain"
+  },
+  {
+    "id": "scolymia-coral",
+    "name": "Scolymia Coral",
+    "scientificName": "Scolymia cubensis",
+    "emoji": "🪸",
+    "regions": [
+      "caribbean",
+      "tropical"
+    ],
+    "danger": "sharp",
+    "size": "Up to 15 cm across",
+    "diet": "Plankton and larger food particles",
+    "habitat": "Reef slopes, lagoons and rubble",
+    "conservation": "Critically endangered",
+    "description": "A solitary, fleshy coral with a round shape and prominent ridges. It comes in many colours and can capture surprisingly large food items with its tentacles.",
+    "funFact": "Some Scolymia corals can swallow small fish and shrimp whole.",
+    "image": "assets/images/scolymia-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Scolymia_cubensis_by_Jessica_Rosenkrantz.jpg",
+    "imageCredit": "Jessica Rosenkrantz",
+    "imageLicense": "CC BY-SA 4.0"
+  },
+  {
+    "id": "blue-sea-star",
+    "name": "Blue Sea Star",
+    "scientificName": "Linckia laevigata",
+    "emoji": "⭐",
+    "regions": [
+      "indo-pacific",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Up to 30 cm across",
+    "diet": "Algae, detritus and small invertebrates",
+    "habitat": "Reef flats, seagrass and rubble",
+    "conservation": "Not evaluated",
+    "description": "A bright blue starfish with long, rounded arms, often seen on reef flats and rubble. It moves slowly over the bottom, feeding on algae and detritus, and can regrow lost arms.",
+    "funFact": "It can regenerate not just an arm but an entire body from a fragment.",
+    "image": "assets/images/blue-sea-star.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Linckia_laevigata_Tonga.jpg",
+    "imageCredit": "dr.scott.mills",
+    "imageLicense": "CC BY-SA 2.0"
+  },
+  {
+    "id": "bubble-tip-anemone",
+    "name": "Bubble-tip Anemone",
+    "scientificName": "Entacmaea quadricolor",
+    "emoji": "🌺",
+    "regions": [
+      "indo-pacific",
+      "red-sea",
+      "tropical"
+    ],
+    "danger": "sting",
+    "size": "Up to 30 cm across",
+    "diet": "Plankton, fish and shrimp",
+    "habitat": "Reef crevices and coral branches",
+    "conservation": "Not evaluated",
+    "description": "A sea anemone with tentacles that often end in bulbous tips, usually brown, green or pink. It hosts several clownfish species and can retract into a crevice when disturbed.",
+    "funFact": "The bulbous tips may help the anemone capture food and shelter its clownfish partners.",
+    "image": "assets/images/bubble-tip-anemone.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Entacmaea_quadricolor_(Bubble_tip_anemone).jpg",
+    "imageCredit": "Nhobgood Nick Hobgood",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "small-giant-clam",
+    "name": "Small Giant Clam",
+    "scientificName": "Tridacna maxima",
+    "emoji": "🦪",
+    "regions": [
+      "red-sea",
+      "indo-pacific",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Up to 40 cm",
+    "diet": "Sunlight via symbiotic algae, plus plankton",
+    "habitat": "Shallow reef flats and coral heads",
+    "conservation": "Least concern",
+    "description": "A colourful clam that embeds itself in coral or rock, exposing a mantle full of symbiotic algae. It can close its shell quickly when shadowed, and is much smaller than the true giant clam.",
+    "funFact": "Its mantle can be brilliant blue, green or purple thanks to the algae living inside it.",
+    "image": "assets/images/small-giant-clam.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Almeja_gigante_(Tridacna_maxima),_Temple,_Sharm_el-Sheij,_Egipto,_2022-03-26,_DD_33.jpg",
+    "imageCredit": "Diego Delso",
+    "imageLicense": "CC BY-SA 4.0"
+  },
+  {
+    "id": "sinularia-coral",
+    "name": "Sinularia Coral",
+    "scientificName": "Sinularia spp.",
+    "emoji": "🪸",
+    "regions": [
+      "red-sea",
+      "indo-pacific",
+      "tropical"
+    ],
+    "danger": "harmless",
+    "size": "Colonies up to 1 m",
+    "diet": "Plankton and dissolved nutrients",
+    "habitat": "Reef flats and slopes",
+    "conservation": "Not evaluated",
+    "description": "A soft leathery coral with finger-like lobes that sway in the current. It sheds mucus to clean itself and can release chemicals that discourage neighbouring corals from growing too close.",
+    "funFact": "Soft corals like this have no hard stony skeleton, only tiny flexible spicules.",
+    "image": "assets/images/sinularia-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Flexible_Leather_Coral_(Sinularia_flexibilis)_-_GRB.jpg",
+    "imageCredit": "George Berninger Jr.",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "mediterranean-cup-coral",
+    "name": "Mediterranean Cup Coral",
+    "scientificName": "Cladocora caespitosa",
+    "emoji": "🪸",
+    "regions": [
+      "mediterranean"
+    ],
+    "danger": "sharp",
+    "size": "Colonies up to 50 cm",
+    "diet": "Plankton",
+    "habitat": "Shallow rocky reefs and seagrass edges",
+    "conservation": "Endangered",
+    "description": "Clusters of brown, cup-shaped corallites that build small banks in shallow Mediterranean water. It is one of the few reef-building corals in the Mediterranean and is vulnerable to heat waves.",
+    "funFact": "Its colonies can grow large enough to be considered a true reef.",
+    "image": "assets/images/mediterranean-cup-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Capo_Gallo_063_Cladocora_caespitosa.jpg",
+    "imageCredit": "Esculapio",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "red-coral",
+    "name": "Red Coral",
+    "scientificName": "Corallium rubrum",
+    "emoji": "🪸",
+    "regions": [
+      "mediterranean"
+    ],
+    "danger": "sharp",
+    "size": "Colonies up to 50 cm",
+    "diet": "Plankton",
+    "habitat": "Dark caves and deep rocky walls",
+    "conservation": null,
+    "description": "A slow-growing gorgonian with a bright red skeleton and white polyps, living in shaded caves and deep walls. It has been harvested for jewellery for thousands of years and is now heavily depleted in many areas.",
+    "funFact": "Some red coral colonies are thought to live for centuries.",
+    "image": "assets/images/red-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Corallium_rubrum_(Linnaeus,_1758)_11.jpg",
+    "imageCredit": "Géry PARENT",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "yellow-gorgonian",
+    "name": "Yellow Gorgonian",
+    "scientificName": "Eunicella cavolini",
+    "emoji": "🪸",
+    "regions": [
+      "mediterranean"
+    ],
+    "danger": "harmless",
+    "size": "Up to 50 cm",
+    "diet": "Plankton",
+    "habitat": "Rocky walls and overhangs",
+    "conservation": "Near threatened",
+    "description": "A yellow fan-shaped gorgonian with polyps arranged in rows along its branches. It feeds by catching plankton from the current and is a familiar sight on Mediterranean walls.",
+    "funFact": "Gorgonians orient their fans across the current to catch the most plankton.",
+    "image": "assets/images/yellow-gorgonian.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Eunicella.jpg",
+    "imageCredit": "albert kok",
+    "imageLicense": "CC BY-SA 3.0"
+  },
+  {
+    "id": "snakelocks-anemone",
+    "name": "Snakelocks Anemone",
+    "scientificName": "Anemonia sulcata",
+    "emoji": "🌺",
+    "regions": [
+      "mediterranean",
+      "temperate"
+    ],
+    "danger": "sting",
+    "size": "Up to 20 cm across",
+    "diet": "Plankton, small fish and crustaceans",
+    "habitat": "Sunlit rocks and seagrass",
+    "conservation": "Not evaluated",
+    "description": "A sea anemone with long, slender green tentacles tipped with purple, often growing in sunlit shallow water. It hosts symbiotic algae and can survive long periods without catching food.",
+    "funFact": "Its tentacles stay extended in daylight to let the algae inside it photosynthesise.",
+    "image": "assets/images/snakelocks-anemone.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Anemonia_viridis_Lamiot_Le_Racou_2979.JPG",
+    "imageCredit": "Lamiot",
+    "imageLicense": "CC BY-SA 4.0"
+  },
+  {
+    "id": "giant-pavona",
+    "name": "Giant Pavona Coral",
+    "scientificName": "Pavona gigantea",
+    "emoji": "🪸",
+    "regions": [
+      "east-pacific",
+      "tropical"
+    ],
+    "danger": "sharp",
+    "size": "Colonies up to 3 m",
+    "diet": "Plankton and nutrients from symbiotic algae",
+    "habitat": "Rocky and coral reefs",
+    "conservation": "Near threatened",
+    "description": "A massive coral that builds broad plates and mounds, often dominating eastern Pacific reefs. Its surface is covered in small polyps that give it a rough, ridged texture.",
+    "funFact": "It is one of the main reef-building corals in the tropical eastern Pacific.",
+    "image": "assets/images/giant-pavona.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Pavona_gigantea_192642652.jpg",
+    "imageCredit": "keesgroenendijk",
+    "imageLicense": "CC BY-SA 4.0"
+  },
+  {
+    "id": "elegant-cup-coral",
+    "name": "Orange Coral",
+    "scientificName": "Balanophyllia elegans",
+    "emoji": "🪸",
+    "regions": [
+      "east-pacific",
+      "temperate"
+    ],
+    "danger": "sharp",
+    "size": "Up to 5 cm across",
+    "diet": "Plankton",
+    "habitat": "Rocky walls and shaded undersides",
+    "conservation": "Not evaluated",
+    "description": "A solitary orange cup coral that grows on rocky walls and under overhangs along the eastern Pacific coast. It extends translucent tentacles to feed and retracts them when touched.",
+    "funFact": "It broods its larvae and colonises new rock slowly, one polyp at a time.",
+    "image": "assets/images/elegant-cup-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Balanophyllia_elegans.jpg",
+    "imageCredit": "Steve Lonhart / NOAA MBNMS",
+    "imageLicense": "Public domain"
+  },
+  {
+    "id": "orange-cup-coral",
+    "name": "Orange Cup Coral",
+    "scientificName": "Tubastraea coccinea",
+    "emoji": "🪸",
+    "regions": [
+      "east-pacific",
+      "indo-pacific",
+      "caribbean",
+      "tropical"
+    ],
+    "danger": "sting",
+    "size": "Colonies up to 10 cm",
+    "diet": "Plankton",
+    "habitat": "Shaded reef walls, caves and pilings",
+    "conservation": "Not evaluated",
+    "description": "Bright orange tubular polyps that grow in clusters on shaded walls, caves and artificial structures. Unlike many reef corals, it has no symbiotic algae and depends entirely on catching plankton.",
+    "funFact": "It is a successful invader and can spread on ship hulls and oil platforms.",
+    "image": "assets/images/orange-cup-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Coral_sol_(Tubastraea_coccinea),_Cabo_Pulmo,_Baja_California,_M%C3%A9xico,_2024-12-19,_DD_22.jpg",
+    "imageCredit": "Diego Delso",
+    "imageLicense": "CC BY-SA 4.0"
+  },
+  {
+    "id": "pacific-sea-fan",
+    "name": "Pacific Sea Fan",
+    "scientificName": "Muricea californica",
+    "emoji": "🪸",
+    "regions": [
+      "east-pacific",
+      "temperate"
+    ],
+    "danger": "harmless",
+    "size": "Up to 1 m",
+    "diet": "Plankton",
+    "habitat": "Rocky reefs and kelp forests",
+    "conservation": "Not evaluated",
+    "description": "A golden-brown gorgonian sea fan with a branching, net-like shape, found along the eastern Pacific coast. It grows across the current and feeds on plankton drifting past.",
+    "funFact": "Sea fans are colonies of tiny polyps, not plants, despite their branch-like appearance.",
+    "image": "assets/images/pacific-sea-fan.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Muricea_californica.jpg",
+    "imageCredit": "Claire Fackler, CINMS, NOAA",
+    "imageLicense": "Public domain"
+  },
+  {
+    "id": "green-knob-coral",
+    "name": "Green Knob Coral",
+    "scientificName": "Plesiastrea versipora",
+    "emoji": "🪸",
+    "regions": [
+      "australia-temperate",
+      "indo-pacific"
+    ],
+    "danger": "harmless",
+    "size": "Colonies up to 2 m",
+    "diet": "Plankton and nutrients from symbiotic algae",
+    "habitat": "Rocky reefs and shallow caves",
+    "conservation": "Least concern",
+    "description": "Greenish-grey lumpy colonies with small polyps, often found in shaded parts of rocky reefs. It tolerates cooler water than many reef corals and is common in southern Australia.",
+    "funFact": "It is one of the few reef corals that thrives in the cooler waters of southern Australia.",
+    "image": "assets/images/green-knob-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Plesiastrea_versipora,_in_situ.jpg",
+    "imageCredit": "Benzoni, F.",
+    "imageLicense": "CC BY 3.0"
+  },
+  {
+    "id": "devonshire-cup-coral",
+    "name": "Devonshire Cup Coral",
+    "scientificName": "Caryophyllia smithii",
+    "emoji": "🪸",
+    "regions": [
+      "temperate",
+      "mediterranean"
+    ],
+    "danger": "sharp",
+    "size": "Up to 3 cm across",
+    "diet": "Plankton",
+    "habitat": "Rocky walls, caves and wrecks",
+    "conservation": "Least concern",
+    "description": "A small solitary coral with a cup-shaped skeleton and translucent tentacles tipped in white. It lives on rocky walls and wrecks, often in shaded spots where currents bring plankton.",
+    "funFact": "Each polyp lives alone rather than in a colony, unlike most reef-building corals.",
+    "image": "assets/images/devonshire-cup-coral.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Caryophyllia_smithii_Stokes_%26_Broderip,_1828_2.jpg",
+    "imageCredit": "Parent Géry",
+    "imageLicense": "Public domain"
+  },
+  {
+    "id": "dead-mans-fingers",
+    "name": "Dead Man's Fingers",
+    "scientificName": "Alcyonium digitatum",
+    "emoji": "🪸",
+    "regions": [
+      "temperate"
+    ],
+    "danger": "harmless",
+    "size": "Colonies up to 30 cm",
+    "diet": "Plankton",
+    "habitat": "Rocky reefs, wrecks and tide-swept walls",
+    "conservation": "Not evaluated",
+    "description": "A pale soft coral with thick finger-like lobes and white polyps that emerge to feed. It is common on cold-water rocky reefs and wrecks, where it sways in strong currents.",
+    "funFact": "Its ghostly hand-shaped colonies gave it its common name.",
+    "image": "assets/images/dead-mans-fingers.jpg",
+    "imageSource": "https://commons.wikimedia.org/wiki/File:Tote_Meerhand_(Alcyonium_digitatum)_2.jpg",
+    "imageCredit": "Haplochromis",
+    "imageLicense": "CC BY-SA 3.0"
   }
 ]

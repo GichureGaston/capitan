@@ -2,10 +2,14 @@ id,name,author,license,source
 staghorn-coral,Staghorn Coral,"Albert Kok at Dutch Wikipedia
 
 (Original text: albert kok)",Public domain,https://commons.wikimedia.org/wiki/File:Hertshoon.jpg
+elkhorn-coral,Elkhorn Coral,Unknown,Public domain,https://commons.wikimedia.org/wiki/File:Elkhorn_coral.jpg
 table-coral,Table Coral,Holobionics,CC BY-SA 4.0,"https://commons.wikimedia.org/wiki/File:Lodestone_Reef,_Valentines_Day_2016_CoralScape.jpg"
+brain-coral,Grooved Brain Coral,Unknown,Public domain,https://commons.wikimedia.org/wiki/File:Brain_coral.jpg
 pillar-coral,Pillar Coral,Unknown,Public domain,https://commons.wikimedia.org/wiki/File:PillarCoral.jpg
 boulder-star-coral,Boulder Star Coral,Louiswray,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:MontastraeaAnnularis.jpg
+finger-coral,Finger Coral,Jstuby at en.wikipedia,Public domain,https://commons.wikimedia.org/wiki/File:Porites_porites_French_Bay.jpg
 fire-coral,Fire Coral,Nhobgood Nick Hobgood,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Millepora_alcicornis_(Branching_Fire_Coral).jpg
+sea-fan,Sea Fan,James St. John,CC BY 2.0,"https://commons.wikimedia.org/wiki/File:Gorgonia_flabellum,_Bahamas.jpg"
 leather-coral,Leather Coral,George Berninger Jr.,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Flexible_Leather_Coral_(Sinularia_flexibilis)_-_GRB.jpg
 carnation-coral,Carnation Coral,Alexander Vasenin,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Dendronephthya_soft_coral_at_Gilli_Lawa_Laut.JPG
 bubble-coral,Bubble Coral,Oceanamazon,CC0,https://commons.wikimedia.org/wiki/File:Plerogyra_sinuosa-1.jpg
@@ -14,5 +18,44 @@ mushroom-coral,Mushroom Coral,Stickpen,Public domain,https://commons.wikimedia.o
 cauliflower-coral,Cauliflower Coral,Diego Delso,CC BY-SA 4.0,"https://commons.wikimedia.org/wiki/File:Coral_(Pocillopora_verrucosa),_mar_Rojo,_Egipto,_2023-04-15,_DD_103.jpg"
 magnificent-anemone,Magnificent Sea Anemone,Nhobgood Nick Hobgood,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Amphiprion_perideraion_(Pink_anemonefish)_in_Heteractis_magnifica_(Magnificent_sea_anemone).jpg
 blue-coral,Blue Coral,Frédéric Ducarme,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Heliopora_coerulea_Maldives.jpg
+black-coral,Black Coral,Image courtesy of Dr. Scott France.,Public domain,https://commons.wikimedia.org/wiki/File:Blackcoral_colony_600.jpg
 red-gorgonian,Red Gorgonian,Parent Géry,CC0,"https://commons.wikimedia.org/wiki/File:Paramuricea_clavata_(Risso,_1826)_3.jpg"
+porites-boulder,Massive Porites,not specified,Public domain,https://commons.wikimedia.org/wiki/File:Lisianski_coral_lrg.jpg
 rose-coral,Rose Coral,James St. John,CC BY 2.0,"https://commons.wikimedia.org/wiki/File:Manicina_areolata_(rose_coral)_(San_Salvador_Island,_Bahamas)_2_(15472166633).jpg"
+open-brain-coral,Open Brain Coral,bondolo,CC BY 3.0,https://commons.wikimedia.org/wiki/File:Open_Brain_Coral_Green.jpg
+elegance-coral,Elegance Coral,Tappinen,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Catalaphyllia_short.JPG
+torch-coral,Torch Coral,Josuevg,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Euphyllia_glabrescens_en_acuario.JPG
+hammer-coral,Hammer Coral,Diego Delso,CC BY-SA 4.0,"https://commons.wikimedia.org/wiki/File:Coral_(Euphyllia_ancora),_Anilao,_Filipinas,_2023-08-22,_DD_292.jpg"
+xenia-coral,Pulsing Xenia Coral,Diego Delso,CC BY-SA 4.0,"https://commons.wikimedia.org/wiki/File:Coral_pulsante_(Xenia_umbellata),_Ras_Katy,_Sharm_el-Sheij,_Egipto,_2022-03-26,_DD_96.jpg"
+green-star-polyps,Green Star Polyps,User:Haplochromis,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Briareum.JPG
+giant-clam,Giant Clam,Charles J. Sharp,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Giant_clam_(Tridacna_gigas)_Michaelmas_Cay.jpg
+crown-of-thorns-starfish,Crown-of-thorns Starfish,John Hepburn,CC BY 4.0,https://commons.wikimedia.org/wiki/File:Acanthaster_planci_460468243_(closeup).jpg
+christmas-tree-worm,Christmas Tree Worm,Nhobgood Nick Hobgood,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Spirobranchus_giganteus_(Red_and_white_christmas_tree_worm).jpg
+great-star-coral,Great Star Coral,Unknown,Public domain,https://commons.wikimedia.org/wiki/File:Montastraea_cavernosa.jpg
+zoanthid,Zoanthid,Kazvorpal,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Zoanthus-dragon-eye.jpg
+mustard-hill-coral,Mustard Hill Coral,James St. John,CC BY 2.0,"https://commons.wikimedia.org/wiki/File:Porites_astreoides_(mustard_hill_coral)_(San_Salvador_Island,_Bahamas)_1_(16097660545).jpg"
+lettuce-coral,Lettuce Coral,Nhobgood Nick Hobgood,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Agarica_agaricites_(Scaled_Lettuce_Coral)_closeup.jpg
+giant-barrel-sponge,Giant Barrel Sponge,"Twilight Zone Expedition Team 2007, NOAA-OE .",Public domain,https://commons.wikimedia.org/wiki/File:Reef3860_-_Flickr_-_NOAA_Photo_Library.jpg
+long-spined-sea-urchin,Long-spined Sea Urchin,NOAA,Public domain,https://commons.wikimedia.org/wiki/File:Diadema_antillarum_Flower_Garden_Banks.jpg
+flower-coral,Flower Coral,Photographer: Florida Keys National Marine Sanctuary Staff,Public domain,https://commons.wikimedia.org/wiki/File:Eusmilia_fastigiata_large.jpg
+blade-fire-coral,Blade Fire Coral,Paul Asman y Jill Lenoble,CC BY 2.0,https://commons.wikimedia.org/wiki/File:Millepora_complanata_y_Chromis_multilineata.jpg
+encrusting-gorgonian,Encrusting Gorgonian,Liné1,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Erythropodium_caribaeorum_01_by_Line1.JPG
+black-sea-rod,Black Sea Fan,Unknown,Public domain,https://commons.wikimedia.org/wiki/File:Iciligorgia_schrammi.jpg
+montipora-coral,Montipora Coral,No machine-readable author provided. Haplochromis assumed (based on copyright claims).,Public domain,https://commons.wikimedia.org/wiki/File:Montipora_digitata.jpg
+duncan-coral,Duncan Coral,Unknown,Public domain,https://commons.wikimedia.org/wiki/File:Duncanopsammia_axifuga_(whisker_coral).jpg
+scolymia-coral,Scolymia Coral,Jessica Rosenkrantz,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Scolymia_cubensis_by_Jessica_Rosenkrantz.jpg
+blue-sea-star,Blue Sea Star,dr.scott.mills,CC BY-SA 2.0,https://commons.wikimedia.org/wiki/File:Linckia_laevigata_Tonga.jpg
+bubble-tip-anemone,Bubble-tip Anemone,Nhobgood Nick Hobgood,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Entacmaea_quadricolor_(Bubble_tip_anemone).jpg
+small-giant-clam,Small Giant Clam,Diego Delso,CC BY-SA 4.0,"https://commons.wikimedia.org/wiki/File:Almeja_gigante_(Tridacna_maxima),_Temple,_Sharm_el-Sheij,_Egipto,_2022-03-26,_DD_33.jpg"
+sinularia-coral,Sinularia Coral,George Berninger Jr.,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Flexible_Leather_Coral_(Sinularia_flexibilis)_-_GRB.jpg
+mediterranean-cup-coral,Mediterranean Cup Coral,Esculapio,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Capo_Gallo_063_Cladocora_caespitosa.jpg
+red-coral,Red Coral,Géry PARENT,CC BY-SA 3.0,"https://commons.wikimedia.org/wiki/File:Corallium_rubrum_(Linnaeus,_1758)_11.jpg"
+yellow-gorgonian,Yellow Gorgonian,albert kok,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Eunicella.jpg
+snakelocks-anemone,Snakelocks Anemone,Lamiot,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Anemonia_viridis_Lamiot_Le_Racou_2979.JPG
+giant-pavona,Giant Pavona Coral,keesgroenendijk,CC BY-SA 4.0,https://commons.wikimedia.org/wiki/File:Pavona_gigantea_192642652.jpg
+elegant-cup-coral,Orange Coral,Steve Lonhart / NOAA MBNMS,Public domain,https://commons.wikimedia.org/wiki/File:Balanophyllia_elegans.jpg
+orange-cup-coral,Orange Cup Coral,Diego Delso,CC BY-SA 4.0,"https://commons.wikimedia.org/wiki/File:Coral_sol_(Tubastraea_coccinea),_Cabo_Pulmo,_Baja_California,_M%C3%A9xico,_2024-12-19,_DD_22.jpg"
+pacific-sea-fan,Pacific Sea Fan,"Claire Fackler, CINMS, NOAA",Public domain,https://commons.wikimedia.org/wiki/File:Muricea_californica.jpg
+green-knob-coral,Green Knob Coral,"Benzoni, F.",CC BY 3.0,"https://commons.wikimedia.org/wiki/File:Plesiastrea_versipora,_in_situ.jpg"
+devonshire-cup-coral,Devonshire Cup Coral,Parent Géry,Public domain,"https://commons.wikimedia.org/wiki/File:Caryophyllia_smithii_Stokes_%26_Broderip,_1828_2.jpg"
+dead-mans-fingers,Dead Man's Fingers,Haplochromis,CC BY-SA 3.0,https://commons.wikimedia.org/wiki/File:Tote_Meerhand_(Alcyonium_digitatum)_2.jpg
