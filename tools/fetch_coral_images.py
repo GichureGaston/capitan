@@ -18,8 +18,8 @@ import argparse, csv, html, json, pathlib, re, sys, time
 import urllib.parse, urllib.request
 
 # Wikimedia asks for a descriptive User-Agent with contact info. Edit this.
-UA = "ReefGuideImageFetcher/1.0 (https://example.com; you@example.com)"
-WIDTH = 960  # Wikimedia standard thumbnail size (others: 500, 1280, 1920)
+UA = "CapitanReefGuide/1.0 (https://github.com/capitan; hello@capitan.app)"
+WIDTH = 600  # Keep downloaded photos small enough for mobile app assets.
 
 OK_LICENSE = re.compile(r"^(CC0|CC BY|Public domain|PD)", re.I)
 
@@ -53,7 +53,7 @@ def commons_info(filename):
         meta = info.get("extmetadata", {})
         clean = lambda k: html.unescape(re.sub(r"<[^>]+>", "", meta.get(k, {}).get("value", ""))).strip()
         return {
-            "url": info.get("thumburl") or info["url"],
+            "url": (info.get("thumburl") or info["url"]).split("?", 1)[0],
             "source": info.get("descriptionurl", ""),
             "license": clean("LicenseShortName"),
             "author": clean("Artist") or "Unknown",
@@ -100,6 +100,11 @@ TITLE_OVERRIDES = {
     "boulder-star-coral": ["Orbicella annularis", "Montastraea annularis", "Orbicella"],
     "magnificent-anemone": ["Heteractis magnifica", "Magnificent sea anemone"],
     "red-gorgonian": ["Paramuricea clavata", "Red gorgonian"],
+    "xenia-coral": ["Xenia (coral)", "Xenia umbellata", "Xenia"],
+    "zoanthid": ["Zoanthus", "Zoantharia", "Zoanthid"],
+    # The Briareum violaceum lead image is only served as an unscaled original
+    # that Wikimedia rejects, so use the genus page's thumbnail instead.
+    "green-star-polyps": ["Briareum", "Briareum violaceum"],
 }
 
 
