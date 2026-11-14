@@ -82,6 +82,7 @@ class SpeciesRepository {
         'global' => 'Worldwide',
         'tropical' => 'Tropical seas',
         'caribbean' => 'Caribbean & W. Atlantic',
+        'tropical-atlantic' => 'Tropical Atlantic',
         'indo-pacific' => 'Indo-Pacific',
         'red-sea' => 'Red Sea',
         'mediterranean' => 'Mediterranean',
