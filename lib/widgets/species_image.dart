@@ -31,13 +31,22 @@ class SpeciesImage extends StatelessWidget {
       child: Text(entry.emoji, style: TextStyle(fontSize: emojiSize)),
     );
 
+    // Decode only as many pixels as the widget can actually show. The source
+    // photos are ~600x400–960x640, so list thumbnails would otherwise allocate
+    // a full-resolution bitmap for every row.
+    final dpr = MediaQuery.devicePixelRatioOf(context);
+    final isThumbnail = width != null && width! <= 100;
+
     final photo = entry.hasImage
         ? Image.asset(
             entry.image!,
             width: width,
             height: height,
             fit: BoxFit.cover,
-            filterQuality: FilterQuality.medium,
+            cacheWidth: width == null ? null : (width! * dpr).round(),
+            cacheHeight: height == null ? null : (height! * dpr).round(),
+            filterQuality:
+                isThumbnail ? FilterQuality.low : FilterQuality.medium,
             errorBuilder: (_, _, _) => fallback,
           )
         : fallback;
