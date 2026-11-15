@@ -490,12 +490,18 @@ class _ConditionGrid extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
-      child: GridView.count(
-        crossAxisCount: MediaQuery.of(context).size.width > 600 ? 4 : 2,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        childAspectRatio: 1.95,
-        children: tiles,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final columns = constraints.maxWidth > 600 ? 4 : 2;
+          final tileWidth = constraints.maxWidth / columns;
+          final tileHeight = tileWidth / 1.95;
+          return Wrap(
+            children: [
+              for (final tile in tiles)
+                SizedBox(width: tileWidth, height: tileHeight, child: tile),
+            ],
+          );
+        },
       ),
     );
   }
