@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../app_bloc.dart';
 import '../models/marine_data.dart';
+import '../models/sea_location.dart';
 import '../models/weather_data.dart';
 import '../services/tide_service.dart';
 import '../utils/geo.dart';
@@ -18,15 +19,19 @@ class TidesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<AppBloc>().state;
+    final (location, weather, marine) = context
+        .select<AppBloc, (SeaLocation?, WeatherData?, MarineData?)>(
+          (bloc) =>
+              (bloc.state.location, bloc.state.weather, bloc.state.marine),
+        );
 
-    if (state.location == null) {
+    if (location == null) {
       return _promptLocation(context);
     }
-    if (state.weather == null) {
+    if (weather == null) {
       return const Center(child: CircularProgressIndicator(strokeWidth: 2));
     }
-    if (state.marine == null) {
+    if (marine == null) {
       return _noMarineData(context);
     }
 
@@ -87,11 +92,13 @@ class _TidesBodyState extends State<_TidesBody> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<AppBloc>().state;
-    final marine = state.marine!;
-    final weather = state.weather!;
-    final now = weather.current.time;
-    final hourly = marine.hourly;
+    final (location, weather, marine) = context
+        .select<AppBloc, (SeaLocation?, WeatherData?, MarineData?)>(
+          (bloc) =>
+              (bloc.state.location, bloc.state.weather, bloc.state.marine),
+        );
+    final now = weather!.current.time;
+    final hourly = marine!.hourly;
 
     final tides = TideService.detectTides(hourly);
     final upcoming = TideService.upcomingTides(tides, now);
@@ -108,7 +115,7 @@ class _TidesBodyState extends State<_TidesBody> {
           next: next,
           levelNow: levelNow,
           trend: trend,
-          locationLabel: state.location!.name,
+          locationLabel: location!.name,
         ),
         const SectionHeader('Sea level (tides)', icon: Icons.waves),
         Card(

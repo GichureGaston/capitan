@@ -146,10 +146,11 @@ class _SpotsScreenState extends State<SpotsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<AppBloc>().state;
+    final location =
+        context.select<AppBloc, SeaLocation?>((bloc) => bloc.state.location);
     final scheme = Theme.of(context).colorScheme;
 
-    if (state.location == null) {
+    if (location == null) {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(32),
@@ -180,7 +181,7 @@ class _SpotsScreenState extends State<SpotsScreen> {
             children: [
               Expanded(
                 child: Text(
-                  'Around ${state.location!.name}',
+                  'Around ${location.name}',
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium

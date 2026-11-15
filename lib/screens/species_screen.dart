@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../app_bloc.dart';
 import '../data/species_repository.dart';
+import '../models/sea_location.dart';
 import '../models/species.dart';
 import '../widgets/species_tile.dart';
 import 'species_detail_screen.dart';
@@ -47,7 +48,8 @@ class _SpeciesScreenState extends State<SpeciesScreen> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final location = context.watch<AppBloc>().state.location;
+    final location =
+        context.select<AppBloc, SeaLocation?>((bloc) => bloc.state.location);
 
     final regionTags = location == null
         ? const <String>[]

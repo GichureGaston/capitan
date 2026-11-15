@@ -81,7 +81,8 @@ class _LocationSheetState extends State<_LocationSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final locating = context.watch<AppBloc>().state.locating;
+    final locating =
+        context.select<AppBloc, bool>((bloc) => bloc.state.locating);
     final scheme = Theme.of(context).colorScheme;
     final viewInsets = MediaQuery.of(context).viewInsets;
 

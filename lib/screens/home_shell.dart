@@ -32,7 +32,8 @@ class _HomeShellState extends State<HomeShell> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final locationName = context.watch<AppBloc>().state.location?.name;
+    final locationName =
+        context.select<AppBloc, String?>((bloc) => bloc.state.location?.name);
 
     return Scaffold(
       appBar: AppBar(
