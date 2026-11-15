@@ -19,6 +19,11 @@ class HomeShell extends StatefulWidget {
 class _HomeShellState extends State<HomeShell> {
   int _tab = 0;
 
+  // Tabs are built lazily: a tab is only mounted after its first visit. This
+  // keeps startup cheap (no eager fish/coral lists or tide charts) while still
+  // preserving each tab's state once visited.
+  final List<bool> _visited = List<bool>.generate(5, (index) => index == 0);
+
   static const _titles = [
     'Capitán',
     'Tides & sea',
@@ -28,6 +33,25 @@ class _HomeShellState extends State<HomeShell> {
   ];
 
   void _openLocationSheet() => showLocationSheet(context);
+
+  void _selectTab(int index) {
+    if (_tab == index && _visited[index]) return;
+    setState(() {
+      _visited[index] = true;
+      _tab = index;
+    });
+  }
+
+  Widget _buildTab(int index) {
+    return switch (index) {
+      0 => const DashboardScreen(),
+      1 => const TidesScreen(),
+      2 => SpotsScreen(onUseSpot: () => _selectTab(0)),
+      3 => const FishScreen(),
+      4 => const CoralScreen(),
+      _ => const SizedBox.shrink(),
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,18 +84,13 @@ class _HomeShellState extends State<HomeShell> {
       body: IndexedStack(
         index: _tab,
         children: [
-          const DashboardScreen(),
-          const TidesScreen(),
-          SpotsScreen(
-            onUseSpot: () => setState(() => _tab = 0),
-          ),
-          const FishScreen(),
-          const CoralScreen(),
+          for (var i = 0; i < _titles.length; i++)
+            _visited[i] ? _buildTab(i) : const SizedBox.shrink(),
         ],
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
-        onDestinationSelected: (index) => setState(() => _tab = index),
+        onDestinationSelected: _selectTab,
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.dashboard_outlined),
