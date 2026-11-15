@@ -56,8 +56,10 @@ class SimpleLineChart extends StatelessWidget {
 
     return SizedBox(
       height: height,
-      child: LineChart(
-        LineChartData(
+      child: RepaintBoundary(
+        child: LineChart(
+          duration: Duration.zero,
+          LineChartData(
           minY: minY,
           maxY: maxY,
           minX: minX,
@@ -124,6 +126,7 @@ class SimpleLineChart extends StatelessWidget {
             ),
           ),
         ),
+      ),
       ),
     );
   }

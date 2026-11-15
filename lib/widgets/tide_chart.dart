@@ -59,8 +59,10 @@ class TideChart extends StatelessWidget {
       height: height,
       child: Padding(
         padding: const EdgeInsets.only(top: 8, right: 10, left: 4),
-        child: LineChart(
-          LineChartData(
+        child: RepaintBoundary(
+          child: LineChart(
+            duration: Duration.zero,
+            LineChartData(
             minY: yMin,
             maxY: yMax,
             minX: 0,
@@ -156,6 +158,7 @@ class TideChart extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ),
+  );
   }
 }
