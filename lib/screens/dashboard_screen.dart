@@ -15,6 +15,9 @@ import '../widgets/uv_card.dart';
 import '../widgets/wind_compass.dart';
 import 'location_sheet.dart';
 
+final _timeFormat = DateFormat('HH:mm');
+final _weekdayFormat = DateFormat('EEE');
+
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
 
@@ -87,7 +90,7 @@ class DashboardScreen extends StatelessWidget {
             peakLabel: weather.uvPeakTimeToday == null
                 ? 'Peak UV today: ${_formatUv(uvMax)}'
                 : 'Peak UV today: ${_formatUv(uvMax)} around '
-                    '${DateFormat('HH:mm').format(weather.uvPeakTimeToday!)}',
+                    '${_timeFormat.format(weather.uvPeakTimeToday!)}',
           ),
           const SectionHeader('Activity ratings'),
           if (ratings.isEmpty)
@@ -188,7 +191,7 @@ class _HeroHeader extends StatelessWidget {
                 ),
                 if (lastUpdated != null)
                   Text(
-                    'Updated ${DateFormat('HH:mm').format(lastUpdated!)}',
+                    'Updated ${_timeFormat.format(lastUpdated!)}',
                     style: TextStyle(
                         color: scheme.onPrimary.withValues(alpha: 0.85), fontSize: 12),
                   ),
@@ -546,12 +549,12 @@ class _SunTimesCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _timeEntry(context, Icons.wb_twilight, 'Sunrise',
-                sunrise == null ? '—' : DateFormat('HH:mm').format(sunrise)),
+                sunrise == null ? '—' : _timeFormat.format(sunrise)),
             Container(width: 1, height: 36, color: scheme.outlineVariant),
             _timeEntry(context, Icons.wb_sunny, 'Peak UV window', '11:00-15:00'),
             Container(width: 1, height: 36, color: scheme.outlineVariant),
             _timeEntry(context, Icons.nights_stay, 'Sunset',
-                sunset == null ? '—' : DateFormat('HH:mm').format(sunset)),
+                sunset == null ? '—' : _timeFormat.format(sunset)),
           ],
         ),
       ),
@@ -602,7 +605,7 @@ class _DailyStrip extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      index == 0 ? 'Today' : DateFormat('EEE').format(day.date),
+                      index == 0 ? 'Today' : _weekdayFormat.format(day.date),
                       style: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 4),

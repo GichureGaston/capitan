@@ -209,6 +209,8 @@ class _NextTideBanner extends StatelessWidget {
     required this.locationLabel,
   });
 
+  static final _timeFormat = DateFormat('HH:mm');
+
   final TideEvent? next;
   final double? levelNow;
   final int trend;
@@ -232,7 +234,7 @@ class _NextTideBanner extends StatelessWidget {
           ? 'about now'
           : 'in ${hours > 0 ? '$hours h ' : ''}$minutes min';
       headline = '${next!.label} $inPhrase';
-      detail = '${next!.label} at ${DateFormat('HH:mm').format(next!.time)} · '
+      detail = '${next!.label} at ${_timeFormat.format(next!.time)} · '
           '${next!.heightMsl.toStringAsFixed(2)} m';
     }
 
@@ -328,6 +330,9 @@ class _NextTideBanner extends StatelessWidget {
 class _TideRow extends StatelessWidget {
   const _TideRow({required this.tide, required this.isNext});
 
+  static final _timeFormat = DateFormat('HH:mm');
+  static final _dayTimeFormat = DateFormat('EEE HH:mm');
+
   final TideEvent tide;
   final bool isNext;
 
@@ -351,8 +356,8 @@ class _TideRow extends StatelessWidget {
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         subtitle: isTextToday(tide.time)
-            ? Text('Today at ${DateFormat('HH:mm').format(tide.time)}')
-            : Text(DateFormat('EEE HH:mm').format(tide.time)),
+            ? Text('Today at ${_timeFormat.format(tide.time)}')
+            : Text(_dayTimeFormat.format(tide.time)),
         trailing: isNext ? const Pill(label: 'Next', color: Colors.teal) : null,
       ),
     );
@@ -450,6 +455,8 @@ class _WaveCard extends StatelessWidget {
 class _WindHourlyChart extends StatelessWidget {
   const _WindHourlyChart({required this.weather});
 
+  static final _timeFormat = DateFormat('HH:mm');
+
   final WeatherData weather;
 
   @override
@@ -513,7 +520,7 @@ class _WindHourlyChart extends StatelessWidget {
               xLabelBuilder: (x) {
                 final hourIndex = startIndex + x.toInt();
                 if (hourIndex < 0 || hourIndex >= hourly.length) return '';
-                return DateFormat('HH:mm').format(hourly.time[hourIndex]);
+                return _timeFormat.format(hourly.time[hourIndex]);
               },
             ),
           ],

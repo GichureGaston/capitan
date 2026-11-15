@@ -13,6 +13,9 @@ class TideChart extends StatelessWidget {
     this.height = 220,
   });
 
+  static final _timeFormat = DateFormat('HH:mm');
+  static final _dayFormat = DateFormat('E');
+
   final MarineHourly hourly;
 
   final DateTime from;
@@ -104,8 +107,8 @@ class TideChart extends StatelessWidget {
                       meta: meta,
                       child: Text(
                         windowHours <= 48
-                            ? DateFormat('HH:mm').format(time)
-                            : DateFormat('E').format(time),
+                            ? _timeFormat.format(time)
+                            : _dayFormat.format(time),
                         style: textTheme.bodySmall,
                       ),
                     );
