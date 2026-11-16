@@ -20,9 +20,11 @@ class CapitanApp extends StatelessWidget {
     return RepositoryProvider<OpenMeteoApi>(
       create: (_) => OpenMeteoApi(),
       child: BlocProvider<AppBloc>(
-        create: (context) =>
-            (bloc ?? AppBloc(api: context.read<OpenMeteoApi>()))
-              ..add(const AppStarted()),
+        create: (context) {
+          final appBloc = bloc ?? AppBloc(api: context.read<OpenMeteoApi>());
+          appBloc.add(const AppStarted());
+          return appBloc;
+        },
         child: MaterialApp(
           title: 'Capitán',
           debugShowCheckedModeBanner: false,
@@ -39,18 +41,26 @@ class CapitanApp extends StatelessWidget {
       seedColor: const Color(0xFF0077B6),
       brightness: brightness,
     );
+
+    Color background;
+    if (brightness == Brightness.light) {
+      background = const Color(0xFFF3F8FB);
+    } else {
+      background = const Color(0xFF0B1520);
+    }
+
     return ThemeData(
       colorScheme: scheme,
       useMaterial3: true,
-      scaffoldBackgroundColor: brightness == Brightness.light
-          ? const Color(0xFFF3F8FB)
-          : const Color(0xFF0B1520),
+      scaffoldBackgroundColor: background,
       appBarTheme: const AppBarTheme(centerTitle: false),
       cardTheme: const CardThemeData(
         elevation: 0,
         margin: EdgeInsets.zero,
         clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
       ),
       navigationBarTheme: NavigationBarThemeData(
         height: 66,
