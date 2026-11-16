@@ -16,8 +16,10 @@ class ApiException implements Exception {
 }
 
 class OpenMeteoApi {
-  OpenMeteoApi({http.Client? client, this.baseUrl = 'https://api.open-meteo.com'})
-      : _client = client ?? http.Client();
+  OpenMeteoApi({
+    http.Client? client,
+    this.baseUrl = 'https://api.open-meteo.com',
+  }) : _client = client ?? http.Client();
 
   final http.Client _client;
   final String baseUrl;
@@ -63,65 +65,76 @@ class OpenMeteoApi {
   ];
 
   Future<WeatherData> fetchWeather(double latitude, double longitude) async {
-    final uri = Uri.parse('$baseUrl/v1/forecast').replace(queryParameters: {
-      'latitude': '$latitude',
-      'longitude': '$longitude',
-      'current': _currentWeatherVars.join(','),
-      'hourly': _hourlyWeatherVars.join(','),
-      'daily': _dailyWeatherVars.join(','),
-      'timezone': 'auto',
-      'forecast_days': '7',
-    });
+    final uri = Uri.parse('$baseUrl/v1/forecast').replace(
+      queryParameters: {
+        'latitude': '$latitude',
+        'longitude': '$longitude',
+        'current': _currentWeatherVars.join(','),
+        'hourly': _hourlyWeatherVars.join(','),
+        'daily': _dailyWeatherVars.join(','),
+        'timezone': 'auto',
+        'forecast_days': '7',
+      },
+    );
     final json = await _getJson(uri);
     return WeatherData.fromJson(_asMap(json));
   }
 
   Future<MarineData> fetchMarine(double latitude, double longitude) async {
-    final uri = Uri.parse('https://marine-api.open-meteo.com/v1/marine')
-        .replace(queryParameters: {
-      'latitude': '$latitude',
-      'longitude': '$longitude',
-      'current': 'wave_height,wave_direction,wave_period,sea_surface_temperature,'
-          'ocean_current_velocity,ocean_current_direction,sea_level_height_msl',
-      'hourly': 'wave_height,wave_direction,wave_period,sea_surface_temperature,'
-          'sea_level_height_msl,ocean_current_velocity,ocean_current_direction',
-      'daily': 'wave_height_max,wave_direction_dominant,wave_period_max',
-      'timezone': 'auto',
-      'forecast_days': '7',
-      'length_unit': 'metric',
-      'cell_selection': 'sea',
-    });
+    final uri = Uri.parse('https://marine-api.open-meteo.com/v1/marine').replace(
+      queryParameters: {
+        'latitude': '$latitude',
+        'longitude': '$longitude',
+        'current':
+            'wave_height,wave_direction,wave_period,sea_surface_temperature,'
+            'ocean_current_velocity,ocean_current_direction,sea_level_height_msl',
+        'hourly':
+            'wave_height,wave_direction,wave_period,sea_surface_temperature,'
+            'sea_level_height_msl,ocean_current_velocity,ocean_current_direction',
+        'daily': 'wave_height_max,wave_direction_dominant,wave_period_max',
+        'timezone': 'auto',
+        'forecast_days': '7',
+        'length_unit': 'metric',
+        'cell_selection': 'sea',
+      },
+    );
     final json = await _getJson(uri);
     return MarineData.fromJson(_asMap(json));
   }
 
   Future<List<MarineData>> fetchMarineBatch(List<SeaLocation> locations) async {
     if (locations.isEmpty) return const [];
-    final uri =
-        Uri.parse('https://marine-api.open-meteo.com/v1/marine').replace(queryParameters: {
-      'latitude': locations.map((l) => l.latitude).join(','),
-      'longitude': locations.map((l) => l.longitude).join(','),
-      'current': 'wave_height,wave_period,sea_surface_temperature,ocean_current_velocity',
-      'hourly': 'wave_height,wave_period,sea_surface_temperature,ocean_current_velocity',
-      'timezone': 'auto',
-      'forecast_days': '1',
-      'cell_selection': 'sea',
-    });
+    final uri = Uri.parse('https://marine-api.open-meteo.com/v1/marine')
+        .replace(
+          queryParameters: {
+            'latitude': locations.map((l) => l.latitude).join(','),
+            'longitude': locations.map((l) => l.longitude).join(','),
+            'current': 'wave_height,wave_period,sea_surface_temperature,ocean_current_velocity',
+            'hourly': 'wave_height,wave_period,sea_surface_temperature,ocean_current_velocity',
+            'timezone': 'auto',
+            'forecast_days': '1',
+            'cell_selection': 'sea',
+          },
+        );
     final json = await _getJson(uri);
     final list = _asList(json);
     return list.map(MarineData.fromJson).toList();
   }
 
-  Future<List<WeatherData>> fetchWeatherBatch(List<SeaLocation> locations) async {
+  Future<List<WeatherData>> fetchWeatherBatch(
+    List<SeaLocation> locations,
+  ) async {
     if (locations.isEmpty) return const [];
-    final uri = Uri.parse('$baseUrl/v1/forecast').replace(queryParameters: {
-      'latitude': locations.map((l) => l.latitude).join(','),
-      'longitude': locations.map((l) => l.longitude).join(','),
-      'current': 'weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,is_day',
-      'hourly': 'uv_index',
-      'timezone': 'auto',
-      'forecast_days': '1',
-    });
+    final uri = Uri.parse('$baseUrl/v1/forecast').replace(
+      queryParameters: {
+        'latitude': locations.map((l) => l.latitude).join(','),
+        'longitude': locations.map((l) => l.longitude).join(','),
+        'current': 'weather_code,wind_speed_10m,wind_direction_10m,wind_gusts_10m,is_day',
+        'hourly': 'uv_index',
+        'timezone': 'auto',
+        'forecast_days': '1',
+      },
+    );
     final json = await _getJson(uri);
     final list = _asList(json);
     return list.map(WeatherData.fromJson).toList();
@@ -131,12 +144,14 @@ class OpenMeteoApi {
     final trimmed = query.trim();
     if (trimmed.isEmpty) return const [];
     final uri = Uri.parse('https://geocoding-api.open-meteo.com/v1/search')
-        .replace(queryParameters: {
-      'name': trimmed,
-      'count': '10',
-      'language': 'en',
-      'format': 'json',
-    });
+        .replace(
+          queryParameters: {
+            'name': trimmed,
+            'count': '10',
+            'language': 'en',
+            'format': 'json',
+          },
+        );
     final json = await _getJson(uri);
     final results = json['results'] as List?;
     if (results == null) return const [];
@@ -165,9 +180,9 @@ class OpenMeteoApi {
   }
 
   Map<String, String> get _headers => {
-        'User-Agent': 'Capitan sea companion (Flutter app)',
-        'Accept': 'application/json',
-      };
+    'User-Agent': 'Capitan sea companion (Flutter app)',
+    'Accept': 'application/json',
+  };
 
   static Map<String, dynamic> _asMap(dynamic json) {
     if (json is Map<String, dynamic>) return json;
