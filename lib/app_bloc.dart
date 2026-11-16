@@ -12,25 +12,25 @@ import 'models/weather_data.dart';
 import 'services/location_service.dart';
 import 'services/open_meteo.dart';
 
-sealed class AppEvent {
+abstract class AppEvent {
   const AppEvent();
 }
 
-final class AppStarted extends AppEvent {
+class AppStarted extends AppEvent {
   const AppStarted();
 }
 
-final class LocationSelected extends AppEvent {
+class LocationSelected extends AppEvent {
   const LocationSelected(this.location);
 
   final SeaLocation location;
 }
 
-final class DeviceLocationRequested extends AppEvent {
+class DeviceLocationRequested extends AppEvent {
   const DeviceLocationRequested();
 }
 
-final class RefreshRequested extends AppEvent {
+class RefreshRequested extends AppEvent {
   const RefreshRequested();
 }
 
@@ -60,49 +60,51 @@ class AppState extends Equatable {
     return ConditionsSnapshot.fromForecast(weather!, marine);
   }
 
-  static const _unset = Object();
-
   AppState copyWith({
     SeaLocation? location,
     WeatherData? weather,
-    Object? marine = _unset,
+    MarineData? marine,
+    bool clearMarine = false,
     bool? loading,
     bool? locating,
-    Object? error = _unset,
-    Object? marineNotice = _unset,
+    String? error,
+    bool clearError = false,
+    String? marineNotice,
+    bool clearMarineNotice = false,
     DateTime? lastUpdated,
   }) {
     return AppState(
       location: location ?? this.location,
       weather: weather ?? this.weather,
-      marine: marine == _unset ? this.marine : marine as MarineData?,
+      marine: clearMarine ? null : (marine ?? this.marine),
       loading: loading ?? this.loading,
       locating: locating ?? this.locating,
-      error: error == _unset ? this.error : error as String?,
-      marineNotice:
-          marineNotice == _unset ? this.marineNotice : marineNotice as String?,
+      error: clearError ? null : (error ?? this.error),
+      marineNotice: clearMarineNotice
+          ? null
+          : (marineNotice ?? this.marineNotice),
       lastUpdated: lastUpdated ?? this.lastUpdated,
     );
   }
 
   @override
   List<Object?> get props => [
-        location,
-        weather,
-        marine,
-        loading,
-        locating,
-        error,
-        marineNotice,
-        lastUpdated,
-      ];
+    location,
+    weather,
+    marine,
+    loading,
+    locating,
+    error,
+    marineNotice,
+    lastUpdated,
+  ];
 }
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   AppBloc({OpenMeteoApi? api, LocationService? locationService})
-      : _api = api ?? OpenMeteoApi(),
-        _locationService = locationService ?? LocationService(),
-        super(const AppState()) {
+    : _api = api ?? OpenMeteoApi(),
+      _locationService = locationService ?? LocationService(),
+      super(const AppState()) {
     on<AppStarted>(_onAppStarted);
     on<LocationSelected>(_onLocationSelected);
     on<DeviceLocationRequested>(_onDeviceLocationRequested);
@@ -121,8 +123,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final prefs = await SharedPreferences.getInstance();
       final raw = prefs.getString(_prefsKey);
       if (raw == null) return;
-      final location =
-          SeaLocation.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+      final location = SeaLocation.fromJson(
+        jsonDecode(raw) as Map<String, dynamic>,
+      );
       emit(state.copyWith(location: location));
       await _refresh(emit);
     } catch (e) {
@@ -131,15 +134,19 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   Future<void> _onLocationSelected(
-      LocationSelected event, Emitter<AppState> emit) async {
+    LocationSelected event,
+    Emitter<AppState> emit,
+  ) async {
     await _applyLocation(event.location, emit);
     await _refresh(emit);
   }
 
   Future<void> _onDeviceLocationRequested(
-      DeviceLocationRequested event, Emitter<AppState> emit) async {
+    DeviceLocationRequested event,
+    Emitter<AppState> emit,
+  ) async {
     if (state.locating) return;
-    emit(state.copyWith(locating: true, error: null));
+    emit(state.copyWith(locating: true, clearError: true));
     try {
       final position = await _locationService.getCurrentLocation();
       await _applyLocation(position, emit);
@@ -154,13 +161,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   Future<void> _onRefreshRequested(
-      RefreshRequested event, Emitter<AppState> emit) async {
+    RefreshRequested event,
+    Emitter<AppState> emit,
+  ) async {
     await _refresh(emit);
   }
 
   Future<void> _applyLocation(
-      SeaLocation location, Emitter<AppState> emit) async {
-    emit(state.copyWith(location: location, error: null));
+    SeaLocation location,
+    Emitter<AppState> emit,
+  ) async {
+    emit(state.copyWith(location: location, clearError: true));
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_prefsKey, jsonEncode(location.toJson()));
@@ -174,36 +185,54 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if (current == null) return;
 
     final seq = ++_refreshSeq;
-    emit(state.copyWith(loading: true, error: null));
+    emit(state.copyWith(loading: true, clearError: true));
 
-    final weatherFuture =
-        _api.fetchWeather(current.latitude, current.longitude);
+    final weatherFuture = _api.fetchWeather(
+      current.latitude,
+      current.longitude,
+    );
     final marineFuture = _fetchMarineOrNull(current);
 
     try {
       final weather = await weatherFuture;
       final fetchedMarine = await marineFuture;
       if (seq != _refreshSeq) return;
-      emit(state.copyWith(
-        weather: weather,
-        marine: fetchedMarine,
-        marineNotice: fetchedMarine == null
-            ? 'No tide or wave model data for this spot. '
-                'Ratings are wind-only — pick a coastal location for full sea data.'
-            : null,
-        lastUpdated: DateTime.now(),
-        loading: false,
-      ));
+
+      if (fetchedMarine == null) {
+        emit(
+          state.copyWith(
+            weather: weather,
+            clearMarine: true,
+            marineNotice:
+                'No tide or wave model data for this spot. '
+                'Ratings are wind-only — pick a coastal location for full sea data.',
+            lastUpdated: DateTime.now(),
+            loading: false,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            weather: weather,
+            marine: fetchedMarine,
+            clearMarineNotice: true,
+            lastUpdated: DateTime.now(),
+            loading: false,
+          ),
+        );
+      }
     } on ApiException catch (e) {
       if (seq == _refreshSeq) {
         emit(state.copyWith(error: e.message, loading: false));
       }
     } catch (e) {
       if (seq == _refreshSeq) {
-        emit(state.copyWith(
-          error: 'Something went wrong while fetching conditions: $e',
-          loading: false,
-        ));
+        emit(
+          state.copyWith(
+            error: 'Something went wrong while fetching conditions: $e',
+            loading: false,
+          ),
+        );
       }
     }
   }
