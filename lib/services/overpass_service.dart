@@ -8,8 +8,10 @@ import '../utils/geo.dart';
 import 'open_meteo.dart';
 
 class OverpassService {
-  OverpassService({http.Client? client, this.endpoint = 'https://overpass-api.de/api/interpreter'})
-      : _client = client ?? http.Client();
+  OverpassService({
+    http.Client? client,
+    this.endpoint = 'https://overpass-api.de/api/interpreter',
+  }) : _client = client ?? http.Client();
 
   final http.Client _client;
   final String endpoint;
@@ -21,7 +23,8 @@ class OverpassService {
     int limit = 15,
   }) async {
     final radiusM = (radiusKm * 1000).round();
-    final query = '[out:json][timeout:30];('
+    final query =
+        '[out:json][timeout:30];('
         'node["natural"="beach"](around:$radiusM,$latitude,$longitude);'
         'way["natural"="beach"](around:$radiusM,$latitude,$longitude);'
         'relation["natural"="beach"](around:$radiusM,$latitude,$longitude);'
@@ -32,10 +35,15 @@ class OverpassService {
     final uri = Uri.parse(endpoint).replace(queryParameters: {'data': query});
     http.Response response;
     try {
-      response = await _client.get(uri, headers: {
-        'User-Agent': 'Capitan sea companion (Flutter app)',
-        'Accept': 'application/json',
-      }).timeout(const Duration(seconds: 60));
+      response = await _client
+          .get(
+            uri,
+            headers: {
+              'User-Agent': 'Capitan sea companion (Flutter app)',
+              'Accept': 'application/json',
+            },
+          )
+          .timeout(const Duration(seconds: 60));
     } on TimeoutException {
       throw ApiException('The beach search timed out — try again.');
     } catch (e) {
@@ -71,16 +79,15 @@ class OverpassService {
           '$name|${spotLat.toStringAsFixed(3)}|${spotLon.toStringAsFixed(3)}';
       if (!seen.add(key)) continue;
 
-      spots.add(SwimSpot.fromOverpass(
-        map,
-        distanceKm: geoDistance(latitude, longitude, spotLat, spotLon),
-      ));
+      spots.add(
+        SwimSpot.fromOverpass(
+          map,
+          distanceKm: distanceKm(latitude, longitude, spotLat, spotLon),
+        ),
+      );
     }
 
     spots.sort((a, b) => a.distanceKm.compareTo(b.distanceKm));
     return spots.take(limit).toList();
   }
 }
-
-double geoDistance(double lat1, double lon1, double lat2, double lon2) =>
-    distanceKm(lat1, lon1, lat2, lon2);
