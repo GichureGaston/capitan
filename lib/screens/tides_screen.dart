@@ -19,11 +19,10 @@ class TidesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final (location, weather, marine) = context
-        .select<AppBloc, (SeaLocation?, WeatherData?, MarineData?)>(
-          (bloc) =>
-              (bloc.state.location, bloc.state.weather, bloc.state.marine),
-        );
+    final state = context.watch<AppBloc>().state;
+    final location = state.location;
+    final weather = state.weather;
+    final marine = state.marine;
 
     if (location == null) {
       return _promptLocation(context);
@@ -35,7 +34,7 @@ class TidesScreen extends StatelessWidget {
       return _noMarineData(context);
     }
 
-    return const _TidesBody();
+    return _TidesBody(location: location, weather: weather, marine: marine);
   }
 
   Widget _promptLocation(BuildContext context) {
@@ -45,7 +44,11 @@ class TidesScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.waves, size: 64, color: Theme.of(context).colorScheme.primary),
+            Icon(
+              Icons.waves,
+              size: 64,
+              color: Theme.of(context).colorScheme.primary,
+            ),
             const SizedBox(height: 16),
             const Text('Pick a coastal location to see tides.'),
           ],
@@ -64,8 +67,10 @@ class TidesScreen extends StatelessWidget {
           children: [
             Icon(Icons.waves, size: 64, color: scheme.onSurfaceVariant),
             const SizedBox(height: 16),
-            Text('No tide data at this location',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'No tide data at this location',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 8),
             Text(
               'The tide model covers open ocean and coastal waters. '
@@ -81,7 +86,15 @@ class TidesScreen extends StatelessWidget {
 }
 
 class _TidesBody extends StatefulWidget {
-  const _TidesBody();
+  const _TidesBody({
+    required this.location,
+    required this.weather,
+    required this.marine,
+  });
+
+  final SeaLocation location;
+  final WeatherData weather;
+  final MarineData marine;
 
   @override
   State<_TidesBody> createState() => _TidesBodyState();
@@ -92,13 +105,8 @@ class _TidesBodyState extends State<_TidesBody> {
 
   @override
   Widget build(BuildContext context) {
-    final (location, weather, marine) = context
-        .select<AppBloc, (SeaLocation?, WeatherData?, MarineData?)>(
-          (bloc) =>
-              (bloc.state.location, bloc.state.weather, bloc.state.marine),
-        );
-    final now = weather!.current.time;
-    final hourly = marine!.hourly;
+    final now = widget.weather.current.time;
+    final hourly = widget.marine.hourly;
 
     final tides = TideService.detectTides(hourly);
     final upcoming = TideService.upcomingTides(tides, now);
@@ -106,7 +114,12 @@ class _TidesBodyState extends State<_TidesBody> {
     final levelNow = hourly.seaLevelAt(now);
     final trend = TideService.tideTrend(hourly, now);
     final range = TideService.rangeAround(hourly, now, 24);
-    final uvNow = weather.uvNow;
+    final uvNow = widget.weather.uvNow;
+
+    final tideRows = <Widget>[];
+    for (final tide in upcoming.take(6)) {
+      tideRows.add(_TideRow(tide: tide, isNext: tide == next));
+    }
 
     return ListView(
       padding: const EdgeInsets.only(bottom: 24),
@@ -115,7 +128,7 @@ class _TidesBodyState extends State<_TidesBody> {
           next: next,
           levelNow: levelNow,
           trend: trend,
-          locationLabel: location!.name,
+          locationLabel: widget.location.name,
         ),
         const SectionHeader('Sea level (tides)', icon: Icons.waves),
         Card(
@@ -125,11 +138,7 @@ class _TidesBodyState extends State<_TidesBody> {
             padding: const EdgeInsets.fromLTRB(0, 6, 10, 6),
             child: Column(
               children: [
-                TideChart(
-                  hourly: hourly,
-                  from: now,
-                  windowHours: _windowHours,
-                ),
+                TideChart(hourly: hourly, from: now, windowHours: _windowHours),
                 const SizedBox(height: 8),
                 SegmentedButton<int>(
                   segments: const [
@@ -155,22 +164,21 @@ class _TidesBodyState extends State<_TidesBody> {
                   child: ConditionTile(
                     icon: Icons.swap_vert,
                     label: 'Tidal range · next 24 h',
-                    value:
-                        '${(range.$2 - range.$1).toStringAsFixed(2)} m',
+                    value: '${(range.max - range.min).toStringAsFixed(2)} m',
                     sublabel:
-                        'Low ${(range.$1).toStringAsFixed(2)} m · high ${(range.$2).toStringAsFixed(2)} m',
+                        'Low ${range.min.toStringAsFixed(2)} m · '
+                        'high ${range.max.toStringAsFixed(2)} m',
                   ),
                 ),
               ],
             ),
           ),
         const SectionHeader('Upcoming tides', icon: Icons.update),
-        for (final tide in upcoming.take(6))
-          _TideRow(tide: tide, isNext: tide == next),
+        ...tideRows,
         const SectionHeader('Waves & currents', icon: Icons.waves),
-        _WaveCard(marine: marine),
+        _WaveCard(marine: widget.marine),
         const SectionHeader('Wind & gusts', icon: Icons.air),
-        _WindHourlyChart(weather: weather),
+        _WindHourlyChart(weather: widget.weather),
         if (uvNow != null) ...[
           const SectionHeader('Sun while you swim', icon: Icons.wb_sunny),
           Padding(
@@ -221,21 +229,38 @@ class _NextTideBanner extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final now = DateTime.now();
 
+    IconData trendIcon = Icons.swap_vert;
+    if (trend > 0) {
+      trendIcon = Icons.north;
+    } else if (trend < 0) {
+      trendIcon = Icons.south;
+    }
+
     String headline;
     String detail;
-    if (next == null) {
+
+    final nextTide = next;
+    if (nextTide == null) {
       headline = 'Tide model available';
       detail = 'No turning points found in the current forecast window.';
     } else {
-      final remaining = next!.time.difference(now);
+      final remaining = nextTide.time.difference(now);
       final hours = remaining.inMinutes ~/ 60;
       final minutes = remaining.inMinutes % 60;
-      final inPhrase = remaining.isNegative
-          ? 'about now'
-          : 'in ${hours > 0 ? '$hours h ' : ''}$minutes min';
-      headline = '${next!.label} $inPhrase';
-      detail = '${next!.label} at ${_timeFormat.format(next!.time)} · '
-          '${next!.heightMsl.toStringAsFixed(2)} m';
+
+      String inPhrase;
+      if (remaining.isNegative) {
+        inPhrase = 'about now';
+      } else if (hours > 0) {
+        inPhrase = 'in $hours h $minutes min';
+      } else {
+        inPhrase = 'in $minutes min';
+      }
+
+      headline = '${nextTide.label} $inPhrase';
+      detail =
+          '${nextTide.label} at ${_timeFormat.format(nextTide.time)} · '
+          '${nextTide.heightMsl.toStringAsFixed(2)} m';
     }
 
     return Container(
@@ -287,14 +312,7 @@ class _NextTideBanner extends StatelessWidget {
             const SizedBox(height: 10),
             Row(
               children: [
-                Icon(
-                  trend > 0
-                      ? Icons.north
-                      : trend < 0
-                          ? Icons.south
-                          : Icons.swap_vert,
-                  color: scheme.onPrimary,
-                ),
+                Icon(trendIcon, color: scheme.onPrimary),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
@@ -347,10 +365,7 @@ class _TideRow extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       child: ListTile(
         dense: true,
-        leading: Icon(
-          tide.isHigh ? Icons.north : Icons.south,
-          color: color,
-        ),
+        leading: Icon(tide.isHigh ? Icons.north : Icons.south, color: color),
         title: Text(
           '${tide.label} · ${tide.heightMsl.toStringAsFixed(2)} m',
           style: const TextStyle(fontWeight: FontWeight.w600),
@@ -365,7 +380,9 @@ class _TideRow extends StatelessWidget {
 
   static bool isTextToday(DateTime time) {
     final now = DateTime.now();
-    return time.year == now.year && time.month == now.month && time.day == now.day;
+    return time.year == now.year &&
+        time.month == now.month &&
+        time.day == now.day;
   }
 }
 
@@ -380,6 +397,37 @@ class _WaveCard extends StatelessWidget {
     final current = marine.current;
     final waveDirection = current.waveDirection;
 
+    String waveHeightLabel = '—';
+    if (current.waveHeight != null) {
+      waveHeightLabel = '${current.waveHeight!.toStringAsFixed(1)} m';
+    }
+
+    String directionLabel = 'Direction unknown';
+    if (waveDirection != null) {
+      directionLabel = 'Waves from ${compass16(waveDirection)}';
+    }
+
+    String wavePeriodLabel = '—';
+    if (current.wavePeriod != null) {
+      wavePeriodLabel = '${current.wavePeriod!.round()} s';
+    }
+
+    String seaTempLabel = '—';
+    if (current.seaSurfaceTemperature != null) {
+      seaTempLabel = '${current.seaSurfaceTemperature!.toStringAsFixed(1)} °C';
+    }
+
+    String currentLabel = '—';
+    if (current.oceanCurrentVelocity != null) {
+      currentLabel = '${current.oceanCurrentVelocity!.toStringAsFixed(1)} km/h';
+    }
+
+    String? currentDirectionLabel;
+    if (current.oceanCurrentDirection != null) {
+      currentDirectionLabel =
+          'towards ${compass16(current.oceanCurrentDirection!)}';
+    }
+
     return Card(
       elevation: 0,
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -393,16 +441,15 @@ class _WaveCard extends StatelessWidget {
               size: 112,
               color: scheme.secondary,
               center: Text(
-                current.waveHeight == null
-                    ? '—'
-                    : '${current.waveHeight!.toStringAsFixed(1)} m',
-                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
+                waveHeightLabel,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               caption: Text(
-                waveDirection == null ? 'Direction unknown' : 'Waves from ${compass16(waveDirection)}',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
+                directionLabel,
+                style: Theme.of(context).textTheme.bodySmall
                     ?.copyWith(color: scheme.onSurfaceVariant),
               ),
             ),
@@ -416,18 +463,14 @@ class _WaveCard extends StatelessWidget {
                         child: ConditionTile(
                           icon: Icons.av_timer,
                           label: 'Wave period',
-                          value: current.wavePeriod == null
-                              ? '—'
-                              : '${current.wavePeriod!.round()} s',
+                          value: wavePeriodLabel,
                         ),
                       ),
                       Expanded(
                         child: ConditionTile(
                           icon: Icons.thermostat,
                           label: 'Sea temperature',
-                          value: current.seaSurfaceTemperature == null
-                              ? '—'
-                              : '${current.seaSurfaceTemperature!.toStringAsFixed(1)} °C',
+                          value: seaTempLabel,
                         ),
                       ),
                     ],
@@ -435,12 +478,8 @@ class _WaveCard extends StatelessWidget {
                   ConditionTile(
                     icon: Icons.water,
                     label: 'Ocean current',
-                    value: current.oceanCurrentVelocity == null
-                        ? '—'
-                        : '${current.oceanCurrentVelocity!.toStringAsFixed(1)} km/h',
-                    sublabel: current.oceanCurrentDirection == null
-                        ? null
-                        : 'towards ${compass16(current.oceanCurrentDirection!)}',
+                    value: currentLabel,
+                    sublabel: currentDirectionLabel,
                   ),
                 ],
               ),
@@ -495,8 +534,12 @@ class _WindHourlyChart extends StatelessWidget {
               children: [
                 Icon(Icons.show_chart, size: 16, color: scheme.primary),
                 const SizedBox(width: 6),
-                Text('Wind speed next 24 h (km/h)',
-                    style: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700)),
+                Text(
+                  'Wind speed next 24 h (km/h)',
+                  style: textTheme.labelLarge?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
                 const Spacer(),
                 Icon(Icons.circle, size: 8, color: scheme.primary),
                 const SizedBox(width: 3),
