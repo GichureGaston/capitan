@@ -25,34 +25,32 @@ class CompassDial extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final arrowColor = color ?? scheme.primary;
 
+    final dialChildren = <Widget>[
+      CustomPaint(
+        size: Size.square(size),
+        painter: _CompassPainter(
+          ringColor: scheme.outlineVariant,
+          labelColor: scheme.onSurfaceVariant,
+        ),
+      ),
+      Transform.rotate(
+        angle: (direction + 180) * math.pi / 180.0,
+        child: Icon(Icons.navigation, color: arrowColor, size: size * 0.36),
+      ),
+    ];
+    if (center != null) {
+      dialChildren.add(center!);
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
           width: size,
           height: size,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              CustomPaint(
-                size: Size.square(size),
-                painter: _CompassPainter(
-                  ringColor: scheme.outlineVariant,
-                  labelColor: scheme.onSurfaceVariant,
-                ),
-              ),
-              Transform.rotate(
-                angle: (direction + 180) * math.pi / 180.0,
-                child: Icon(Icons.navigation, color: arrowColor, size: size * 0.36),
-              ),
-              ?center,
-            ],
-          ),
+          child: Stack(alignment: Alignment.center, children: dialChildren),
         ),
-        if (caption != null) ...[
-          const SizedBox(height: 4),
-          caption!,
-        ],
+        if (caption != null) ...[const SizedBox(height: 4), caption!],
       ],
     );
   }
@@ -79,16 +77,18 @@ class WindCompass extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final from = compass16(direction);
 
+    String caption = 'From $from';
+    if (gustsKmh != null) {
+      caption = '$caption · gusts ${gustsKmh!.round()}';
+    }
+
     return CompassDial(
       direction: direction,
       size: size,
       color: color,
       caption: Text(
-        'From $from'
-        '${gustsKmh != null ? ' · gusts ${gustsKmh!.round()}' : ''}',
-        style: Theme.of(context)
-            .textTheme
-            .bodySmall
+        caption,
+        style: Theme.of(context).textTheme.bodySmall
             ?.copyWith(color: scheme.onSurfaceVariant),
       ),
       center: Column(
@@ -148,8 +148,12 @@ class _CompassPainter extends CustomPainter {
     const labels = ['N', 'E', 'S', 'W'];
     for (var i = 0; i < labels.length; i++) {
       final angle = i * 90 * math.pi / 180.0;
-      final anchor = center +
-          Offset((radius + 8) * math.sin(angle), -(radius + 8) * math.cos(angle));
+      final anchor =
+          center +
+          Offset(
+            (radius + 8) * math.sin(angle),
+            -(radius + 8) * math.cos(angle),
+          );
       _paintLabel(canvas, labels[i], anchor);
     }
   }
@@ -158,14 +162,22 @@ class _CompassPainter extends CustomPainter {
     final painter = TextPainter(
       text: TextSpan(
         text: label,
-        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: labelColor),
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w700,
+          color: labelColor,
+        ),
       ),
       textDirection: TextDirection.ltr,
     )..layout();
-    painter.paint(canvas, anchor - Offset(painter.width / 2, painter.height / 2));
+    painter.paint(
+      canvas,
+      anchor - Offset(painter.width / 2, painter.height / 2),
+    );
   }
 
   @override
   bool shouldRepaint(covariant _CompassPainter oldDelegate) =>
-      oldDelegate.ringColor != ringColor || oldDelegate.labelColor != labelColor;
+      oldDelegate.ringColor != ringColor ||
+      oldDelegate.labelColor != labelColor;
 }

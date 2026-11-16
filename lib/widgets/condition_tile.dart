@@ -41,9 +41,9 @@ class ConditionTile extends StatelessWidget {
                   child: Text(
                     label,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: scheme.onSurfaceVariant,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      color: scheme.onSurfaceVariant,
+                      fontWeight: FontWeight.w600,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -56,9 +56,7 @@ class ConditionTile extends StatelessWidget {
             else ...[
               Text(
                 value,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
+                style: Theme.of(context).textTheme.titleMedium
                     ?.copyWith(fontWeight: FontWeight.w700),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -67,9 +65,8 @@ class ConditionTile extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   sublabel!,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: scheme.onSurfaceVariant,
-                      ),
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: scheme.onSurfaceVariant),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -92,26 +89,28 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+
+    final children = <Widget>[];
+    if (icon != null) {
+      children.add(Icon(icon, size: 18, color: scheme.primary));
+      children.add(const SizedBox(width: 8));
+    }
+    children.add(
+      Expanded(
+        child: Text(
+          title,
+          style: Theme.of(context).textTheme.titleMedium
+              ?.copyWith(fontWeight: FontWeight.w700, color: scheme.onSurface),
+        ),
+      ),
+    );
+    if (trailing != null) {
+      children.add(trailing!);
+    }
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-      child: Row(
-        children: [
-          if (icon != null) ...[
-            Icon(icon, size: 18, color: scheme.primary),
-            const SizedBox(width: 8),
-          ],
-          Expanded(
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: scheme.onSurface,
-                  ),
-            ),
-          ),
-          ?trailing,
-        ],
-      ),
+      child: Row(children: children),
     );
   }
 }
@@ -151,7 +150,7 @@ class Pill extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w700,
-              color: outlined ? color : color,
+              color: color,
             ),
           ),
         ],

@@ -32,9 +32,11 @@ class TideChart extends StatelessWidget {
     final spots = <FlSpot>[];
     double? minY;
     double? maxY;
-    for (var i = startIndex;
-        i < hourly.length && i <= startIndex + windowHours;
-        i++) {
+    for (
+      var i = startIndex;
+      i < hourly.length && i <= startIndex + windowHours;
+      i++
+    ) {
       final level = hourly.seaLevelHeightMsl[i];
       if (level == null) continue;
       final hoursFromStart = i - startIndex;
@@ -53,7 +55,14 @@ class TideChart extends StatelessWidget {
     final yMin = (minY ?? 0) - padding;
     final yMax = (maxY ?? 1) + padding;
 
-    final tickInterval = windowHours <= 24 ? 3.0 : windowHours <= 48 ? 6.0 : 24.0;
+    double tickInterval;
+    if (windowHours <= 24) {
+      tickInterval = 3.0;
+    } else if (windowHours <= 48) {
+      tickInterval = 6.0;
+    } else {
+      tickInterval = 24.0;
+    }
 
     return SizedBox(
       height: height,
@@ -63,102 +72,116 @@ class TideChart extends StatelessWidget {
           child: LineChart(
             duration: Duration.zero,
             LineChartData(
-            minY: yMin,
-            maxY: yMax,
-            minX: 0,
-            maxX: windowHours.toDouble(),
-            gridData: FlGridData(
-              show: true,
-              drawVerticalLine: false,
-              horizontalInterval: 0.5,
-              getDrawingHorizontalLine: (v) =>
-                  FlLine(color: scheme.outlineVariant.withValues(alpha: 0.5), strokeWidth: 0.8),
-            ),
-            borderData: FlBorderData(show: false),
-            titlesData: FlTitlesData(
-              topTitles: const AxisTitles(),
-              rightTitles: const AxisTitles(),
-              leftTitles: AxisTitles(
-                axisNameWidget: Padding(
-                  padding: const EdgeInsets.only(right: 4),
-                  child: Text('m', style: textTheme.bodySmall),
-                ),
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 30,
-                  interval: 0.5,
-                  getTitlesWidget: (value, meta) => SideTitleWidget(
-                    meta: meta,
-                    child: Text(value.toStringAsFixed(1), style: textTheme.bodySmall),
-                  ),
+              minY: yMin,
+              maxY: yMax,
+              minX: 0,
+              maxX: windowHours.toDouble(),
+              gridData: FlGridData(
+                show: true,
+                drawVerticalLine: false,
+                horizontalInterval: 0.5,
+                getDrawingHorizontalLine: (v) => FlLine(
+                  color: scheme.outlineVariant.withValues(alpha: 0.5),
+                  strokeWidth: 0.8,
                 ),
               ),
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 24,
-                  interval: tickInterval,
-                  getTitlesWidget: (value, meta) {
-                    if (value % tickInterval != 0) return const SizedBox.shrink();
-                    final hourIndex = startIndex + value.toInt();
-                    if (hourIndex < 0 || hourIndex >= hourly.length) {
-                      return const SizedBox.shrink();
-                    }
-                    final time = hourly.time[hourIndex];
-                    return SideTitleWidget(
+              borderData: FlBorderData(show: false),
+              titlesData: FlTitlesData(
+                topTitles: const AxisTitles(),
+                rightTitles: const AxisTitles(),
+                leftTitles: AxisTitles(
+                  axisNameWidget: Padding(
+                    padding: const EdgeInsets.only(right: 4),
+                    child: Text('m', style: textTheme.bodySmall),
+                  ),
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 30,
+                    interval: 0.5,
+                    getTitlesWidget: (value, meta) => SideTitleWidget(
                       meta: meta,
                       child: Text(
-                        windowHours <= 48
-                            ? _timeFormat.format(time)
-                            : _dayFormat.format(time),
+                        value.toStringAsFixed(1),
                         style: textTheme.bodySmall,
                       ),
-                    );
-                  },
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            lineBarsData: [
-              LineChartBarData(
-                spots: spots,
-                isCurved: true,
-                curveSmoothness: 0.35,
-                preventCurveOverShooting: true,
-                barWidth: 2.4,
-                color: scheme.primary,
-                dotData: const FlDotData(show: false),
-                belowBarData: BarAreaData(
-                  show: true,
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      scheme.primary.withValues(alpha: 0.30),
-                      scheme.primary.withValues(alpha: 0.04),
-                    ],
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    reservedSize: 24,
+                    interval: tickInterval,
+                    getTitlesWidget: (value, meta) {
+                      if (value % tickInterval != 0) {
+                        return const SizedBox.shrink();
+                      }
+                      final hourIndex = startIndex + value.toInt();
+                      if (hourIndex < 0 || hourIndex >= hourly.length) {
+                        return const SizedBox.shrink();
+                      }
+                      final time = hourly.time[hourIndex];
+
+                      String label;
+                      if (windowHours <= 48) {
+                        label = _timeFormat.format(time);
+                      } else {
+                        label = _dayFormat.format(time);
+                      }
+
+                      return SideTitleWidget(
+                        meta: meta,
+                        child: Text(label, style: textTheme.bodySmall),
+                      );
+                    },
                   ),
                 ),
               ),
-            ],
-            lineTouchData: LineTouchData(
-              touchTooltipData: LineTouchTooltipData(
-                getTooltipItems: (spots) => spots
-                    .map(
-                      (s) => LineTooltipItem(
-                        '${s.y.toStringAsFixed(2)} m',
-                        textTheme.bodySmall!.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
+              lineBarsData: [
+                LineChartBarData(
+                  spots: spots,
+                  isCurved: true,
+                  curveSmoothness: 0.35,
+                  preventCurveOverShooting: true,
+                  barWidth: 2.4,
+                  color: scheme.primary,
+                  dotData: const FlDotData(show: false),
+                  belowBarData: BarAreaData(
+                    show: true,
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        scheme.primary.withValues(alpha: 0.30),
+                        scheme.primary.withValues(alpha: 0.04),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+              lineTouchData: LineTouchData(
+                touchTooltipData: LineTouchTooltipData(
+                  getTooltipItems: (spots) {
+                    final items = <LineTooltipItem>[];
+                    for (final spot in spots) {
+                      items.add(
+                        LineTooltipItem(
+                          '${spot.y.toStringAsFixed(2)} m',
+                          textTheme.bodySmall!.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                    )
-                    .toList(),
+                      );
+                    }
+                    return items;
+                  },
+                ),
               ),
             ),
           ),
         ),
       ),
-    ),
-  );
+    );
   }
 }

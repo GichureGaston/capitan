@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../models/species.dart';
 
-/// Bundled species photo with a graceful emoji fallback when the entry has no
-/// image (or the asset cannot be loaded).
 class SpeciesImage extends StatelessWidget {
   const SpeciesImage({
     super.key,
@@ -31,25 +29,18 @@ class SpeciesImage extends StatelessWidget {
       child: Text(entry.emoji, style: TextStyle(fontSize: emojiSize)),
     );
 
-    // Decode only as many pixels as the widget can actually show. The source
-    // photos are ~600x400–960x640, so list thumbnails would otherwise allocate
-    // a full-resolution bitmap for every row.
-    final dpr = MediaQuery.devicePixelRatioOf(context);
-    final isThumbnail = width != null && width! <= 100;
-
-    final photo = entry.hasImage
-        ? Image.asset(
-            entry.image!,
-            width: width,
-            height: height,
-            fit: BoxFit.cover,
-            cacheWidth: width == null ? null : (width! * dpr).round(),
-            cacheHeight: height == null ? null : (height! * dpr).round(),
-            filterQuality:
-                isThumbnail ? FilterQuality.low : FilterQuality.medium,
-            errorBuilder: (_, _, _) => fallback,
-          )
-        : fallback;
+    Widget photo;
+    if (entry.hasImage) {
+      photo = Image.asset(
+        entry.image!,
+        width: width,
+        height: height,
+        fit: BoxFit.cover,
+        errorBuilder: (_, _, _) => fallback,
+      );
+    } else {
+      photo = fallback;
+    }
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),

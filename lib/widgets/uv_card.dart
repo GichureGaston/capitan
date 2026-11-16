@@ -21,6 +21,30 @@ class UvCard extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final color = advice.color;
 
+    final tips = <Widget>[];
+    for (final tip in advice.tips) {
+      tips.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Icon(
+                  Icons.check_circle_outline,
+                  size: 14,
+                  color: scheme.onSurfaceVariant,
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(child: Text(tip)),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Card(
       elevation: 0,
       clipBehavior: Clip.antiAlias,
@@ -30,10 +54,7 @@ class UvCard extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              color.withValues(alpha: 0.22),
-              scheme.surfaceContainerLow,
-            ],
+            colors: [color.withValues(alpha: 0.22), scheme.surfaceContainerLow],
           ),
         ),
         padding: const EdgeInsets.all(16),
@@ -47,9 +68,7 @@ class UvCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     'Sun exposure · UV ${advice.uvIndexLabel} (${advice.category})',
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall
+                    style: Theme.of(context).textTheme.titleSmall
                         ?.copyWith(fontWeight: FontWeight.w700),
                   ),
                 ),
@@ -60,41 +79,18 @@ class UvCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               advice.headline,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall
+              style: Theme.of(context).textTheme.titleSmall
                   ?.copyWith(color: color, fontWeight: FontWeight.w700),
             ),
             if (peakLabel != null) ...[
               const SizedBox(height: 2),
               Text(
                 peakLabel!,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
+                style: Theme.of(context).textTheme.bodySmall
                     ?.copyWith(color: scheme.onSurfaceVariant),
               ),
             ],
-            if (!compact) ...[
-              const SizedBox(height: 10),
-              ...advice.tips.map(
-                (tip) => Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 2),
-                        child: Icon(Icons.check_circle_outline,
-                            size: 14, color: scheme.onSurfaceVariant),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(child: Text(tip)),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            if (!compact) ...[const SizedBox(height: 10), ...tips],
           ],
         ),
       ),
@@ -108,17 +104,25 @@ class _UvBar extends StatelessWidget {
   final double uvIndex;
   final Color color;
 
-  static const _bands = <(double, Color)>[
-    (0, Color(0xFF3E9B4F)),
-    (3, Color(0xFFE6C229)),
-    (6, Color(0xFFF77F00)),
-    (8, Color(0xFFD62828)),
-    (11, Color(0xFF8E24AA)),
+  static const _bandColors = [
+    Color(0xFF3E9B4F),
+    Color(0xFFE6C229),
+    Color(0xFFF77F00),
+    Color(0xFFD62828),
+    Color(0xFF8E24AA),
   ];
 
   @override
   Widget build(BuildContext context) {
     final fraction = (uvIndex / 12).clamp(0.0, 1.0);
+
+    final bands = <Widget>[];
+    for (final bandColor in _bandColors) {
+      bands.add(
+        Expanded(child: Container(color: bandColor.withValues(alpha: 0.85))),
+      );
+    }
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
@@ -129,14 +133,7 @@ class _UvBar extends StatelessWidget {
               Positioned.fill(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Row(
-                    children: [
-                      for (var i = 0; i < _bands.length; i++)
-                        Expanded(
-                          child: Container(color: _bands[i].$2.withValues(alpha: 0.85)),
-                        ),
-                    ],
-                  ),
+                  child: Row(children: bands),
                 ),
               ),
               Positioned(
@@ -148,7 +145,11 @@ class _UvBar extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(2),
                     boxShadow: const [
-                      BoxShadow(color: Colors.black38, blurRadius: 2, spreadRadius: 0.5),
+                      BoxShadow(
+                        color: Colors.black38,
+                        blurRadius: 2,
+                        spreadRadius: 0.5,
+                      ),
                     ],
                   ),
                 ),

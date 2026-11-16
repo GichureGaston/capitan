@@ -5,11 +5,7 @@ import '../models/swim_spot.dart';
 import 'condition_tile.dart';
 
 class SpotTile extends StatelessWidget {
-  const SpotTile({
-    super.key,
-    required this.spot,
-    required this.onUse,
-  });
+  const SpotTile({super.key, required this.spot, required this.onUse});
 
   final SwimSpot spot;
   final void Function(SwimSpot spot) onUse;
@@ -19,6 +15,11 @@ class SpotTile extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
     final rating = spot.swimmingRating;
     final conditions = spot.conditions;
+
+    String waveText = '—';
+    if (conditions != null && conditions.snapshot.waveHeight != null) {
+      waveText = '${conditions.snapshot.waveHeight!.toStringAsFixed(1)} m';
+    }
 
     return Card(
       elevation: 0,
@@ -38,16 +39,12 @@ class SpotTile extends StatelessWidget {
                     children: [
                       Text(
                         spot.name,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall
+                        style: Theme.of(context).textTheme.titleSmall
                             ?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       Text(
                         '${spot.distanceKm.toStringAsFixed(1)} km away · ${spot.surfaceLabel}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
+                        style: Theme.of(context).textTheme.bodySmall
                             ?.copyWith(color: scheme.onSurfaceVariant),
                       ),
                     ],
@@ -63,14 +60,7 @@ class SpotTile extends StatelessWidget {
                 spacing: 16,
                 runSpacing: 4,
                 children: [
-                  _conditionText(
-                    context,
-                    Icons.waves,
-                    'Waves',
-                    conditions.snapshot.waveHeight == null
-                        ? '—'
-                        : '${conditions.snapshot.waveHeight!.toStringAsFixed(1)} m',
-                  ),
+                  _conditionText(context, Icons.waves, 'Waves', waveText),
                   _conditionText(
                     context,
                     Icons.air,
@@ -92,9 +82,7 @@ class SpotTile extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   rating.reasons.first,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall
+                  style: Theme.of(context).textTheme.bodySmall
                       ?.copyWith(color: scheme.onSurfaceVariant),
                 ),
               ],
@@ -126,10 +114,7 @@ class SpotTile extends StatelessWidget {
       children: [
         Icon(icon, size: 14, color: scheme.primary),
         const SizedBox(width: 4),
-        Text(
-          '$label $value',
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        Text('$label $value', style: Theme.of(context).textTheme.bodySmall),
       ],
     );
   }

@@ -14,31 +14,70 @@ class ActivityCard extends StatelessWidget {
     final color = rating.level.color;
     final activity = rating.activity;
     final isLight = Theme.of(context).brightness == Brightness.light;
-    // Darken the accent slightly on light surfaces so yellow/green levels stay
-    // legible, and give the card a tinted surface plus border so it does not
-    // blend into the pale scaffold background.
-    final accent = isLight ? Color.lerp(color, Colors.black, 0.18)! : color;
-    final cardColor = isLight
-        ? Color.alphaBlend(
-            accent.withValues(alpha: 0.07),
-            scheme.surfaceContainerLowest,
-          )
-        : scheme.surfaceContainerLow;
-    final pillText =
-        ThemeData.estimateBrightnessForColor(color) == Brightness.dark
-        ? Colors.white
-        : Colors.black87;
+
+    Color accent;
+    if (isLight) {
+      accent = Color.lerp(color, Colors.black, 0.18)!;
+    } else {
+      accent = color;
+    }
+
+    Color cardColor;
+    if (isLight) {
+      cardColor = Color.alphaBlend(
+        accent.withValues(alpha: 0.07),
+        scheme.surfaceContainerLowest,
+      );
+    } else {
+      cardColor = scheme.surfaceContainerLow;
+    }
+
+    Color pillText;
+    if (ThemeData.estimateBrightnessForColor(color) == Brightness.dark) {
+      pillText = Colors.white;
+    } else {
+      pillText = Colors.black87;
+    }
+
+    Color borderColor;
+    if (isLight) {
+      borderColor = accent.withValues(alpha: 0.38);
+    } else {
+      borderColor = scheme.outlineVariant.withValues(alpha: 0.5);
+    }
+
+    final reasons = <Widget>[];
+    for (final reason in rating.reasons.take(4)) {
+      reasons.add(
+        Padding(
+          padding: const EdgeInsets.only(bottom: 2),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 3),
+                child: Icon(Icons.circle, size: 4, color: accent),
+              ),
+              const SizedBox(width: 7),
+              Expanded(
+                child: Text(
+                  reason,
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: scheme.onSurfaceVariant),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return Card(
       elevation: 0,
       color: cardColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(
-          color: isLight
-              ? accent.withValues(alpha: 0.38)
-              : scheme.outlineVariant.withValues(alpha: 0.5),
-        ),
+        side: BorderSide(color: borderColor),
       ),
       margin: const EdgeInsets.all(5),
       child: Padding(
@@ -77,30 +116,7 @@ class ActivityCard extends StatelessWidget {
                 ),
               ],
             ),
-            if (!compact) ...[
-              const SizedBox(height: 8),
-              for (final reason in rating.reasons.take(4))
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 2),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 3),
-                        child: Icon(Icons.circle, size: 4, color: accent),
-                      ),
-                      const SizedBox(width: 7),
-                      Expanded(
-                        child: Text(
-                          reason,
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(color: scheme.onSurfaceVariant),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-            ],
+            if (!compact) ...[const SizedBox(height: 8), ...reasons],
           ],
         ),
       ),

@@ -13,11 +13,15 @@ class SpeciesTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final dangerColor = entry.danger == 'venomous' || entry.danger == 'sting'
-        ? const Color(0xFFD62828)
-        : entry.isDangerous
-            ? const Color(0xFFEF6C00)
-            : scheme.onSurfaceVariant;
+
+    Color dangerColor;
+    if (entry.danger == 'venomous' || entry.danger == 'sting') {
+      dangerColor = const Color(0xFFD62828);
+    } else if (entry.isDangerous) {
+      dangerColor = const Color(0xFFEF6C00);
+    } else {
+      dangerColor = scheme.onSurfaceVariant;
+    }
 
     return Card(
       elevation: 0,
@@ -29,12 +33,7 @@ class SpeciesTile extends StatelessWidget {
           padding: const EdgeInsets.all(10),
           child: Row(
             children: [
-              SpeciesImage(
-                entry: entry,
-                width: 52,
-                height: 52,
-                emojiSize: 26,
-              ),
+              SpeciesImage(entry: entry, width: 52, height: 52, emojiSize: 26),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
@@ -45,23 +44,22 @@ class SpeciesTile extends StatelessWidget {
                         Expanded(
                           child: Text(
                             entry.name,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
+                            style: Theme.of(context).textTheme.titleSmall
                                 ?.copyWith(fontWeight: FontWeight.w700),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        if (entry.isDangerous) Pill(label: entry.dangerLabel, color: dangerColor),
+                        if (entry.isDangerous)
+                          Pill(label: entry.dangerLabel, color: dangerColor),
                       ],
                     ),
                     Text(
                       entry.scientificName,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            fontStyle: FontStyle.italic,
-                            color: scheme.onSurfaceVariant,
-                          ),
+                        fontStyle: FontStyle.italic,
+                        color: scheme.onSurfaceVariant,
+                      ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),

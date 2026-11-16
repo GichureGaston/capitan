@@ -52,7 +52,13 @@ class SimpleLineChart extends StatelessWidget {
     }
 
     final span = (maxX ?? 24) - (minX ?? 0);
-    final xInterval = this.xInterval ?? (span / 4 > 0 ? span / 4 : 1.0);
+
+    double defaultInterval = 1.0;
+    if (span / 4 > 0) {
+      defaultInterval = span / 4;
+    }
+
+    final xInterval = this.xInterval ?? defaultInterval;
 
     return SizedBox(
       height: height,
@@ -60,73 +66,81 @@ class SimpleLineChart extends StatelessWidget {
         child: LineChart(
           duration: Duration.zero,
           LineChartData(
-          minY: minY,
-          maxY: maxY,
-          minX: minX,
-          maxX: maxX,
-          gridData: FlGridData(
-            show: true,
-            drawVerticalLine: false,
-            horizontalInterval: yInterval,
-            getDrawingHorizontalLine: (v) => FlLine(
-              color: scheme.outlineVariant.withValues(alpha: 0.5),
-              strokeWidth: 0.8,
+            minY: minY,
+            maxY: maxY,
+            minX: minX,
+            maxX: maxX,
+            gridData: FlGridData(
+              show: true,
+              drawVerticalLine: false,
+              horizontalInterval: yInterval,
+              getDrawingHorizontalLine: (v) => FlLine(
+                color: scheme.outlineVariant.withValues(alpha: 0.5),
+                strokeWidth: 0.8,
+              ),
             ),
-          ),
-          borderData: FlBorderData(show: false),
-          titlesData: FlTitlesData(
-            topTitles: const AxisTitles(),
-            rightTitles: const AxisTitles(),
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 30,
-                interval: yInterval,
-                getTitlesWidget: (value, meta) => SideTitleWidget(
-                  meta: meta,
-                  child: Text(
-                    value == value.roundToDouble()
-                        ? value.round().toString()
-                        : value.toStringAsFixed(1),
-                    style: textTheme.bodySmall,
-                  ),
+            borderData: FlBorderData(show: false),
+            titlesData: FlTitlesData(
+              topTitles: const AxisTitles(),
+              rightTitles: const AxisTitles(),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 30,
+                  interval: yInterval,
+                  getTitlesWidget: (value, meta) {
+                    String label;
+                    if (value == value.roundToDouble()) {
+                      label = value.round().toString();
+                    } else {
+                      label = value.toStringAsFixed(1);
+                    }
+
+                    return SideTitleWidget(
+                      meta: meta,
+                      child: Text(label, style: textTheme.bodySmall),
+                    );
+                  },
+                ),
+              ),
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  reservedSize: 24,
+                  interval: xInterval == 0 ? 1 : xInterval,
+                  getTitlesWidget: (value, meta) {
+                    final label = xLabelBuilder?.call(value);
+                    if (label == null) return const SizedBox.shrink();
+                    return SideTitleWidget(
+                      meta: meta,
+                      child: Text(label, style: textTheme.bodySmall),
+                    );
+                  },
                 ),
               ),
             ),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                reservedSize: 24,
-                interval: xInterval == 0 ? 1 : xInterval,
-                getTitlesWidget: (value, meta) {
-                  final label = xLabelBuilder?.call(value);
-                  if (label == null) return const SizedBox.shrink();
-                  return SideTitleWidget(
-                    meta: meta,
-                    child: Text(label, style: textTheme.bodySmall),
-                  );
+            lineBarsData: lines,
+            lineTouchData: LineTouchData(
+              touchTooltipData: LineTouchTooltipData(
+                getTooltipItems: (spots) {
+                  final items = <LineTooltipItem>[];
+                  for (final spot in spots) {
+                    items.add(
+                      LineTooltipItem(
+                        spot.y.toStringAsFixed(1),
+                        textTheme.bodySmall!.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    );
+                  }
+                  return items;
                 },
               ),
             ),
           ),
-          lineBarsData: lines,
-          lineTouchData: LineTouchData(
-            touchTooltipData: LineTouchTooltipData(
-              getTooltipItems: (spots) => spots
-                  .map(
-                    (s) => LineTooltipItem(
-                      s.y.toStringAsFixed(1),
-                      textTheme.bodySmall!.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
         ),
-      ),
       ),
     );
   }
