@@ -75,19 +75,27 @@ All species data and photos are bundled with the app — the fish and coral guid
 
 ## Screenshots
 
-> Add screenshots here. Drop the images into `docs/screenshots/` and replace the placeholders below.
+Captured on Android in Diani, Kenya.
 
-| Now dashboard | Tides & sea |
+| Now — conditions | Sun protection & activity ratings |
 | --- | --- |
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Tides](docs/screenshots/tides.png) |
+| ![Now dashboard](docs/screenshots/now-dashboard.png) | ![Sun protection and activity ratings](docs/screenshots/now-sun-protection.png) |
 
-| Swim spots | Fish guide |
+| Sun times & week ahead | Tides & sea |
 | --- | --- |
-| ![Spots](docs/screenshots/spots.png) | ![Fish guide](docs/screenshots/fish.png) |
+| ![Sun times and seven-day outlook](docs/screenshots/now-outlook.png) | ![Tide chart](docs/screenshots/tides-chart.png) |
 
-| Coral guide | Species detail |
+| Upcoming tides & currents | Wind & sea detail |
 | --- | --- |
-| ![Coral guide](docs/screenshots/coral.png) | ![Species detail](docs/screenshots/species-detail.png) |
+| ![Upcoming tides and currents](docs/screenshots/tides-upcoming.png) | ![Wind chart and tidal notes](docs/screenshots/tides-wind.png) |
+
+| Fish guide | Clownfish |
+| --- | --- |
+| ![Fish guide](docs/screenshots/fish-guide.png) | ![Clownfish detail](docs/screenshots/fish-clownfish.png) |
+
+| Table coral | Organ pipe coral |
+| --- | --- |
+| ![Table coral detail](docs/screenshots/coral-table.png) | ![Organ pipe coral detail](docs/screenshots/coral-organ-pipe.png) |
 
 ---
 
