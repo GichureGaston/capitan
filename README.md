@@ -30,7 +30,7 @@ The goal is simple: spend less time guessing and more time in the water. And com
 
 ## What the app does
 
-### 🌊 Now — conditions and activity ratings
+### Now — conditions and activity ratings
 A single dashboard for the moment you are about to get in:
 
 - Current air and "feels like" temperature, wind direction, gusts, humidity, and cloud cover.
@@ -41,31 +41,31 @@ A single dashboard for the moment you are about to get in:
 - **Activity ratings for snorkelling, freediving, surfing, and swimming** — Excellent / Good / Fair / Poor / Dangerous, with the reasons behind each score: waves, wind, gusts, currents, sea temperature, and UV.
 - **After dark, the app suggests rest instead of a water activity.** Capitán is a daylight companion; night swimming is a different sport with different risks.
 
-### 🌗 Tides & sea
+### Tides & sea
 - Sea-level chart for the next 24 hours, 48 hours, or 7 days.
 - The next high or low tide, with time and height, plus the trend right now.
 - Upcoming tide turns and the tidal range over the next 24 hours.
 - Wave and current detail, plus an hourly wind and gust chart.
 - A clear reminder that modelled tides are guidance, not navigation data.
 
-### 🏖 Spots — nearby swim spots
+### Spots — nearby swim spots
 - Finds beaches and swimming areas around you using OpenStreetMap data (via Overpass).
 - Shows distance, surface type, and — where the data exists — whether a spot is patrolled.
 - Pulls weather and marine conditions for each spot and rates swimming there, so you can compare a few options before committing.
 - One tap sets the spot as your current location, and Capitán remembers it next time.
 
-### 🐟 Fish guide
+### Fish guide
 - 79 fish species, each with a photo, scientific name, size, diet, habitat, and conservation status.
 - **Danger labels in plain language:** Harmless, Sharp / spiny, Stings, Venomous, Bites when provoked, Poisonous to eat.
 - A short "what to know" description and a fun fact per species.
 - Automatically filters to species typical for the waters around your current location (Caribbean, Indo-Pacific, Red Sea, Mediterranean, eastern Pacific, southern Australia, temperate waters, and more), with a toggle for the full guide and search by common or scientific name.
 
-### 🪸 Coral guide
+### Coral guide
 - 58 corals and reef-life entries (including anemones, jellies, octopuses, turtles, sharks, clams, starfish, sponges and sea urchins), with photos and the same safety framing.
 - Calls out fragile, sharp, and stinging reef life — the things to look at from a respectful distance rather than touch.
 - Conservation status surfaced next to the danger label, because "don't touch" is both a safety rule and a reef rule.
 
-### 📍 Anywhere you swim
+### Anywhere you swim
 - Search for a beach, town, or bay by name, or use your device location.
 - Your chosen location is saved locally, so the app opens where you left off.
 
