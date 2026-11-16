@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class UvAdvice {
   UvAdvice({required this.uvIndex, required this.isMaxToday})
-      : band = _bandFor(uvIndex);
+    : band = _bandFor(uvIndex);
 
   final double uvIndex;
 
@@ -10,9 +10,11 @@ class UvAdvice {
 
   final UvBand band;
 
-  factory UvAdvice.current(double uvIndex) => UvAdvice(uvIndex: uvIndex, isMaxToday: false);
+  factory UvAdvice.current(double uvIndex) =>
+      UvAdvice(uvIndex: uvIndex, isMaxToday: false);
 
-  factory UvAdvice.dailyMax(double uvIndex) => UvAdvice(uvIndex: uvIndex, isMaxToday: true);
+  factory UvAdvice.dailyMax(double uvIndex) =>
+      UvAdvice(uvIndex: uvIndex, isMaxToday: true);
 
   static UvBand _bandFor(double uv) {
     if (uv < 3) return UvBand.low;
@@ -22,29 +24,50 @@ class UvAdvice {
     return UvBand.extreme;
   }
 
-  String get category => switch (band) {
-        UvBand.low => 'Low',
-        UvBand.moderate => 'Moderate',
-        UvBand.high => 'High',
-        UvBand.veryHigh => 'Very high',
-        UvBand.extreme => 'Extreme',
-      };
+  String get category {
+    switch (band) {
+      case UvBand.low:
+        return 'Low';
+      case UvBand.moderate:
+        return 'Moderate';
+      case UvBand.high:
+        return 'High';
+      case UvBand.veryHigh:
+        return 'Very high';
+      case UvBand.extreme:
+        return 'Extreme';
+    }
+  }
 
-  Color get color => switch (band) {
-        UvBand.low => const Color(0xFF3E9B4F),
-        UvBand.moderate => const Color(0xFFE6C229),
-        UvBand.high => const Color(0xFFF77F00),
-        UvBand.veryHigh => const Color(0xFFD62828),
-        UvBand.extreme => const Color(0xFF8E24AA),
-      };
+  Color get color {
+    switch (band) {
+      case UvBand.low:
+        return const Color(0xFF3E9B4F);
+      case UvBand.moderate:
+        return const Color(0xFFE6C229);
+      case UvBand.high:
+        return const Color(0xFFF77F00);
+      case UvBand.veryHigh:
+        return const Color(0xFFD62828);
+      case UvBand.extreme:
+        return const Color(0xFF8E24AA);
+    }
+  }
 
-  String get headline => switch (band) {
-        UvBand.low => 'Low burn risk — enjoy the water',
-        UvBand.moderate => 'SPF 30+ sunscreen · hat for long sessions',
-        UvBand.high => 'SPF 30-50 · reapply every 2 hours',
-        UvBand.veryHigh => 'SPF 50 waterproof · reapply every 40-80 min',
-        UvBand.extreme => 'SPF 50+ · full cover · avoid midday sun',
-      };
+  String get headline {
+    switch (band) {
+      case UvBand.low:
+        return 'Low burn risk — enjoy the water';
+      case UvBand.moderate:
+        return 'SPF 30+ sunscreen · hat for long sessions';
+      case UvBand.high:
+        return 'SPF 30-50 · reapply every 2 hours';
+      case UvBand.veryHigh:
+        return 'SPF 50 waterproof · reapply every 40-80 min';
+      case UvBand.extreme:
+        return 'SPF 50+ · full cover · avoid midday sun';
+    }
+  }
 
   List<String> get tips {
     final when = isMaxToday ? 'will peak' : 'is';
@@ -84,17 +107,23 @@ class UvAdvice {
     }
   }
 
-  String get uvIndexLabel => uvIndex >= 10
-      ? uvIndex.round().toString()
-      : uvIndex.toStringAsFixed(1);
+  String get uvIndexLabel =>
+      uvIndex >= 10 ? uvIndex.round().toString() : uvIndex.toStringAsFixed(1);
 
-  String get shortPhrase => switch (band) {
-        UvBand.low => 'sun risk low',
-        UvBand.moderate => 'wear sunscreen',
-        UvBand.high => 'sunscreen essential',
-        UvBand.veryHigh => 'high sun risk',
-        UvBand.extreme => 'extreme sun risk',
-      };
+  String get shortPhrase {
+    switch (band) {
+      case UvBand.low:
+        return 'sun risk low';
+      case UvBand.moderate:
+        return 'wear sunscreen';
+      case UvBand.high:
+        return 'sunscreen essential';
+      case UvBand.veryHigh:
+        return 'high sun risk';
+      case UvBand.extreme:
+        return 'extreme sun risk';
+    }
+  }
 }
 
 enum UvBand { low, moderate, high, veryHigh, extreme }

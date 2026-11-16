@@ -23,17 +23,20 @@ class SwimSpot {
   final SpotConditions? conditions;
 
   SwimSpot copyWith({SpotConditions? conditions}) => SwimSpot(
-        osmId: osmId,
-        name: name,
-        latitude: latitude,
-        longitude: longitude,
-        distanceKm: distanceKm,
-        surface: surface,
-        supervised: supervised,
-        conditions: conditions ?? this.conditions,
-      );
+    osmId: osmId,
+    name: name,
+    latitude: latitude,
+    longitude: longitude,
+    distanceKm: distanceKm,
+    surface: surface,
+    supervised: supervised,
+    conditions: conditions ?? this.conditions,
+  );
 
-  factory SwimSpot.fromOverpass(Map<String, dynamic> element, {required double distanceKm}) {
+  factory SwimSpot.fromOverpass(
+    Map<String, dynamic> element, {
+    required double distanceKm,
+  }) {
     final type = element['type'] as String;
     final id = element['id'] as int;
     double lat;
@@ -59,16 +62,26 @@ class SwimSpot {
 
   ActivityRating? get swimmingRating => conditions?.rating;
 
-  String get surfaceLabel => switch (surface) {
-        'sand' => 'Sandy',
-        'gravel' => 'Gravel',
-        'pebblestone' => 'Pebbles',
-        'shingle' => 'Shingle',
-        'rock' => 'Rocky',
-        'stones' => 'Stony',
-        null => 'Natural',
-        _ => surface!,
-      };
+  String get surfaceLabel {
+    switch (surface) {
+      case 'sand':
+        return 'Sandy';
+      case 'gravel':
+        return 'Gravel';
+      case 'pebblestone':
+        return 'Pebbles';
+      case 'shingle':
+        return 'Shingle';
+      case 'rock':
+        return 'Rocky';
+      case 'stones':
+        return 'Stony';
+      case null:
+        return 'Natural';
+      default:
+        return surface!;
+    }
+  }
 }
 
 class SpotConditions {

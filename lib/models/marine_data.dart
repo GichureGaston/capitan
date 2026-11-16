@@ -10,8 +10,9 @@ class MarineData {
   final List<MarineDay> daily;
 
   factory MarineData.fromJson(Map<String, dynamic> json) {
-    final current = MarineCurrent.fromJson(json['current'] as Map<String, dynamic>);
-    // Batch marine responses may omit hourly/daily data.
+    final current = MarineCurrent.fromJson(
+      json['current'] as Map<String, dynamic>,
+    );
     final hourlyRaw = json['hourly'] as Map<String, dynamic>?;
     final hourly = hourlyRaw == null
         ? MarineHourly.fromJson(const {'time': <String>[]})
@@ -55,15 +56,15 @@ class MarineCurrent {
   final double? seaLevelMsl;
 
   factory MarineCurrent.fromJson(Map<String, dynamic> json) => MarineCurrent(
-        time: DateTime.parse(json['time'] as String),
-        waveHeight: _num(json['wave_height']),
-        waveDirection: _num(json['wave_direction']),
-        wavePeriod: _num(json['wave_period']),
-        seaSurfaceTemperature: _num(json['sea_surface_temperature']),
-        oceanCurrentVelocity: _num(json['ocean_current_velocity']),
-        oceanCurrentDirection: _num(json['ocean_current_direction']),
-        seaLevelMsl: _num(json['sea_level_height_msl']),
-      );
+    time: DateTime.parse(json['time'] as String),
+    waveHeight: _num(json['wave_height']),
+    waveDirection: _num(json['wave_direction']),
+    wavePeriod: _num(json['wave_period']),
+    seaSurfaceTemperature: _num(json['sea_surface_temperature']),
+    oceanCurrentVelocity: _num(json['ocean_current_velocity']),
+    oceanCurrentDirection: _num(json['ocean_current_direction']),
+    seaLevelMsl: _num(json['sea_level_height_msl']),
+  );
 }
 
 class MarineHourly {
@@ -88,10 +89,26 @@ class MarineHourly {
   final List<double?> oceanCurrentDirection;
 
   factory MarineHourly.fromJson(Map<String, dynamic> json) {
-    final time = (json['time'] as List).map((e) => DateTime.parse(e as String)).toList();
-    List<double?> doubles(String key) =>
-        (json[key] as List?)?.map((e) => e == null ? null : (e as num).toDouble()).toList() ??
-            List<double?>.filled(time.length, null);
+    final time = (json['time'] as List)
+        .map((e) => DateTime.parse(e as String))
+        .toList();
+    List<double?> doubles(String key) {
+      final raw = json[key] as List?;
+      if (raw == null) {
+        return List<double?>.filled(time.length, null);
+      }
+
+      final values = <double?>[];
+      for (final item in raw) {
+        if (item == null) {
+          values.add(null);
+        } else {
+          values.add((item as num).toDouble());
+        }
+      }
+      return values;
+    }
+
     return MarineHourly(
       time: time,
       waveHeight: doubles('wave_height'),
@@ -121,7 +138,9 @@ class MarineHourly {
 
   double? seaLevelAt(DateTime at) {
     final i = indexOfNearestHour(at);
-    return (i < 0 || i >= seaLevelHeightMsl.length) ? null : seaLevelHeightMsl[i];
+    return (i < 0 || i >= seaLevelHeightMsl.length)
+        ? null
+        : seaLevelHeightMsl[i];
   }
 }
 
@@ -138,7 +157,8 @@ class MarineDay {
   final double? waveDirectionDominant;
   final double? wavePeriodMax;
 
-  factory MarineDay.fromIndexedJson(Map<String, dynamic> daily, int i) => MarineDay(
+  factory MarineDay.fromIndexedJson(Map<String, dynamic> daily, int i) =>
+      MarineDay(
         date: DateTime.parse((daily['time'] as List)[i] as String),
         waveHeightMax: _numAt(daily['wave_height_max'], i),
         waveDirectionDominant: _numAt(daily['wave_direction_dominant'], i),
@@ -147,7 +167,11 @@ class MarineDay {
 }
 
 class TideEvent {
-  const TideEvent({required this.time, required this.isHigh, required this.heightMsl});
+  const TideEvent({
+    required this.time,
+    required this.isHigh,
+    required this.heightMsl,
+  });
 
   final DateTime time;
   final bool isHigh;
@@ -157,5 +181,6 @@ class TideEvent {
 }
 
 double? _num(dynamic v) => v == null ? null : (v as num).toDouble();
-double? _numAt(dynamic list, int i) =>
-    list == null ? null : (list[i] == null ? null : (list[i] as num).toDouble());
+double? _numAt(dynamic list, int i) => list == null
+    ? null
+    : (list[i] == null ? null : (list[i] as num).toDouble());

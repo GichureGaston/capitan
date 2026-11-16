@@ -17,9 +17,9 @@ class WeatherData {
   final DateTime? sunsetToday;
 
   factory WeatherData.fromJson(Map<String, dynamic> json) {
-    final current = WeatherCurrent.fromJson(json['current'] as Map<String, dynamic>);
-    // Batch forecast responses may omit hourly/daily data. Treat them as
-    // empty rather than failing — current conditions are still usable.
+    final current = WeatherCurrent.fromJson(
+      json['current'] as Map<String, dynamic>,
+    );
     final hourlyRaw = json['hourly'] as Map<String, dynamic>?;
     final hourly = hourlyRaw == null
         ? WeatherHourly.fromJson(const {'time': <String>[]})
@@ -80,18 +80,18 @@ class WeatherCurrent {
   final bool isDay;
 
   factory WeatherCurrent.fromJson(Map<String, dynamic> json) => WeatherCurrent(
-        time: DateTime.parse(json['time'] as String),
-        temperature: _num(json['temperature_2m']),
-        apparentTemperature: _num(json['apparent_temperature']),
-        humidity: _num(json['relative_humidity_2m']),
-        precipitation: _num(json['precipitation']),
-        weatherCode: (json['weather_code'] as num?)?.toInt() ?? 0,
-        cloudCover: _num(json['cloud_cover']),
-        windSpeed: _num(json['wind_speed_10m']),
-        windDirection: _num(json['wind_direction_10m']),
-        windGusts: _num(json['wind_gusts_10m']),
-        isDay: (json['is_day'] as num?)?.toInt() != 0,
-      );
+    time: DateTime.parse(json['time'] as String),
+    temperature: _num(json['temperature_2m']),
+    apparentTemperature: _num(json['apparent_temperature']),
+    humidity: _num(json['relative_humidity_2m']),
+    precipitation: _num(json['precipitation']),
+    weatherCode: (json['weather_code'] as num?)?.toInt() ?? 0,
+    cloudCover: _num(json['cloud_cover']),
+    windSpeed: _num(json['wind_speed_10m']),
+    windDirection: _num(json['wind_direction_10m']),
+    windGusts: _num(json['wind_gusts_10m']),
+    isDay: (json['is_day'] as num?)?.toInt() != 0,
+  );
 }
 
 class WeatherHourly {
@@ -120,14 +120,44 @@ class WeatherHourly {
   final List<double?> visibility;
 
   factory WeatherHourly.fromJson(Map<String, dynamic> json) {
-    final time = (json['time'] as List).map((e) => DateTime.parse(e as String)).toList();
-    List<double?> doubles(String key) =>
-        (json[key] as List?)?.map((e) => e == null ? null : (e as num).toDouble()).toList() ??
-        List<double?>.filled(time.length, null);
-    final weatherCode = (json['weather_code'] as List?)
-            ?.map((e) => e == null ? 0 : (e as num).toInt())
-            .toList() ??
-        List<int>.filled(time.length, 0);
+    final time = (json['time'] as List)
+        .map((e) => DateTime.parse(e as String))
+        .toList();
+    List<double?> doubles(String key) {
+      final raw = json[key] as List?;
+      if (raw == null) {
+        return List<double?>.filled(time.length, null);
+      }
+
+      final values = <double?>[];
+      for (final item in raw) {
+        if (item == null) {
+          values.add(null);
+        } else {
+          values.add((item as num).toDouble());
+        }
+      }
+      return values;
+    }
+
+    List<int> weatherCodes() {
+      final raw = json['weather_code'] as List?;
+      if (raw == null) {
+        return List<int>.filled(time.length, 0);
+      }
+
+      final values = <int>[];
+      for (final item in raw) {
+        if (item == null) {
+          values.add(0);
+        } else {
+          values.add((item as num).toInt());
+        }
+      }
+      return values;
+    }
+
+    final weatherCode = weatherCodes();
     return WeatherHourly(
       time: time,
       temperature: doubles('temperature_2m'),
@@ -205,7 +235,8 @@ class WeatherDay {
   final DateTime? sunrise;
   final DateTime? sunset;
 
-  factory WeatherDay.fromIndexedJson(Map<String, dynamic> daily, int i) => WeatherDay(
+  factory WeatherDay.fromIndexedJson(Map<String, dynamic> daily, int i) =>
+      WeatherDay(
         date: DateTime.parse((daily['time'] as List)[i] as String),
         weatherCode: _intAt(daily['weather_code'], i),
         tempMax: _numAt(daily['temperature_2m_max'], i),
@@ -220,13 +251,27 @@ class WeatherDay {
       );
 }
 
-double _num(dynamic v) => v == null ? 0 : (v as num).toDouble();
-double? _numAt(dynamic list, int i) =>
-    list == null ? null : (list[i] == null ? null : (list[i] as num).toDouble());
-int _intAt(dynamic list, int i) =>
-    list == null ? 0 : (list[i] == null ? 0 : (list[i] as num).toInt());
-DateTime? _dateAt(dynamic list, int i) =>
-    list == null || list[i] == null ? null : DateTime.parse(list[i] as String);
+double _num(dynamic v) {
+  if (v == null) return 0;
+  return (v as num).toDouble();
+}
+
+double? _numAt(dynamic list, int i) {
+  if (list == null) return null;
+  if (list[i] == null) return null;
+  return (list[i] as num).toDouble();
+}
+
+int _intAt(dynamic list, int i) {
+  if (list == null) return 0;
+  if (list[i] == null) return 0;
+  return (list[i] as num).toInt();
+}
+
+DateTime? _dateAt(dynamic list, int i) {
+  if (list == null || list[i] == null) return null;
+  return DateTime.parse(list[i] as String);
+}
 
 class WmoWeather {
   const WmoWeather._();
@@ -266,7 +311,9 @@ class WmoWeather {
   static String label(int code) => _labels[code] ?? 'Unknown';
 
   static IconData icon(int code, {required bool isDay}) {
-    if (code == 0 || code == 1) return isDay ? Icons.sunny : Icons.nightlight_round;
+    if (code == 0 || code == 1) {
+      return isDay ? Icons.sunny : Icons.nightlight_round;
+    }
     if (code == 2) return isDay ? Icons.wb_sunny : Icons.nights_stay;
     if (code == 3) return Icons.cloud;
     if (code == 45 || code == 48) return Icons.foggy;

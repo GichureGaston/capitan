@@ -25,40 +25,40 @@ class SeaLocation {
   }
 
   factory SeaLocation.fromJson(Map<String, dynamic> json) => SeaLocation(
-        name: json['name'] as String,
-        latitude: (json['latitude'] as num).toDouble(),
-        longitude: (json['longitude'] as num).toDouble(),
-        admin: json['admin'] as String?,
-        country: json['country'] as String?,
-        timezone: json['timezone'] as String?,
-      );
+    name: json['name'] as String,
+    latitude: (json['latitude'] as num).toDouble(),
+    longitude: (json['longitude'] as num).toDouble(),
+    admin: json['admin'] as String?,
+    country: json['country'] as String?,
+    timezone: json['timezone'] as String?,
+  );
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'latitude': latitude,
-        'longitude': longitude,
-        'admin': admin,
-        'country': country,
-        'timezone': timezone,
-      };
+    'name': name,
+    'latitude': latitude,
+    'longitude': longitude,
+    'admin': admin,
+    'country': country,
+    'timezone': timezone,
+  };
 
   factory SeaLocation.fromGeocoding(Map<String, dynamic> json) => SeaLocation(
-        name: json['name'] as String,
-        latitude: (json['latitude'] as num).toDouble(),
-        longitude: (json['longitude'] as num).toDouble(),
-        admin: json['admin1'] as String?,
-        country: json['country'] as String?,
-        timezone: json['timezone'] as String?,
-      );
+    name: json['name'] as String,
+    latitude: (json['latitude'] as num).toDouble(),
+    longitude: (json['longitude'] as num).toDouble(),
+    admin: json['admin1'] as String?,
+    country: json['country'] as String?,
+    timezone: json['timezone'] as String?,
+  );
 
   SeaLocation withName(String newName) => SeaLocation(
-        name: newName,
-        latitude: latitude,
-        longitude: longitude,
-        admin: admin,
-        country: country,
-        timezone: timezone,
-      );
+    name: newName,
+    latitude: latitude,
+    longitude: longitude,
+    admin: admin,
+    country: country,
+    timezone: timezone,
+  );
 
   @override
   String toString() => 'SeaLocation($label @ $latitude,$longitude)';
