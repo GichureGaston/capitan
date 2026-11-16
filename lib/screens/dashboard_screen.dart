@@ -23,28 +23,13 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Select only the fields the dashboard renders. Toggling loading/locating
-    // no longer rebuilds the whole page (and its charts) on every emission.
-    final (location, weather, marine, error, marineNotice, lastUpdated) =
-        context.select<
-            AppBloc,
-            (
-              SeaLocation?,
-              WeatherData?,
-              MarineData?,
-              String?,
-              String?,
-              DateTime?,
-            )>(
-      (bloc) => (
-        bloc.state.location,
-        bloc.state.weather,
-        bloc.state.marine,
-        bloc.state.error,
-        bloc.state.marineNotice,
-        bloc.state.lastUpdated,
-      ),
-    );
+    final state = context.watch<AppBloc>().state;
+    final location = state.location;
+    final weather = state.weather;
+    final marine = state.marine;
+    final error = state.error;
+    final marineNotice = state.marineNotice;
+    final lastUpdated = state.lastUpdated;
 
     if (location == null) {
       return const _NoLocationState();
@@ -65,7 +50,18 @@ class DashboardScreen extends StatelessWidget {
     final uvMax = weather.uvMaxToday ?? uvNow;
     final ratings = ActivityRater.rateAll(snapshot);
     final best = ActivityRater.bestOf(ratings);
-    final tideTrend = marine == null ? 0 : TideService.tideTrend(marine.hourly, current.time);
+    final tideTrend = marine == null
+        ? 0
+        : TideService.tideTrend(marine.hourly, current.time);
+
+    String peakLabel;
+    if (weather.uvPeakTimeToday == null) {
+      peakLabel = 'Peak UV today: ${_formatUv(uvMax)}';
+    } else {
+      peakLabel =
+          'Peak UV today: ${_formatUv(uvMax)} around '
+          '${_timeFormat.format(weather.uvPeakTimeToday!)}';
+    }
 
     return RefreshIndicator(
       onRefresh: () => _refresh(context),
@@ -83,15 +79,13 @@ class DashboardScreen extends StatelessWidget {
           if (marineNotice != null) _MarineNoticeCard(text: marineNotice),
           const SectionHeader('Conditions right now'),
           _WindCard(weather: weather),
-          _ConditionGrid(weather: weather, marine: marine, tideTrend: tideTrend),
-          const SectionHeader('Sun protection', icon: Icons.wb_sunny),
-          UvCard(
-            advice: UvAdvice.current(uvNow),
-            peakLabel: weather.uvPeakTimeToday == null
-                ? 'Peak UV today: ${_formatUv(uvMax)}'
-                : 'Peak UV today: ${_formatUv(uvMax)} around '
-                    '${_timeFormat.format(weather.uvPeakTimeToday!)}',
+          _ConditionGrid(
+            weather: weather,
+            marine: marine,
+            tideTrend: tideTrend,
           ),
+          const SectionHeader('Sun protection', icon: Icons.wb_sunny),
+          UvCard(advice: UvAdvice.current(uvNow), peakLabel: peakLabel),
           const SectionHeader('Activity ratings'),
           if (ratings.isEmpty)
             const Padding(
@@ -105,12 +99,17 @@ class DashboardScreen extends StatelessWidget {
                 builder: (context, constraints) {
                   final columns = constraints.maxWidth > 600 ? 4 : 2;
                   final cardWidth = constraints.maxWidth / columns - 10;
-                  return Wrap(
-                    children: [
-                      for (final r in ratings)
-                        SizedBox(width: cardWidth, child: ActivityCard(rating: r)),
-                    ],
-                  );
+
+                  final cards = <Widget>[];
+                  for (final rating in ratings) {
+                    cards.add(
+                      SizedBox(
+                        width: cardWidth,
+                        child: ActivityCard(rating: rating),
+                      ),
+                    );
+                  }
+                  return Wrap(children: cards);
                 },
               ),
             ),
@@ -152,6 +151,7 @@ class _HeroHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final current = weather.current;
+    final bestRating = best;
 
     return Container(
       width: double.infinity,
@@ -193,7 +193,9 @@ class _HeroHeader extends StatelessWidget {
                   Text(
                     'Updated ${_timeFormat.format(lastUpdated!)}',
                     style: TextStyle(
-                        color: scheme.onPrimary.withValues(alpha: 0.85), fontSize: 12),
+                      color: scheme.onPrimary.withValues(alpha: 0.85),
+                      fontSize: 12,
+                    ),
                   ),
               ],
             ),
@@ -230,12 +232,13 @@ class _HeroHeader extends StatelessWidget {
                 ),
               ],
             ),
-            if (best != null) ...[
+            if (bestRating != null) ...[
               const SizedBox(height: 14),
               _HeroChip(
-                icon: best!.activity.icon,
-                message: 'Best right now: ${best!.activity.label} — '
-                    '${best!.level.label.toLowerCase()}',
+                icon: bestRating.activity.icon,
+                message:
+                    'Best right now: ${bestRating.activity.label} — '
+                    '${bestRating.level.label.toLowerCase()}',
               ),
             ] else if (!current.isDay) ...[
               const SizedBox(height: 14),
@@ -337,7 +340,11 @@ class _MarineNoticeCard extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Row(
             children: [
-              Icon(Icons.info_outline, size: 18, color: scheme.onSecondaryContainer),
+              Icon(
+                Icons.info_outline,
+                size: 18,
+                color: scheme.onSecondaryContainer,
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
@@ -379,11 +386,21 @@ class _WindCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _stat(context, Icons.water_drop, 'Humidity',
-                      '${current.humidity.round()}%'),
+                  _stat(
+                    context,
+                    Icons.water_drop,
+                    'Humidity',
+                    '${current.humidity.round()}%',
+                  ),
                   const SizedBox(height: 8),
-                  _stat(context, Icons.air, 'Gusts',
-                      current.windGusts > 0 ? '${current.windGusts.round()} km/h' : '—'),
+                  _stat(
+                    context,
+                    Icons.air,
+                    'Gusts',
+                    current.windGusts > 0
+                        ? '${current.windGusts.round()} km/h'
+                        : '—',
+                  ),
                   const SizedBox(height: 8),
                   _stat(
                     context,
@@ -400,7 +417,12 @@ class _WindCard extends StatelessWidget {
     );
   }
 
-  Widget _stat(BuildContext context, IconData icon, String label, String value) {
+  Widget _stat(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
     final scheme = Theme.of(context).colorScheme;
     return Row(
       children: [
@@ -409,9 +431,7 @@ class _WindCard extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
+            style: Theme.of(context).textTheme.bodySmall
                 ?.copyWith(color: scheme.onSurfaceVariant),
           ),
         ),
@@ -441,39 +461,75 @@ class _ConditionGrid extends StatelessWidget {
     final seaTemp = marine?.current.seaSurfaceTemperature;
     final uvNow = weather.uvNow;
 
+    String waveValue = '—';
+    if (waveHeight != null) {
+      waveValue = '${waveHeight.toStringAsFixed(1)} m';
+    }
+
+    String waveSublabel = 'No sea model data';
+    if (wavePeriod != null) {
+      waveSublabel = '${wavePeriod.round()} s intervals';
+    }
+
+    String seaTempValue = '—';
+    if (seaTemp != null) {
+      seaTempValue = '${seaTemp.toStringAsFixed(1)} °C';
+    }
+
+    String seaLevelValue = '—';
+    if (seaLevel != null) {
+      seaLevelValue = '${seaLevel.toStringAsFixed(2)} m';
+    }
+
+    String tideSublabel;
+    if (tideTrend > 0) {
+      tideSublabel = 'Rising — flooding';
+    } else if (tideTrend < 0) {
+      tideSublabel = 'Falling — ebbing';
+    } else if (seaLevel != null) {
+      tideSublabel = 'Slack / steady';
+    } else {
+      tideSublabel = 'No tide data here';
+    }
+
+    String uvValue = '—';
+    Color? uvColor;
+    if (uvNow != null) {
+      final advice = UvAdvice.current(uvNow);
+      uvValue = advice.uvIndexLabel;
+      uvColor = advice.color;
+    }
+
+    String? uvSublabel;
+    if (weather.uvMaxToday != null) {
+      uvSublabel = 'Peak ${weather.uvMaxToday!.round()} today';
+    }
+
     final tiles = <Widget>[
       ConditionTile(
         icon: Icons.waves,
         label: 'Wave height',
-        value: waveHeight == null ? '—' : '${waveHeight.toStringAsFixed(1)} m',
-        sublabel: wavePeriod == null
-            ? 'No sea model data'
-            : '${wavePeriod.round()} s intervals',
+        value: waveValue,
+        sublabel: waveSublabel,
       ),
       ConditionTile(
         icon: Icons.thermostat,
         label: 'Sea temperature',
-        value: seaTemp == null ? '—' : '${seaTemp.toStringAsFixed(1)} °C',
+        value: seaTempValue,
         sublabel: _seaTempComment(seaTemp),
       ),
       ConditionTile(
         icon: tideTrend >= 0 ? Icons.north : Icons.south,
         label: 'Sea level & tide',
-        value: seaLevel == null ? '—' : '${seaLevel.toStringAsFixed(2)} m',
-        sublabel: tideTrend > 0
-            ? 'Rising — flooding'
-            : tideTrend < 0
-                ? 'Falling — ebbing'
-                : seaLevel != null
-                    ? 'Slack / steady'
-                    : 'No tide data here',
+        value: seaLevelValue,
+        sublabel: tideSublabel,
       ),
       ConditionTile(
         icon: Icons.wb_sunny,
         label: 'UV index',
-        value: uvNow == null ? '—' : UvAdvice.current(uvNow).uvIndexLabel,
-        sublabel: weather.uvMaxToday == null ? null : 'Peak ${weather.uvMaxToday!.round()} today',
-        accentColor: uvNow == null ? null : UvAdvice.current(uvNow).color,
+        value: uvValue,
+        sublabel: uvSublabel,
+        accentColor: uvColor,
       ),
       ConditionTile(
         icon: Icons.visibility,
@@ -495,12 +551,14 @@ class _ConditionGrid extends StatelessWidget {
           final columns = constraints.maxWidth > 600 ? 4 : 2;
           final tileWidth = constraints.maxWidth / columns;
           final tileHeight = tileWidth / 1.95;
-          return Wrap(
-            children: [
-              for (final tile in tiles)
-                SizedBox(width: tileWidth, height: tileHeight, child: tile),
-            ],
-          );
+
+          final children = <Widget>[];
+          for (final tile in tiles) {
+            children.add(
+              SizedBox(width: tileWidth, height: tileHeight, child: tile),
+            );
+          }
+          return Wrap(children: children);
         },
       ),
     );
@@ -516,8 +574,12 @@ class _ConditionGrid extends StatelessWidget {
 
   static String _visibilityLabel(WeatherHourly hourly, DateTime now) {
     final i = hourly.indexOfNearestHour(now);
-    if (i < 0 || hourly.visibility[i] == null) return '—';
-    final km = hourly.visibility[i]! / 1000;
+    if (i < 0) return '—';
+
+    final visibility = hourly.visibility[i];
+    if (visibility == null) return '—';
+
+    final km = visibility / 1000;
     if (km >= 20) return '${km.round()} km — clear';
     if (km >= 10) return '${km.round()} km';
     return '${km.toStringAsFixed(1)} km — hazy';
@@ -526,12 +588,18 @@ class _ConditionGrid extends StatelessWidget {
   static String _rainChanceLabel(WeatherHourly hourly, DateTime now) {
     final i = hourly.indexOfNearestHour(now);
     if (i < 0) return '—';
+
     double? max;
     for (var j = i; j < hourly.length && j < i + 4; j++) {
-      final v = hourly.precipitationProbability[j];
-      if (v != null) max = max == null || v > max ? v : max;
+      final value = hourly.precipitationProbability[j];
+      if (value == null) continue;
+      if (max == null || value > max) {
+        max = value;
+      }
     }
-    return max == null ? '—' : '${max.round()}%';
+
+    if (max == null) return '—';
+    return '${max.round()}%';
   }
 }
 
@@ -554,27 +622,53 @@ class _SunTimesCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _timeEntry(context, Icons.wb_twilight, 'Sunrise',
-                sunrise == null ? '—' : _timeFormat.format(sunrise)),
+            _timeEntry(
+              context,
+              Icons.wb_twilight,
+              'Sunrise',
+              _formatTime(sunrise),
+            ),
             Container(width: 1, height: 36, color: scheme.outlineVariant),
-            _timeEntry(context, Icons.wb_sunny, 'Peak UV window', '11:00-15:00'),
+            _timeEntry(
+              context,
+              Icons.wb_sunny,
+              'Peak UV window',
+              '11:00-15:00',
+            ),
             Container(width: 1, height: 36, color: scheme.outlineVariant),
-            _timeEntry(context, Icons.nights_stay, 'Sunset',
-                sunset == null ? '—' : _timeFormat.format(sunset)),
+            _timeEntry(
+              context,
+              Icons.nights_stay,
+              'Sunset',
+              _formatTime(sunset),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _timeEntry(BuildContext context, IconData icon, String label, String value) {
+  String _formatTime(DateTime? time) {
+    if (time == null) return '—';
+    return _timeFormat.format(time);
+  }
+
+  Widget _timeEntry(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
     final scheme = Theme.of(context).colorScheme;
     return Column(
       children: [
         Icon(icon, color: scheme.primary, size: 20),
         const SizedBox(height: 4),
         Text(value, style: const TextStyle(fontWeight: FontWeight.w700)),
-        Text(label, style: TextStyle(fontSize: 11, color: scheme.onSurfaceVariant)),
+        Text(
+          label,
+          style: TextStyle(fontSize: 11, color: scheme.onSurfaceVariant),
+        ),
       ],
     );
   }
@@ -612,7 +706,9 @@ class _DailyStrip extends StatelessWidget {
                   children: [
                     Text(
                       index == 0 ? 'Today' : _weekdayFormat.format(day.date),
-                      style: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+                      style: textTheme.labelLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Icon(
@@ -627,9 +723,12 @@ class _DailyStrip extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      day.windSpeedMax == null ? '' : '${day.windSpeedMax!.round()} km/h',
-                      style:
-                          textTheme.bodySmall?.copyWith(color: scheme.onSurfaceVariant),
+                      day.windSpeedMax == null
+                          ? ''
+                          : '${day.windSpeedMax!.round()} km/h',
+                      style: textTheme.bodySmall?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
                     ),
                     if (uvMax != null)
                       Text(
@@ -683,7 +782,10 @@ class _NoLocationState extends StatelessWidget {
           children: [
             Icon(Icons.sailing, size: 64, color: scheme.primary),
             const SizedBox(height: 16),
-            Text('Where are you headed?', style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'Where are you headed?',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 8),
             Text(
               'Pick your beach, bay or island to see tides, wind, UV and '
@@ -721,8 +823,10 @@ class _ErrorState extends StatelessWidget {
           children: [
             Icon(Icons.cloud_off, size: 64, color: scheme.error),
             const SizedBox(height: 16),
-            Text('Could not load conditions',
-                style: Theme.of(context).textTheme.titleLarge),
+            Text(
+              'Could not load conditions',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
             const SizedBox(height: 8),
             Text(
               message,

@@ -19,11 +19,6 @@ class HomeShell extends StatefulWidget {
 class _HomeShellState extends State<HomeShell> {
   int _tab = 0;
 
-  // Tabs are built lazily: a tab is only mounted after its first visit. This
-  // keeps startup cheap (no eager fish/coral lists or tide charts) while still
-  // preserving each tab's state once visited.
-  final List<bool> _visited = List<bool>.generate(5, (index) => index == 0);
-
   static const _titles = [
     'Capitán',
     'Tides & sea',
@@ -32,32 +27,28 @@ class _HomeShellState extends State<HomeShell> {
     'Coral guide',
   ];
 
-  void _openLocationSheet() => showLocationSheet(context);
-
-  void _selectTab(int index) {
-    if (_tab == index && _visited[index]) return;
-    setState(() {
-      _visited[index] = true;
-      _tab = index;
-    });
+  void _openLocationSheet() {
+    showLocationSheet(context);
   }
 
-  Widget _buildTab(int index) {
-    return switch (index) {
-      0 => const DashboardScreen(),
-      1 => const TidesScreen(),
-      2 => SpotsScreen(onUseSpot: () => _selectTab(0)),
-      3 => const FishScreen(),
-      4 => const CoralScreen(),
-      _ => const SizedBox.shrink(),
-    };
+  void _selectTab(int index) {
+    setState(() {
+      _tab = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final locationName =
-        context.select<AppBloc, String?>((bloc) => bloc.state.location?.name);
+    final locationName = context.watch<AppBloc>().state.location?.name;
+
+    final screens = <Widget>[
+      const DashboardScreen(),
+      const TidesScreen(),
+      SpotsScreen(onUseSpot: () => _selectTab(0)),
+      const FishScreen(),
+      const CoralScreen(),
+    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -81,13 +72,7 @@ class _HomeShellState extends State<HomeShell> {
         backgroundColor: scheme.primaryContainer,
         foregroundColor: scheme.onPrimaryContainer,
       ),
-      body: IndexedStack(
-        index: _tab,
-        children: [
-          for (var i = 0; i < _titles.length; i++)
-            _visited[i] ? _buildTab(i) : const SizedBox.shrink(),
-        ],
-      ),
+      body: IndexedStack(index: _tab, children: screens),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tab,
         onDestinationSelected: _selectTab,

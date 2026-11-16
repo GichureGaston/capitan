@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../app_bloc.dart';
 import '../data/species_repository.dart';
-import '../models/sea_location.dart';
 import '../models/species.dart';
 import '../widgets/species_tile.dart';
 import 'species_detail_screen.dart';
@@ -48,24 +47,37 @@ class _SpeciesScreenState extends State<SpeciesScreen> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final location =
-        context.select<AppBloc, SeaLocation?>((bloc) => bloc.state.location);
+    final location = context.watch<AppBloc>().state.location;
 
-    final regionTags = location == null
-        ? const <String>[]
-        : SpeciesRepository.regionsForLocation(location.latitude, location.longitude);
-    final visibleRegionTags = regionTags.where((t) => t != 'global').toList();
+    List<String> regionTags = const <String>[];
+    if (location != null) {
+      regionTags = SpeciesRepository.regionsForLocation(
+        location.latitude,
+        location.longitude,
+      );
+    }
+
+    final visibleRegionTags = regionTags
+        .where((tag) => tag != 'global')
+        .toList();
+
+    List<String>? filterTags;
+    if (_myRegionOnly && visibleRegionTags.isNotEmpty) {
+      filterTags = regionTags;
+    }
 
     final entries = SpeciesRepository.filter(
       _entries,
       query: _query,
-      regionTags: _myRegionOnly && visibleRegionTags.isNotEmpty ? regionTags : null,
+      regionTags: filterTags,
     );
 
-    final title = switch (widget.type) {
-      SpeciesType.fish => 'Fish around you',
-      SpeciesType.coral => 'Corals & reef life',
-    };
+    String title;
+    if (widget.type == SpeciesType.fish) {
+      title = 'Fish around you';
+    } else {
+      title = 'Corals & reef life';
+    }
 
     return Column(
       children: [
@@ -76,9 +88,7 @@ class _SpeciesScreenState extends State<SpeciesScreen> {
               Expanded(
                 child: Text(
                   title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
+                  style: Theme.of(context).textTheme.titleMedium
                       ?.copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
@@ -90,14 +100,11 @@ class _SpeciesScreenState extends State<SpeciesScreen> {
                   child: FilterChip(
                     selected: _myRegionOnly,
                     label: Text(
-                      _myRegionOnly
-                          ? (visibleRegionTags.isEmpty
-                              ? 'All waters'
-                              : SpeciesRepository.regionLabel(visibleRegionTags.first))
-                          : 'All waters',
+                      _regionChipLabel(visibleRegionTags),
                       style: const TextStyle(fontSize: 12),
                     ),
-                    onSelected: (selected) => setState(() => _myRegionOnly = selected),
+                    onSelected: (selected) =>
+                        setState(() => _myRegionOnly = selected),
                   ),
                 ),
             ],
@@ -109,14 +116,8 @@ class _SpeciesScreenState extends State<SpeciesScreen> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: Text(
-                _myRegionOnly && visibleRegionTags.isEmpty
-                    ? 'No region detected — showing the full guide.'
-                    : _myRegionOnly
-                        ? 'Common around ${location.name}'
-                        : 'Full guide (${_entries.length} species)',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
+                _regionHint(location.name, visibleRegionTags),
+                style: Theme.of(context).textTheme.bodySmall
                     ?.copyWith(color: scheme.onSurfaceVariant),
               ),
             ),
@@ -127,10 +128,7 @@ class _SpeciesScreenState extends State<SpeciesScreen> {
             controller: _searchController,
             decoration: InputDecoration(
               isDense: true,
-              hintText: switch (widget.type) {
-                SpeciesType.fish => 'Search fish…',
-                SpeciesType.coral => 'Search corals…',
-              },
+              hintText: _searchHint(),
               prefixIcon: const Icon(Icons.search, size: 20),
               suffixIcon: _query.isEmpty
                   ? null
@@ -141,46 +139,88 @@ class _SpeciesScreenState extends State<SpeciesScreen> {
                         setState(() => _query = '');
                       },
                     ),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
             onChanged: (value) => setState(() => _query = value),
           ),
         ),
-        Expanded(
-          child: _loading
-              ? const Center(child: CircularProgressIndicator(strokeWidth: 2))
-              : entries.isEmpty
-                  ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(24),
-                        child: Text(
-                          _query.isEmpty
-                              ? 'No species tagged for your region yet — '
-                                  'tap the region chip to see the whole guide.'
-                              : 'Nothing matched "$_query".',
-                          textAlign: TextAlign.center,
-                          style:
-                              TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
-                        ),
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.only(top: 4, bottom: 16),
-                      itemCount: entries.length,
-                      itemBuilder: (context, index) => SpeciesTile(
-                        entry: entries[index],
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (_) => SpeciesDetailScreen(
-                              entry: entries[index],
-                              type: widget.type,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-        ),
+        Expanded(child: _buildList(context, entries)),
       ],
     );
+  }
+
+  Widget _buildList(BuildContext context, List<SpeciesEntry> entries) {
+    if (_loading) {
+      return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+    }
+
+    if (entries.isEmpty) {
+      String message;
+      if (_query.isEmpty) {
+        message =
+            'No species tagged for your region yet — '
+            'tap the region chip to see the whole guide.';
+      } else {
+        message = 'Nothing matched "$_query".';
+      }
+
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Text(
+            message,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: const EdgeInsets.only(top: 4, bottom: 16),
+      itemCount: entries.length,
+      itemBuilder: (context, index) {
+        final entry = entries[index];
+        return SpeciesTile(
+          entry: entry,
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) =>
+                    SpeciesDetailScreen(entry: entry, type: widget.type),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  String _regionChipLabel(List<String> visibleRegionTags) {
+    if (_myRegionOnly && visibleRegionTags.isNotEmpty) {
+      return SpeciesRepository.regionLabel(visibleRegionTags.first);
+    }
+    return 'All waters';
+  }
+
+  String _regionHint(String locationName, List<String> visibleRegionTags) {
+    if (_myRegionOnly) {
+      if (visibleRegionTags.isEmpty) {
+        return 'No region detected — showing the full guide.';
+      }
+      return 'Common around $locationName';
+    }
+    return 'Full guide (${_entries.length} species)';
+  }
+
+  String _searchHint() {
+    if (widget.type == SpeciesType.fish) {
+      return 'Search fish…';
+    }
+    return 'Search corals…';
   }
 }

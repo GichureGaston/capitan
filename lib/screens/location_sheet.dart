@@ -12,7 +12,7 @@ Future<void> showLocationSheet(BuildContext context) {
     context: context,
     isScrollControlled: true,
     showDragHandle: true,
-    builder: (sheetContext) => const _LocationSheet(),
+    builder: (_) => const _LocationSheet(),
   );
 }
 
@@ -48,7 +48,10 @@ class _LocationSheetState extends State<_LocationSheet> {
 
   void _onChanged(String value, OpenMeteoApi api) {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 400), () => _runSearch(value, api));
+    _debounce = Timer(
+      const Duration(milliseconds: 400),
+      () => _runSearch(value, api),
+    );
   }
 
   Future<void> _runSearch(String value, OpenMeteoApi api) async {
@@ -66,7 +69,11 @@ class _LocationSheetState extends State<_LocationSheet> {
       if (!mounted) return;
       setState(() {
         _results = results;
-        _error = results.isEmpty ? 'No places matched "$query".' : null;
+        if (results.isEmpty) {
+          _error = 'No places matched "$query".';
+        } else {
+          _error = null;
+        }
       });
     } catch (e) {
       if (!mounted) return;
@@ -81,10 +88,27 @@ class _LocationSheetState extends State<_LocationSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final locating =
-        context.select<AppBloc, bool>((bloc) => bloc.state.locating);
+    final locating = context.watch<AppBloc>().state.locating;
     final scheme = Theme.of(context).colorScheme;
     final viewInsets = MediaQuery.of(context).viewInsets;
+
+    Widget locatingIcon;
+    if (locating) {
+      locatingIcon = const SizedBox(
+        width: 16,
+        height: 16,
+        child: CircularProgressIndicator(strokeWidth: 2),
+      );
+    } else {
+      locatingIcon = const Icon(Icons.my_location, size: 18);
+    }
+
+    String locatingLabel;
+    if (locating) {
+      locatingLabel = 'Locating…';
+    } else {
+      locatingLabel = 'Use my current location';
+    }
 
     return Padding(
       padding: EdgeInsets.only(bottom: viewInsets.bottom),
@@ -100,17 +124,13 @@ class _LocationSheetState extends State<_LocationSheet> {
             children: [
               Text(
                 'Where are you diving today?',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
+                style: Theme.of(context).textTheme.titleMedium
                     ?.copyWith(fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 4),
               Text(
                 'Tip: search a beach, town or bay name — e.g. "Bondi Beach".',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodySmall
+                style: Theme.of(context).textTheme.bodySmall
                     ?.copyWith(color: scheme.onSurfaceVariant),
               ),
               const SizedBox(height: 12),
@@ -121,9 +141,12 @@ class _LocationSheetState extends State<_LocationSheet> {
                 decoration: InputDecoration(
                   hintText: 'Search place name…',
                   prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
-                onChanged: (value) => _onChanged(value, context.read<OpenMeteoApi>()),
+                onChanged: (value) =>
+                    _onChanged(value, context.read<OpenMeteoApi>()),
               ),
               const SizedBox(height: 12),
               SizedBox(
@@ -131,62 +154,59 @@ class _LocationSheetState extends State<_LocationSheet> {
                 child: FilledButton.icon(
                   onPressed: locating
                       ? null
-                      : () => context
-                          .read<AppBloc>()
-                          .add(const DeviceLocationRequested()),
-                  icon: locating
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.my_location, size: 18),
-                  label: Text(locating ? 'Locating…' : 'Use my current location'),
+                      : () => context.read<AppBloc>().add(
+                          const DeviceLocationRequested(),
+                        ),
+                  icon: locatingIcon,
+                  label: Text(locatingLabel),
                 ),
               ),
               if (locating) const SizedBox(height: 8),
-              if (_searching)
-                const Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
-                )
-              else if (_error != null)
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text(_error!, style: TextStyle(color: scheme.onSurfaceVariant)),
-                )
-              else
-                Flexible(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _results.length,
-                    itemBuilder: (context, index) {
-                      final result = _results[index];
-                      return ListTile(
-                        dense: true,
-                        contentPadding: EdgeInsets.zero,
-                        leading: const Icon(Icons.place, size: 20),
-                        title: Text(result.name),
-                        subtitle: Text(
-                          [result.admin, result.country]
-                              .whereType<String>()
-                              .join(', '),
-                          maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                        ),
-                        onTap: () {
-                          Navigator.of(context).pop();
-                          context
-                              .read<AppBloc>()
-                              .add(LocationSelected(result));
-                        },
-                      );
-                    },
-                  ),
-                ),
+              _buildResults(scheme),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildResults(ColorScheme scheme) {
+    if (_searching) {
+      return const Padding(
+        padding: EdgeInsets.all(16),
+        child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+      );
+    }
+
+    if (_error != null) {
+      return Padding(
+        padding: const EdgeInsets.all(12),
+        child: Text(_error!, style: TextStyle(color: scheme.onSurfaceVariant)),
+      );
+    }
+
+    return Flexible(
+      child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: _results.length,
+        itemBuilder: (context, index) {
+          final result = _results[index];
+          final place = [
+            result.admin,
+            result.country,
+          ].whereType<String>().join(', ');
+          return ListTile(
+            dense: true,
+            contentPadding: EdgeInsets.zero,
+            leading: const Icon(Icons.place, size: 20),
+            title: Text(result.name),
+            subtitle: Text(place, maxLines: 1, overflow: TextOverflow.ellipsis),
+            onTap: () {
+              Navigator.of(context).pop();
+              context.read<AppBloc>().add(LocationSelected(result));
+            },
+          );
+        },
       ),
     );
   }

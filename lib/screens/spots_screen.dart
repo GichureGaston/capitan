@@ -17,7 +17,6 @@ class SpotsScreen extends StatefulWidget {
 
   final VoidCallback? onUseSpot;
 
-  /// Injectable for tests; defaults to the live Overpass API.
   final OverpassService? overpass;
 
   @override
@@ -25,7 +24,7 @@ class SpotsScreen extends StatefulWidget {
 }
 
 class _SpotsScreenState extends State<SpotsScreen> {
-  late final OverpassService _overpass = widget.overpass ?? OverpassService();
+  late OverpassService _overpass;
 
   List<SwimSpot> _spots = const [];
   bool _loading = false;
@@ -33,6 +32,12 @@ class _SpotsScreenState extends State<SpotsScreen> {
   int _radiusKm = 25;
   String? _loadedKey;
   int _loadSeq = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _overpass = widget.overpass ?? OverpassService();
+  }
 
   @override
   void didChangeDependencies() {
@@ -85,10 +90,16 @@ class _SpotsScreenState extends State<SpotsScreen> {
       }
 
       final target = spots.take(10).toList();
-      final locations = <SeaLocation>[
-        for (final spot in target)
-          SeaLocation(name: spot.name, latitude: spot.latitude, longitude: spot.longitude),
-      ];
+      final locations = <SeaLocation>[];
+      for (final spot in target) {
+        locations.add(
+          SeaLocation(
+            name: spot.name,
+            latitude: spot.latitude,
+            longitude: spot.longitude,
+          ),
+        );
+      }
 
       List<WeatherData> weatherBatch = const [];
       List<MarineData> marineBatch = const [];
@@ -107,21 +118,29 @@ class _SpotsScreenState extends State<SpotsScreen> {
         final marine = i < marineBatch.length ? marineBatch[i] : null;
         final marineOk = marine != null && marine.hasData;
 
-        final snapshot = weather == null
-            ? null
-            : ConditionsSnapshot.fromForecast(weather, marineOk ? marine : null);
+        ConditionsSnapshot? snapshot;
+        if (weather != null) {
+          if (marineOk) {
+            snapshot = ConditionsSnapshot.fromForecast(weather, marine);
+          } else {
+            snapshot = ConditionsSnapshot.fromForecast(weather, null);
+          }
+        }
 
         if (snapshot == null) {
           enriched.add(spot);
           continue;
         }
-        enriched.add(spot.copyWith(
-          conditions: SpotConditions(
-            snapshot: snapshot,
-            rating: ActivityRater.rate(SeaActivity.swimming, snapshot),
-            seaSurfaceTemp: marine?.current.seaSurfaceTemperature,
+
+        enriched.add(
+          spot.copyWith(
+            conditions: SpotConditions(
+              snapshot: snapshot,
+              rating: ActivityRater.rate(SeaActivity.swimming, snapshot),
+              seaSurfaceTemp: marine?.current.seaSurfaceTemperature,
+            ),
           ),
-        ));
+        );
       }
 
       if (seq != _loadSeq || !mounted) return;
@@ -146,8 +165,7 @@ class _SpotsScreenState extends State<SpotsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final location =
-        context.select<AppBloc, SeaLocation?>((bloc) => bloc.state.location);
+    final location = context.watch<AppBloc>().state.location;
     final scheme = Theme.of(context).colorScheme;
 
     if (location == null) {
@@ -182,9 +200,7 @@ class _SpotsScreenState extends State<SpotsScreen> {
               Expanded(
                 child: Text(
                   'Around ${location.name}',
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium
+                  style: Theme.of(context).textTheme.titleMedium
                       ?.copyWith(fontWeight: FontWeight.w700),
                 ),
               ),
@@ -259,7 +275,9 @@ class _SpotsScreenState extends State<SpotsScreen> {
             'No named beaches within $_radiusKm km. '
             'Try a larger search radius or another location.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
       );
@@ -272,16 +290,16 @@ class _SpotsScreenState extends State<SpotsScreen> {
         onUse: (spot) {
           final location = context.read<AppBloc>().state.location;
           context.read<AppBloc>().add(
-                LocationSelected(
-                  SeaLocation(
-                    name: spot.name,
-                    latitude: spot.latitude,
-                    longitude: spot.longitude,
-                    admin: location?.admin,
-                    country: location?.country,
-                  ),
-                ),
-              );
+            LocationSelected(
+              SeaLocation(
+                name: spot.name,
+                latitude: spot.latitude,
+                longitude: spot.longitude,
+                admin: location?.admin,
+                country: location?.country,
+              ),
+            ),
+          );
           widget.onUseSpot?.call();
         },
       ),
