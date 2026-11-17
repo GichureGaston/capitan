@@ -1,0 +1,26 @@
+Capitán is a pocket companion for the sea: conditions, tides, nearby swim spots, and the reef life you meet.
+
+Built for snorkellers, freedivers, surfers, and anyone who plans their weekends around the water.
+
+NOW
+See air and "feels like" temperature, wind direction and gusts, humidity, cloud cover, wave height and period, sea-surface temperature, sea level, UV index, visibility, and rain chance for the next few hours. Sunrise and sunset plus a seven-day outlook.
+
+Activity ratings for snorkelling, freediving, surfing, and swimming — Excellent, Good, Fair, Poor, or Dangerous — with the reasons behind each score: waves, wind, gusts, currents, water temperature, and UV. After dark the app suggests rest instead of a water activity.
+
+TIDES AND SEA
+A sea-level chart for the next 24 hours, 48 hours, or 7 days; the next high or low tide; upcoming tide turns and the tidal range; wave and current detail; and an hourly wind and gust chart. Modelled tides are guidance, not navigation data.
+
+SPOTS
+Find beaches and swimming areas nearby using OpenStreetMap data, see distance, surface type, and patrolled status where available, and rate swimming conditions at each spot. Set a spot as your current location with one tap; Capitán remembers it.
+
+FISH AND CORAL GUIDES
+79 fish species and 58 corals and reef-life entries, each with a photo, scientific name, size, diet, habitat, and conservation status. Danger labels are in plain language: harmless, sharp or spiny, stings, venomous, bites when provoked, poisonous to eat. Entries filter automatically to species typical for your waters, with search and a full-guide toggle. All species data and photos are bundled for offline use.
+
+ANYWHERE YOU SWIM
+Search for a beach, town, or bay by name, or use your device location. Your chosen location is saved locally.
+
+SAFETY
+Capitán is a planning aid, not a lifeguard, a tide table, or a substitute for local knowledge. Conditions are modelled and can be wrong. Tides are estimates. Ratings are heuristics. "Dangerous" means don't. Look, don't touch. Go with a buddy, and go in daylight. If you are ever unsure: don't get in. The sea will still be here tomorrow.
+
+NETWORK AND PERMISSIONS
+Weather, marine, tide, search, and nearby-spot data come from Open-Meteo, Nominatim, and the Overpass API, so those features need an internet connection. The fish and coral guides work offline. Location permission is optional: you can search for a place instead. The app contains no advertising, analytics, or tracking. Species photos are from Wikimedia Commons under public-domain, CC0, CC BY, or CC BY-SA licences, with attribution shown in the app.

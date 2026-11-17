@@ -49,13 +49,24 @@ class LocationService {
       );
     }
 
+    // F-Droid: force Android's built-in LocationManager instead of the fused
+    // provider so the app does not depend on Google Play Services. The Android
+    // implementation is the vendored copy in packages/geolocator_android.
+    final locationSettings = defaultTargetPlatform == TargetPlatform.android
+        ? AndroidSettings(
+            accuracy: LocationAccuracy.medium,
+            timeLimit: const Duration(seconds: 20),
+            forceLocationManager: true,
+          )
+        : const LocationSettings(
+            accuracy: LocationAccuracy.medium,
+            timeLimit: Duration(seconds: 20),
+          );
+
     Position position;
     try {
       position = await Geolocator.getCurrentPosition(
-        locationSettings: const LocationSettings(
-          accuracy: LocationAccuracy.medium,
-          timeLimit: Duration(seconds: 20),
-        ),
+        locationSettings: locationSettings,
       );
     } on LocationServiceDisabledException {
       throw LocationException(

@@ -150,8 +150,16 @@ To run on a device or emulator, pick a target with `flutter devices` and then `f
 
 ### Platform notes
 
-- **Android:** fine location permission is already declared in `android/app/src/main/AndroidManifest.xml`.
-- **iOS:** device location requires adding `NSLocationWhenInUseUsageDescription` to `ios/Runner/Info.plist`. Without it, location search and manual spot selection still work.
+- **Android:** fine location permission is already declared in `android/app/src/main/AndroidManifest.xml`. The release build uses a vendored, GMS-free copy of `geolocator_android` (`packages/geolocator_android`) that relies on Android's `LocationManager`, so no Google Play Services code is shipped. See [docs/fdroid.md](docs/fdroid.md).
+- **iOS:** `NSLocationWhenInUseUsageDescription` is set in `ios/Runner/Info.plist`. Without location permission, location search and manual spot selection still work.
+
+### F-Droid
+
+The Android application ID is `io.github.gichuregaston.capitan`. Store metadata lives in [`fastlane/metadata/android/en-US/`](fastlane/metadata/android/en-US/), and the ready-to-submit build recipe is in [`docs/fdroid/`](docs/fdroid/). See [docs/fdroid.md](docs/fdroid.md) for the full release and submission process.
+
+### Branding
+
+Launcher and store icons are generated from [`branding/app_icon_source.jpg`](branding/app_icon_source.jpg). To change them, replace the source and run `python3 tools/generate_icons.py`.
 
 ---
 
@@ -191,3 +199,11 @@ Ideas I would like to add as the app grows:
 - More species, more regions, and seasonal "what you might see now" hints.
 
 Built after a year of fins, salt, and forgetting things — so the next year is spent looking at the reef instead of trying to remember it.
+
+---
+
+## License
+
+Capitán is free software, released under the [Apache License 2.0](LICENSE).
+
+The species photographs in `assets/images/` are not covered by that licence. They are used under the public-domain, CC0, CC BY, or CC BY-SA licences recorded in [`fish-credits.csv`](fish-credits.csv) and [`coral-credits.csv`](coral-credits.csv), and attribution is shown in the app.

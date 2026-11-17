@@ -1,0 +1,11 @@
+# Copy this file to android/key.properties (which is gitignored) and fill in
+# your keystore details before building a signed release yourself.
+#
+# F-Droid builds and signs the app on its own servers and does not need this
+# file, so leave it absent for F-Droid builds.
+#
+# storeFile is resolved relative to android/app/.
+storePassword=change-me
+keyPassword=change-me
+keyAlias=capitan
+storeFile=../capitan-release.jks

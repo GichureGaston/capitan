@@ -1,4 +1,4 @@
-package com.example.capitan
+package io.github.gichuregaston.capitan
 
 import io.flutter.embedding.android.FlutterActivity
 

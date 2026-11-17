@@ -1,0 +1,6 @@
+Initial release.
+
+- Conditions, sun protection, UV, and activity ratings
+- Tide charts, sea level, waves, currents, and wind
+- Nearby swim spots from OpenStreetMap
+- Offline guides to 79 fish and 58 corals and reef life
