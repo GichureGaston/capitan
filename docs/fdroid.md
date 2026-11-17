@@ -85,10 +85,12 @@ application ID, copy
 to `metadata/io.github.gichuregaston.capitan.yml`, and open a merge request
 titled `New App: io.github.gichuregaston.capitan`.
 
-For the first build, replace `commit: v1.0.0` with the full commit hash:
+The recipe is already pinned to the `v1.0.0` commit
+(`027da4a17aa185b3a8c4b642f797166c81a141b0`). For a later release, update it
+with:
 
 ```bash
-git rev-parse v1.0.0
+git rev-parse v1.0.1
 ```
 
 Test the recipe with F-Droid's buildserver:

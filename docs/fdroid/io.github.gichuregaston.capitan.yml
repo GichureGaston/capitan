@@ -1,8 +1,8 @@
 # Copy this file to metadata/io.github.gichuregaston.capitan.yml in a fork of
 # https://gitlab.com/fdroid/fdroiddata and open a merge request.
 #
-# For the first build, replace the commit tag with the full commit hash
-# (`git rev-parse v1.0.0`) so the build is pinned to an immutable revision.
+# The first build is pinned to the v1.0.0 release commit. For later releases,
+# replace the commit with the full hash from `git rev-parse vX.Y.Z`.
 #
 # Flutter version: 3.47.7 (Dart 3.13.5).
 
@@ -19,7 +19,7 @@ Repo: https://github.com/GichureGaston/capitan.git
 Builds:
   - versionName: 1.0.0
     versionCode: 1
-    commit: v1.0.0
+    commit: 027da4a17aa185b3a8c4b642f797166c81a141b0
     timeout: 7200
     output: build/app/outputs/flutter-apk/app-release.apk
     srclibs:
