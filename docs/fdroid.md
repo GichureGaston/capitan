@@ -18,6 +18,7 @@ This document is the checklist for both.
 | Unique application ID | `io.github.gichuregaston.capitan` |
 | FOSS-only dependencies | Vendored GMS-free `geolocator_android` in `packages/`; location uses `LocationManager` (`com.google.android.gms` is also excluded as a guard) |
 | Release build unsigned by default | Yes, unless `android/key.properties` exists |
+| APK layout | One APK per ABI (arm32, arm64, x86_64); ~31–37 MB each instead of a 69 MB universal APK |
 | Release tags | Add `v1.0.0` and one for every later release |
 | Fastlane metadata | `fastlane/metadata/android/en-US/` |
 | Flutter version pin | 3.47.7 in the fdroiddata recipe |
@@ -50,8 +51,8 @@ Until then:
 - re-run the checks in section 2 before every tag.
 
 When resubmitting, start from the current recipe in this repository, update the
-pinned `commit`, `versionName`, `versionCode`, `CurrentVersion` and
-`CurrentVersionCode` to the newest tagged release, and say in the MR description
+pinned `commit`, `versionName`, all three build `versionCode` values,
+`CurrentVersion` and `CurrentVersionCode` to the newest tagged release, and say in the MR description
 that the app has now been actively developed since 2026-11-11. Link to the
 release history as proof. The previous MR can be reopened if the fork's
 `capitan` branch is still available; otherwise open a fresh one.
@@ -86,19 +87,27 @@ Every release needs:
 flutter clean
 flutter pub get
 flutter analyze
-flutter build apk --release
+flutter build apk --release --split-per-abi
 ```
 
-Without `android/key.properties` the APK is unsigned, which is what F-Droid
-expects. To ship your own signed APK as well, copy
+That produces three APKs in `build/app/outputs/flutter-apk/`:
+`app-armeabi-v7a-release.apk` (~31 MB), `app-arm64-v8a-release.apk` (~35 MB)
+and `app-x86_64-release.apk` (~37 MB). A single universal APK would be ~69 MB.
+The F-Droid recipe builds each ABI separately with
+`--target-platform="android-arm"`, `"android-arm64"` or `"android-x64"`.
+
+Without `android/key.properties` the APKs are unsigned, which is what F-Droid
+expects. To ship your own signed APKs as well, copy
 `android/key.properties.example` to `android/key.properties`, point it at your
 keystore, and rebuild.
 
-Check that the proprietary location provider is really gone:
+Check that the proprietary location provider is really gone in every APK:
 
 ```bash
-unzip -p build/app/outputs/flutter-apk/app-release.apk 'classes*.dex' \
-  | strings | grep -c 'com/google/android/gms'   # should print 0
+for apk in build/app/outputs/flutter-apk/app-*-release.apk; do
+  echo "$apk: $(unzip -p "$apk" 'classes*.dex' | strings \
+    | grep -c 'com/google/android/gms') GMS references"   # each should print 0
+done
 ```
 
 ### Vendored location plugin
@@ -117,10 +126,10 @@ fdroiddata recipe). Decide before the first users install.
 
 ### Self-signed APKs on GitHub releases
 
-GitHub release assets are not used by F-Droid, but attaching one gives users a
-direct install during the maintenance period. Build it from the release tag
-with the same Flutter version as the recipe (`3.47.7` for `v1.0.0`), then sign
-it with a keystore you control:
+GitHub release assets are not used by F-Droid, but attaching them gives users a
+direct install during the maintenance period. Build from the release tag with
+the same Flutter version as the recipe (`3.47.7` for `v1.0.0`), produce the
+three split APKs, and sign each one with a keystore you control:
 
 - keystore: `android/capitan-release.jks` (gitignored), alias `capitan`
 - credentials: gitignored `android/key.properties`
@@ -128,8 +137,15 @@ it with a keystore you control:
   `866a83da9b9c0caf1da1ed45085c8d93b05e2c9134b377d528fb99823e9c350e`
 
 Back up the keystore and its passwords: losing them means you can never sign an
-update with the same identity. Say in the release notes that this APK is not
-update-compatible with the later F-Droid build, which uses F-Droid's key.
+update with the same identity. Say in the release notes that these APKs are not
+update-compatible with the later F-Droid build, which uses F-Droid's key, and
+tell users which ABI to install (almost all phones use `arm64-v8a`; the older
+`armeabi-v7a` is a fallback and `x86_64` is for Intel devices/emulators).
+
+Flutter numbers the split APKs `abi_code * 1000 + pubspec version code`
+(arm32=1, arm64=2, x86_64=4). For `1.0.0+1` the APK version codes are
+1001/2001/4001, so the recipe uses `VercodeOperation: 1000 + %c`,
+`2000 + %c`, `4000 + %c` and `CurrentVersionCode: 4001`.
 
 ## 3. Submit the build recipe
 
@@ -141,12 +157,15 @@ to `metadata/io.github.gichuregaston.capitan.yml`, and open a merge request
 titled `New App: io.github.gichuregaston.capitan`.
 
 The recipe is already pinned to the `v1.0.0` commit
-(`027da4a17aa185b3a8c4b642f797166c81a141b0`). For a later release, update it
-with:
+(`027da4a17aa185b3a8c4b642f797166c81a141b0`) with one build block per ABI. For
+a later release, update **all three** build blocks with:
 
 ```bash
 git rev-parse v1.0.1
 ```
+
+Keep the `VercodeOperation` list in sync with the ABI version codes above;
+`fdroid checkupdates` uses it to create the three new build blocks.
 
 Test the recipe with F-Droid's buildserver:
 
@@ -187,8 +206,9 @@ python3 tools/check_fdroid_release.py --strict
 After pushing the tag, run it again without `--strict` to confirm the recipe in
 this repository still matches the tagged release. When it reports a mismatch,
 update `docs/fdroid/io.github.gichuregaston.capitan.yml` (commit, version name,
-version code, `CurrentVersion`, `CurrentVersionCode`) in the same release
-commit.
+all three build version codes, `CurrentVersion`, `CurrentVersionCode`) in the
+same release commit. The checker also verifies each build's output path and
+`--target-platform` so the three ABI blocks cannot silently drift apart.
 
 ## Notes for reviewers
 

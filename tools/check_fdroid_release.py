@@ -31,6 +31,14 @@ ROOT = Path(__file__).resolve().parents[1]
 RECIPE = ROOT / "docs/fdroid/io.github.gichuregaston.capitan.yml"
 VERSION_RE = re.compile(r"^version:\s*(\d+\.\d+\.\d+)\+(\d+)\s*$", re.MULTILINE)
 TAG_RE = re.compile(r"^v\d+(?:\.\d+)*$")
+SAFE_MATH_RE = re.compile(r"^[\d\s+\-*/()]+$")
+
+# Flutter's ABI code -> (APK output name, --target-platform value).
+ABIS = {
+    1: ("app-armeabi-v7a-release.apk", "android-arm"),
+    2: ("app-arm64-v8a-release.apk", "android-arm64"),
+    4: ("app-x86_64-release.apk", "android-x64"),
+}
 
 
 def git(*args: str) -> str:
@@ -45,6 +53,14 @@ def git(*args: str) -> str:
 def latest_tag() -> str | None:
     tags = git("tag", "--list", "v*", "--sort=-v:refname").splitlines()
     return next((tag for tag in tags if TAG_RE.match(tag)), None)
+
+
+def eval_vercode(expression: str, base: int) -> int:
+    """Evaluate a VercodeOperation such as '1000 + %c' for a base version code."""
+    source = expression.replace("%c", str(base))
+    if not SAFE_MATH_RE.fullmatch(source):
+        raise ValueError(f"unsafe VercodeOperation: {expression!r}")
+    return int(eval(source, {"__builtins__": {}}, {}))  # noqa: S307 - validated above
 
 
 def main() -> int:
@@ -70,18 +86,60 @@ def main() -> int:
     version_name, version_code = match.group(1), int(match.group(2))
 
     recipe = yaml.safe_load(RECIPE.read_text(encoding="utf-8"))
-    build = recipe["Builds"][-1]
-    changelog = (
-        f"fastlane/metadata/android/en-US/changelogs/{version_code}.txt"
-    )
-    checks = [
-        (build["versionName"] == version_name, "versionName", build["versionName"], version_name),
-        (build["versionCode"] == version_code, "versionCode", build["versionCode"], version_code),
-        (build["commit"] == commit, "commit", build["commit"], commit),
-        (recipe["CurrentVersion"] == version_name, "CurrentVersion", recipe["CurrentVersion"], version_name),
-        (recipe["CurrentVersionCode"] == version_code, "CurrentVersionCode", recipe["CurrentVersionCode"], version_code),
-    ]
+    builds = recipe["Builds"]
+    operations = recipe.get("VercodeOperation") or []
+    checks = []
 
+    try:
+        expected_codes = [eval_vercode(op, version_code) for op in operations]
+        abi_codes = [eval_vercode(op, 0) // 1000 for op in operations]
+    except ValueError as exc:
+        print(f"FAIL: {exc}")
+        return 1
+
+    checks.append(
+        (
+            bool(operations) and len(builds) == len(operations),
+            "build/operation count",
+            f"{len(builds)} builds / {len(operations)} operations",
+            "one build per VercodeOperation",
+        )
+    )
+
+    for index, (build, expected, abi) in enumerate(
+        zip(builds, expected_codes, abi_codes), start=1
+    ):
+        output, platform = ABIS.get(abi, ("<unknown ABI>", "<unknown platform>"))
+        command = " ".join(str(line) for line in (build.get("build") or []))
+        checks.extend(
+            [
+                (build["versionName"] == version_name, f"build {index} versionName", build["versionName"], version_name),
+                (build["versionCode"] == expected, f"build {index} versionCode", build["versionCode"], expected),
+                (build["commit"] == commit, f"build {index} commit", build["commit"], commit),
+                (build["output"] == f"build/app/outputs/flutter-apk/{output}", f"build {index} output", build["output"], output),
+                (platform in command, f"build {index} target", platform, platform),
+            ]
+        )
+
+    checks.append(
+        (
+            recipe["CurrentVersion"] == version_name,
+            "CurrentVersion",
+            recipe["CurrentVersion"],
+            version_name,
+        )
+    )
+    expected_current = max(expected_codes) if expected_codes else version_code
+    checks.append(
+        (
+            recipe["CurrentVersionCode"] == expected_current,
+            "CurrentVersionCode",
+            recipe["CurrentVersionCode"],
+            expected_current,
+        )
+    )
+
+    changelog = f"fastlane/metadata/android/en-US/changelogs/{version_code}.txt"
     try:
         git("cat-file", "-e", f"{tag}:{changelog}")
         checks.append((True, "changelog", changelog, "present"))
