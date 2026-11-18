@@ -115,6 +115,22 @@ therefore not be update-compatible with the F-Droid build unless you set up
 reproducible builds (`Binaries:` plus `AllowedAPKSigningKeys:` in the
 fdroiddata recipe). Decide before the first users install.
 
+### Self-signed APKs on GitHub releases
+
+GitHub release assets are not used by F-Droid, but attaching one gives users a
+direct install during the maintenance period. Build it from the release tag
+with the same Flutter version as the recipe (`3.47.7` for `v1.0.0`), then sign
+it with a keystore you control:
+
+- keystore: `android/capitan-release.jks` (gitignored), alias `capitan`
+- credentials: gitignored `android/key.properties`
+- certificate SHA-256:
+  `866a83da9b9c0caf1da1ed45085c8d93b05e2c9134b377d528fb99823e9c350e`
+
+Back up the keystore and its passwords: losing them means you can never sign an
+update with the same identity. Say in the release notes that this APK is not
+update-compatible with the later F-Droid build, which uses F-Droid's key.
+
 ## 3. Submit the build recipe
 
 Only do this once the policy gate above is satisfied. Fork
