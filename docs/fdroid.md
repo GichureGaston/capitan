@@ -13,6 +13,7 @@ This document is the checklist for both.
 
 | Requirement | Status |
 | --- | --- |
+| 3 months of active development (inclusion policy) | Not yet: first commit 2026-11-11, earliest eligibility 2027-02-11; see below |
 | FOSS licence in the repository | Apache-2.0, see `LICENSE` |
 | Unique application ID | `io.github.gichuregaston.capitan` |
 | FOSS-only dependencies | Vendored GMS-free `geolocator_android` in `packages/`; location uses `LocationManager` (`com.google.android.gms` is also excluded as a guard) |
@@ -22,6 +23,43 @@ This document is the checklist for both.
 | Flutter version pin | 3.47.7 in the fdroiddata recipe |
 | App icon | Generated from `branding/app_icon_source.jpg` with `tools/generate_icons.py` |
 | Android launcher icon | Replaced with the project icon; adaptive icon included for Android 8+ |
+
+## Policy gate: 3 months of active development
+
+The first merge request ([!57817](https://gitlab.com/fdroid/fdroiddata/-/merge_requests/57817))
+was closed on 2026-11-17 for one reason only: the [inclusion
+policy](https://f-droid.org/en/docs/Inclusion_Policy/) requires an app to have
+been actively developed for at least three months before it can enter the main
+repository. The build recipe, lint, source scan and `fdroid build` all passed;
+there is nothing left to fix in the recipe itself.
+
+The policy allows an exception when the app has proven users, the author
+already maintains other apps on F-Droid, or the app was made for an event.
+Capitán currently has none of those, so the only reliable route is to wait and
+keep developing. The repository's first commit is 2026-11-11, so the earliest
+realistic resubmission date is **2027-02-11**.
+
+Until then:
+
+- keep making real, user-visible improvements rather than empty commits;
+- ship them as tagged releases (`v1.0.1`, `v1.0.2`, ...) with a matching
+  `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` and a GitHub
+  release, so the maintenance history is easy for a reviewer to verify;
+- collect real user feedback and evidence of use (reports, downloads, stars,
+  contributors) — that can later support the "proven users" exception;
+- re-run the checks in section 2 before every tag.
+
+When resubmitting, start from the current recipe in this repository, update the
+pinned `commit`, `versionName`, `versionCode`, `CurrentVersion` and
+`CurrentVersionCode` to the newest tagged release, and say in the MR description
+that the app has now been actively developed since 2026-11-11. Link to the
+release history as proof. The previous MR can be reopened if the fork's
+`capitan` branch is still available; otherwise open a fresh one.
+
+For immediate distribution without waiting, publish a personal F-Droid repo
+instead. That is explicitly allowed by the policy, but users must add it
+manually, and its APKs will not be update-compatible with a later main-repo
+build unless reproducible builds are configured.
 
 ## 1. Bump and tag a release
 
@@ -79,7 +117,8 @@ fdroiddata recipe). Decide before the first users install.
 
 ## 3. Submit the build recipe
 
-Fork <https://gitlab.com/fdroid/fdroiddata>, create a branch named after the
+Only do this once the policy gate above is satisfied. Fork
+<https://gitlab.com/fdroid/fdroiddata>, create a branch named after the
 application ID, copy
 [`docs/fdroid/io.github.gichuregaston.capitan.yml`](fdroid/io.github.gichuregaston.capitan.yml)
 to `metadata/io.github.gichuregaston.capitan.yml`, and open a merge request
@@ -122,6 +161,18 @@ merged, a build usually appears in the main repository within 24–48 hours.
 With `UpdateCheckMode: Tags` and `AutoUpdateMode: Version` in the recipe, you
 only need to push a new version tag. F-Droid adds the build block itself. Keep
 the changelog file in the tag so the listing shows what changed.
+
+Before each tag, check that the recipe and the release metadata still agree:
+
+```bash
+python3 tools/check_fdroid_release.py --strict
+```
+
+After pushing the tag, run it again without `--strict` to confirm the recipe in
+this repository still matches the tagged release. When it reports a mismatch,
+update `docs/fdroid/io.github.gichuregaston.capitan.yml` (commit, version name,
+version code, `CurrentVersion`, `CurrentVersionCode`) in the same release
+commit.
 
 ## Notes for reviewers
 
